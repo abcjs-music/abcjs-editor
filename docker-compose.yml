@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  app:
+    image: abcjs-editor
+    build: .
+    container_name: abcjs-editor
+    volumes:
+      - .:/srv/app
+      - ./node_modules:/srv/app/node_modules

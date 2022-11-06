@@ -1,0 +1,33 @@
+{
+  "name": "abcjs-editor",
+  "version": "1.0.0",
+  "description": "Simple visual editing of ABC strings",
+  "author": "Paul Rosen",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "5.13.1",
+    "@nuxtjs/pwa": "3.3.5",
+    "cross-env": "7.0.3",
+    "nuxt": "2.15.4"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "6.0.0",
+    "@nuxtjs/eslint-module": "3.0.2",
+    "@politico/vue-accessible-selects": "0.14.0",
+    "abcjs": "6.1.6",
+    "babel-eslint": "10.1.0",
+    "babel-polyfill": "6.26.0",
+    "babel-preset-env": "1.7.0",
+    "eslint": "7.24.0",
+    "eslint-plugin-nuxt": "2.0.0",
+    "nodemon": "2.0.7",
+    "v-click-outside": "3.1.2",
+    "vue-shortkey": "3.1.7"
+  }
+}
