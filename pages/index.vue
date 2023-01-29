@@ -15,7 +15,7 @@
 					<nav aria-label="input options">
 						<grow-to-modal ref="modal1" aria="Input Options">
 							<template slot="body">
-								<load-and-save :currentTune="abcString" @load="setTune($event)" @close="close"></load-and-save>
+								<load-and-save :currentTune="abcString" @load="setTune($event)" @close="close" @transposeSource="transposeSource"></load-and-save>
 							</template>
 						</grow-to-modal>
 					</nav>
@@ -62,7 +62,6 @@
 	import {CursorControl} from "../helpers/cursor-control";
 	import AbcjsOutput from "../components/AbcjsOutput";
 	import ImgUploader from "../components/ImgUploader";
-	import CollapsibleSection from "../components/CollapsibleSection";
 	import IntroText from "../components/IntroText";
 	import {getLocalStorage, setLocalStorage} from "../helpers/local-storage-wrapper";
 	import GrowToModal from "../components/GrowToModal";
@@ -128,7 +127,6 @@
 			LoadAndSave,
 			GrowToModal,
 			IntroText,
-			CollapsibleSection,
 			ImgUploader,
 			AbcjsOutput,
 			ButtonWithIcon,
@@ -215,6 +213,14 @@ eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|`, "String");
 			setTune(payload) {
 			  this.$refs.modal1.forceClose();
 				this.abcString = payload.abc;
+				Vue.nextTick(() => {
+					this.abcjsEditor.paramChanged({});
+				});
+			},
+			transposeSource(options) {
+				const visualObj = abcjs.renderAbc("*", this.abcString);
+				var newAbc = abcjs.strTranspose(this.abcString, visualObj, options.halfSteps)
+				this.abcString = newAbc
 				Vue.nextTick(() => {
 					this.abcjsEditor.paramChanged({});
 				});

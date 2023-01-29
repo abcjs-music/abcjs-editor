@@ -15,6 +15,9 @@
 		<label>Font Size: <input type="number" min="8" max="30" v-model="fontSize"></label>
 		<label>Visual Transpose: <input type="number" min="-24" max="24" v-model="visualTranspose"></label>
 		</div>
+		<div v-if="visualTranspose !== 0 && visualTranspose !== '0'" class="extra-bottom">
+			<animated-button el="button" label="Apply Transpose" @click="transposeSource"></animated-button>
+		</div>
 	</div>
 </template>
 
@@ -22,6 +25,7 @@
 import {mapActions, mapGetters} from 'vuex';
 import {abcTitle, abcFilename} from "../helpers/abc";
 import AnimatedButton from "./AnimatedButton";
+const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 export default {
 	name: "load-and-save",
 	components: {AnimatedButton},
@@ -77,6 +81,11 @@ export default {
 		},
 		deleteTune(name) {
 			this.deleteTuneByName(name);
+			this.$emit("close")
+		},
+		transposeSource() {
+			this.$emit('transposeSource', { halfSteps: this.$store.getters.visualTranspose })
+			this.$store.dispatch('setVisualTranspose', '0')
 			this.$emit("close")
 		}
 	}
@@ -146,5 +155,11 @@ h2 {
 .bottom-options input {
 	font-size: 1em;
 	width: 50px;
+}
+
+.extra-bottom {
+	margin-top: 10px;
+    display: flex;
+    justify-content: right;
 }
 </style>
