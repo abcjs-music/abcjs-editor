@@ -5,6 +5,12 @@
 
 For info on the underlying library, please go to [abcjs](https://github.com/paulrosen/abcjs).
 
+This project can be used in two ways: 
+
+1. The source code is here for you to deploy yourself or use as an example of how to use abcjs.
+
+2. This project is deployed to [abcjs-editor](https://editor.drawthedots.com) so that you can immediately use it to compose or display tunes.
+
 ## Deploy
 To deploy, just merge the code you want to deploy to production - Netlify does the rest. The following script will do it if you've checked in all your changes:
 ```
