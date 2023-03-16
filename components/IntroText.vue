@@ -30,7 +30,7 @@
 						If you are transcribing from an image, you can upload it and it will be shown along with the music for easier comparison.
 					</li>
 					<li>☞
-						If you want to display a particular tune when this website opens, then pass it in using "?t=abcString". Note that abcString must be encoded so that special characters are handled by the browser. With Javascript that is done with the function "encodeURLComponent()".
+						If you want to display a particular tune when this website opens, then pass it in using "?t=abcString". Note that abcString must be encoded so that special characters are handled by the browser. With Javascript that is done with the function "encodeURIComponent()".
 					</li>
 					<li class="offset">☞
 						This website is provided for free as a convenience to you. I hope you find it useful! Tell your friends about <a href="https://abcjs.net" target="_blank" class="external-link muted" rel="noreferrer">abcjs</a>!

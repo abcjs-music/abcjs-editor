@@ -51,6 +51,7 @@
 		<section class="download">
 			<a :download="midiFilename" :href="midiData">Download MIDI</a>
 			<button @click="downloadWav">Download WAV</button>
+			<button @click="createSharableLink">{{ copyText }}</button>
 		</section>
 	</div>
 </template>
@@ -68,12 +69,14 @@
 	import LoadAndSave from "../components/LoadAndSave";
 	import {mapGetters, mapActions} from 'vuex';
 	import OutputOptions from "../components/OutputOptions";
+	import { sleep } from "../helpers/sleep"
 	const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 
 	export default {
 		data() {
 			return {
 				cheatSheetVisible: false,
+				copyProgress: "idle",
 				abcString: "",
 				abcjsEditor: null,
 				cursorControl: new CursorControl("#canvas"),
@@ -108,6 +111,17 @@
 				title = title.replace(/\W+/g,'-');
 				return title + '.midi';
 			},
+			copyText() {
+				switch (this.copyProgress) {
+					case "idle":
+						return "Copy Sharable Link To Clipboard"
+					case "working":
+						return "Copying..."
+					case "done":
+						return "Copied!"		
+				}
+				return "Copy Sharable Link To Clipboard"
+			}
 		},
 		watch: {
 			abcString(newValue) {
@@ -254,6 +268,25 @@ eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|`, "String");
 			saveCurrent() {
 				setLocalStorage("current-tune", this.abcString);
 			},
+			async createSharableLink() {
+				try {
+					this.copyProgress = "working"
+					const encoded = encodeURIComponent(this.abcString)
+					const here = document.location.href
+					const link = here + "?t=" + encoded
+					const type = "text/plain"
+					const blob = new Blob([link], { type });
+					const data = [new ClipboardItem({ [type]: blob })];
+					await navigator.clipboard.write(data)
+					await sleep(1000)
+					this.copyProgress = "done"
+					await sleep(1000)
+					this.copyProgress = "idle"
+					console.log("copied")
+				} catch (error) {
+					console.log("error", error)
+				}
+			}
 		}
 	}
 </script>
