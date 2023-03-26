@@ -14,7 +14,7 @@
 				<li><span class="pgm-name">abcjs quick editor</span> courtesy of <a class="link external-link" href="https://abcjs.net" target="_blank" rel="noreferrer">abcjs</a><br>
 					<button class="link external-link" @click="bugs" rel="noreferrer">Bugs and Feature Requests</button></li>
 				<li>Written by <a class="link external-link" href="https://paulrosen.net" target="_blank" rel="noreferrer">Paul Rosen</a><br>
-					Copyright &copy; 2018-2022 by Paul Rosen</li>
+					Copyright &copy; 2018-3 by Paul Rosen</li>
 			</ul>
 		</footer>
 	</div>
