@@ -51,7 +51,7 @@
 		<section class="download">
 			<a :download="midiFilename" :href="midiData">Download MIDI</a>
 			<button @click="downloadWav">Download WAV</button>
-			<button @click="createSharableLink">{{ copyText }}</button>
+			<button v-if="hasClipboard" @click="createSharableLink">{{ copyText }}</button>
 		</section>
 	</div>
 </template>
@@ -81,6 +81,7 @@
 				abcjsEditor: null,
 				cursorControl: new CursorControl("#canvas"),
 				midiData: "",
+				hasClipboard: false,
 				abcjsParams: {
 					responsive: "resize",
 					add_classes: true,
@@ -149,6 +150,13 @@
 		mounted() {
 			this.initTunes();
 			this.cheatSheetVisible = getLocalStorage("help-open", false, "Boolean")
+			try {
+				// See if clipboard works before giving the user the option
+				const type = "text/plain"
+				const blob = new Blob(["test"], { type });
+				[new ClipboardItem({ [type]: blob })];
+				this.hasClipboard = true
+			} catch (error) {}
 			this.abcjsEditor = new abcjs.Editor("abc", {
 				canvas_id: "canvas",
 				warnings_id: "warnings",
