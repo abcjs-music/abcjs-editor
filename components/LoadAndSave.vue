@@ -60,7 +60,7 @@ export default {
 			return abcFilename(this.currentTune);
 		},
 		saveAbcString() {
-			return `data:text/plain,${this.currentTune}`;
+			return `data:text/plain,${encodeURIComponent(this.currentTune)}`;
 		},
 		saveLabel() {
 			return `Save "${this.abcTitle}" in browser`;
