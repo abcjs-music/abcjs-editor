@@ -37,9 +37,9 @@
 <style>
 @font-face {
 	font-family: 'itim-music';
-	src:  	url('/fonts/itim-music.ttf') format('truetype'),
-	url('/fonts/itim-music.woff') format('woff'),
-	url('/fonts/itim-music.svg#icomoon') format('svg');
+	src:  	url('~/assets/fonts/itim-music.ttf') format('truetype'),
+	url('~/assets/fonts/itim-music.woff') format('woff'),
+	url('~/assets/fonts/itim-music.svg#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -92,7 +92,7 @@
 
 	.header-image {
 		width: 100%;
-		background-image: url("/abcjs_comp_extended_08.svg");
+		background-image: url("~/assets/abcjs_comp_extended_08.svg");
 		background-repeat: no-repeat;
 		background-size: cover;
 		height: 30px;
