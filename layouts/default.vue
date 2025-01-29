@@ -6,8 +6,12 @@
 				<h1>quick editor</h1>
 			</div>
 		</header>
-		<main>
-			<nuxt/>
+		<!-- @nvue3 MIGRATION: main has to provide attrs to inner components -->
+		<!-- <main> -->
+		<main v-bind="$attrs">
+			<!-- @nuxt3 MIGRATION: -->
+			<!-- <nuxt/> -->
+			<NuxtPage />
 		</main>
 		<footer>
 			<ul>
@@ -21,7 +25,10 @@
 </template>
 
 <script>
-	const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+	// @nuxt3 MIGRATION:
+	//const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+	import abcjsDefaultExport from 'abcjs';
+	const abcjs = process.browser ? abcjsDefaultExport : null;
 
 	export default {
 		data() {

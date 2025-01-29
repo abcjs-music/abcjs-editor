@@ -1,0 +1,46 @@
+{
+  "editor.formatOnPaste": true,
+  "git.autofetch": true,
+  "[markdown]": {
+    "editor.wordWrap": "on"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    // Indent with tab size 4 - as given by abcjs
+    "editor.detectIndentation": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    //"editor.insertSpaces": false,
+    //"editor.tabSize": 4,
+    "prettier.tabWidth": 4,
+    "prettier.useTabs": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    //"prettier.tabWidth": 4,
+    //"prettier.useTabs": true
+  },
+  "[vue]": {
+    // Indent with tab size 4 - as given by abcjs
+    "editor.detectIndentation": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    //"editor.insertSpaces": false,
+    //"editor.tabSize": 4,
+    "prettier.tabWidth": 4,
+    "prettier.useTabs": true
+  },
+  // Extension: Vue 3 Support - All In One
+  "vue3snippets.tabWidth": 4,
+  "vue3snippets.useTabs": true,
+  // Required in vscode-eslint < v3.0.10 only
+  "eslint.useFlatConfig": true,
+  // Copilot
+  "github.copilot.editor.enableAutoCompletions": false
+}

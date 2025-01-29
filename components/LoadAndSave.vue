@@ -22,13 +22,28 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+// @Store MIGRATION to Pinia
+//import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from "pinia";
+import { useAbcStore } from "../store/abcStore";
 import {abcTitle, abcFilename} from "../helpers/abc";
 import AnimatedButton from "./AnimatedButton";
-const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+// @nuxt3 MIGRATION:
+//const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+import abcjsDefaultExport from "abcjs";
+const abcjs = process.browser ? abcjsDefaultExport : null;
 export default {
+	// @Store MIGRATION to Pinia
+	setup() {
+		const abcStore = useAbcStore();
+		return {
+			abcStore,
+		};
+	},
 	name: "load-and-save",
 	components: {AnimatedButton},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["close", "load", "transposeSource"],
 	props: {
 		currentTune: {
 			type: String,
@@ -36,21 +51,31 @@ export default {
 		},
 	},
 	computed: {
-		...mapGetters(['allTuneNames', 'tuneByTitle']),
+		// @Store MIGRATION to Pinia
+		//...mapGetters(['allTuneNames', 'tuneByTitle']),
+		...mapGetters(useAbcStore, ['allTuneNames', 'tuneByTitle']),
 		fontSize: {
 			get() {
-				return this.$store.getters.fontSize;
+				// @Store MIGRATION to Pinia
+				//return this.$store.getters.fontSize;
+				return this.abcStore.fontSize;
 			},
 			set(value) {
-				this.$store.commit('fontSize', value)
+				// @Store MIGRATION to Pinia
+				//this.$store.commit('fontSize', value)
+				this.abcStore.setFontSize(value);
 			}
 		},
 		visualTranspose: {
 			get() {
-				return this.$store.getters.visualTranspose;
+				// @Store MIGRATION to Pinia
+				//return this.$store.getters.visualTranspose;
+				return this.abcStore.visualTranspose;
 			},
 			set(value) {
-				this.$store.dispatch('setVisualTranspose', value)
+				// @Store MIGRATION to Pinia
+				//this.$store.dispatch('setVisualTranspose', value)
+				this.abcStore.setVisualTranspose(value);
 			}
 		},
 		abcTitle() {
@@ -70,7 +95,9 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions(['saveTune', 'deleteTuneByName']),
+		// @Store MIGRATION to Pinia
+		//...mapActions(['saveTune', 'deleteTuneByName']),
+		...mapActions(useAbcStore, ['saveTune', 'deleteTuneByName']),
 		storeAbcString() {
 			this.saveTune(this.currentTune);
 			this.$emit("close")
@@ -84,8 +111,12 @@ export default {
 			this.$emit("close")
 		},
 		transposeSource() {
-			this.$emit('transposeSource', { halfSteps: this.$store.getters.visualTranspose })
-			this.$store.dispatch('setVisualTranspose', '0')
+			// @Store MIGRATION to Pinia
+			//this.$emit('transposeSource', { halfSteps: this.$store.getters.visualTranspose })
+			this.$emit("transposeSource", { halfSteps: this.abcStore.visualTranspose })
+			// @Store MIGRATION to Pinia
+			//this.$store.dispatch('setVisualTranspose', '0')
+			this.abcStore.setVisualTranspose(0)
 			this.$emit("close")
 		}
 	}

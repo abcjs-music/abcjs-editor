@@ -10,16 +10,28 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+// @Store MIGRATION to Pinia
+//import {mapActions} from 'vuex';
+import { mapActions } from "pinia";
+import { useAbcStore } from "../store/abcStore";
 import CheckBox from "./CheckBox";
 import AnimatedButton from "./AnimatedButton";
 export default {
+	// @Store MIGRATION to Pinia
+	setup() {
+		const abcStore = useAbcStore();
+		return {
+			abcStore,
+		};
+	},
 	name: "output-options",
 	components: {AnimatedButton, CheckBox},
 	computed: {
 		uploadZoom: {
 			get() {
-				return this.$store.getters.uploadZoom; },
+				// @Store MIGRATION to Pinia
+				//return this.$store.getters.uploadZoom; },
+				return this.abcStore.uploadZoom; },
 			set(value) {
 				// Called when the user clicks with mouse
 				this.setUploadZoom(parseInt(value,10));
@@ -31,7 +43,9 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions(['setUploadZoom']),
+		// @Store MIGRATION to Pinia
+		//...mapActions(['setUploadZoom']),
+		...mapActions(useAbcStore, ['setUploadZoom']),
 		print() {
 			window.print();
 		},

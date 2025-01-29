@@ -19,6 +19,8 @@ import CheckBox from "./CheckBox";
 export default {
 	name: "animated-button",
 	components: {CheckBox},
+	// @vue3 MIGRATION: requires emits:
+	emits: ['click'],
 	props: {
 		label: {
 			type: String,

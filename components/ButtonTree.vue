@@ -10,6 +10,8 @@
 <script>
 export default {
 	name: "button-tree",
+	// @vue3 MIGRATION: requires emits:
+	emits: ['click'],
 	props: {
 		label: {
 			type: String,

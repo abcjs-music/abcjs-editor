@@ -27,7 +27,10 @@
 </template>
 
 <script>
-	const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+	// @nuxt3 MIGRATION:
+	//const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+	import abcjsDefaultExport from 'abcjs';
+	const abcjs = process.browser ? abcjsDefaultExport : null;
 	export default {
 		name: "help-headers",
 		data() {

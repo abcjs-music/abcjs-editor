@@ -16,8 +16,19 @@
 </template>
 
 <script>
+// @Store MIGRATION to Pinia
+import { useAbcStore } from "../store/abcStore";
 export default {
+	// @Store MIGRATION to Pinia
+	setup() {
+		const abcStore = useAbcStore();
+		return {
+			abcStore,
+		}
+	},
 	name: "check-box",
+	// @vue3 MIGRATION: requires emits:
+	emits: ["shift-tab", "tab"], // TODO review if this is really needed
 	props: {
 		label: {
 			type: String,
@@ -50,7 +61,9 @@ export default {
 	computed: {
 		dataModel: {
 			get() {
-				return this.$store.getters[this.id]; },
+				// @Store MIGRATION to Pinia
+				//return this.$store.getters[this.id]; },
+				return this.abcStore[this.id]; },
 			set(value) {
 				// Called when the user clicks with mouse
 				this.saveData(value);
@@ -67,13 +80,17 @@ export default {
 		toggle() {
 			// Called when user clicks with keyboard
 			if (!this.disabled)
-				this.saveData(!this.$store.getters[this.id]);
+				// @Store MIGRATION to Pinia
+				//this.saveData(!this.$store.getters[this.id]);
+				this.saveData(!this.abcStore[this.id]);
 		},
 		swallow() {
 			// this keeps the page from scrolling when the space key is pressed.
 		},
 		saveData(value) {
-			this.$store.dispatch(this.action, value);
+			// @Store MIGRATION to Pinia
+			//this.$store.dispatch(this.action, value);
+			this.abcStore[this.action](value);
 		},
 	},
 };

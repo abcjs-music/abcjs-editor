@@ -5,6 +5,8 @@
 <script>
 export default {
 	name: "button-with-icon",
+	// @vue3 MIGRATION: requires emits:
+	emits: ['click'],
 	props: {
 		label: {
 			type: String,

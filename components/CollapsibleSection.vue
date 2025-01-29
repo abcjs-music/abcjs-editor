@@ -26,6 +26,8 @@
 		mounted() {
 			this.showContents = this.isOpen;
 		},
+		// @vue3 MIGRATION: requires emits:
+		emits: ['click'],
 		props: {
 			title: {
 				type: String,

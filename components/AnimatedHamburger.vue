@@ -10,6 +10,8 @@ export default {
 			isOpen: false
 		}
 	},
+  // @vue3 MIGRATION: requires emits:
+  emits: ['click'],
   props: {
 	  aria: {
 	    type: String,

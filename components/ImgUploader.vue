@@ -39,6 +39,8 @@ const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED =
 export default {
 	name: 'img-uploader',
 	components: {ButtonWithIcon},
+	// @vue3 MIGRATION: requires emits:
+	emits: ['shift-tab', 'tab'], // TODO review if this is really needed
 	props: {
 		show: {
 			type: Boolean,
