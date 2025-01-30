@@ -15,7 +15,7 @@
 		</main>
 		<footer>
 			<ul>
-				<li><span class="pgm-name">abcjs quick editor</span> courtesy of <a class="link external-link" href="https://abcjs.net" target="_blank" rel="noreferrer">abcjs</a><br>
+				<li><span class="pgm-name">abcjs quick editor v{{packageVersion}}</span> courtesy of <a class="link external-link" href="https://abcjs.net" target="_blank" rel="noreferrer">abcjs v{{abcjsVersion}}</a><br>
 					<button class="link external-link" @click="bugs" rel="noreferrer">Bugs and Feature Requests</button></li>
 				<li>Written by <a class="link external-link" href="https://paulrosen.net" target="_blank" rel="noreferrer">Paul Rosen</a><br>
 					Copyright &copy; 2018-3 by Paul Rosen</li>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+	import {version as abcjsVersion} from 'abcjs/package.json';
+	import {version as packageVersion} from './package.json';
 	// @nuxt3 MIGRATION:
 	//const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 	import abcjsDefaultExport from 'abcjs';
@@ -32,7 +34,10 @@
 
 	export default {
 		data() {
-			return {};
+			return {
+				abcjsVersion,
+				packageVersion,
+			};
 		},
 		methods: {
 			bugs() {
@@ -44,9 +49,9 @@
 <style>
 @font-face {
 	font-family: 'itim-music';
-	src:  	url('/fonts/itim-music.ttf') format('truetype'),
-	url('/fonts/itim-music.woff') format('woff'),
-	url('/fonts/itim-music.svg#icomoon') format('svg');
+	src:  	url('~/assets/fonts/itim-music.ttf') format('truetype'),
+	url('~/assets/fonts/itim-music.woff') format('woff'),
+	url('~/assets/fonts/itim-music.svg#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -99,7 +104,7 @@
 
 	.header-image {
 		width: 100%;
-		background-image: url("/abcjs_comp_extended_08.svg");
+		background-image: url("~/assets/abcjs_comp_extended_08.svg");
 		background-repeat: no-repeat;
 		background-size: cover;
 		height: 30px;

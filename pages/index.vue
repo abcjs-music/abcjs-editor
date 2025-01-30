@@ -53,9 +53,9 @@
 			</div>
 		</div>
 		<section class="download">
-			<a :download="midiFilename" :href="midiData">Download MIDI</a>
-			<button @click="downloadWav">Download WAV</button>
-			<button v-if="hasClipboard" @click="createSharableLink">{{ copyText }}</button>
+			<a class="btn" :download="midiFilename" :href="midiData">Download MIDI</a>
+			<button class="btn" @click="downloadWav">Download WAV</button>
+			<button class="btn" v-if="hasClipboard" @click="createSharableLink">{{ copyText }}</button>
 		</section>
 	</div>
 </template>
@@ -357,20 +357,8 @@ K: Emin
 	}
 
 	.download a, .download button {
-		padding: 5px 20px;
-		border-radius: 8px;
-		color: white;
-		background: #0080a6;
-		text-decoration: none;
-		font-size: 1em;
-		border: none;
 		margin-left: 5px;
 		margin-right: 5px;
-	}
-
-	.download a:hover, .download button:hover {
-		text-decoration: underline;
-		background-color: #0a9ecc;
 	}
 
 	.muted {

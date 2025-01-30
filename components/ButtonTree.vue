@@ -41,6 +41,9 @@ export default {
 	display: flex;
 	align-items: center;
 }
+.tree:hover {
+	cursor: pointer;
+}
 .header {
 	color: #0098c4;
 	font-size: 1.5em;

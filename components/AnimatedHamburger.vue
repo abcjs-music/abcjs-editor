@@ -32,12 +32,10 @@ export default {
 
 <style scoped>
 .animated-hamburger {
-	cursor: pointer;
 	padding: 13px 26px 16px 5px;
 	min-width: inherit;
 }
 .animated-hamburger span, .animated-hamburger span:before, .animated-hamburger span:after {
-	cursor: pointer;
 	border-radius: 1px;
 	height: 2px;
 	width: 20px;

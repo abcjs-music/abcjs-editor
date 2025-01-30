@@ -45,6 +45,7 @@ export default {
 }
 
 .btn:hover {
+	cursor: pointer;
 	text-decoration: underline;
 	background-color: #0a9ecc;
 }
