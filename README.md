@@ -33,18 +33,34 @@ If you come up with something cool and it is fairly generic and either shows off
 
 ## Creation
 ```bash
-$ npx create-nuxt-app abcjs-editor
-? Project name abcjs-editor
-? Project description Simple visual editing of ABC strings
-? Author name Paul Rosen
-? Choose the package manager Npm
-? Choose UI framework None
-? Choose custom server framework None (Recommended)
-? Choose Nuxt.js modules Progressive Web App (PWA) Support
-? Choose linting tools ESLint
-? Choose test framework None
-? Choose rendering mode Universal (SSR)
+$ npx nuxi@latest init abcjs-editor-nuxt3
+ Which package manager would you like to use? npm
+ Initialize git repository? yes
 ```
+- Add Pinia store framework (replacement for vuex):
+  ```bash
+  $ npx nuxi module add pinia
+  ```
+  - did update:
+    - package.json:
+      ```json
+      ...
+      "dependencies": {
+        ...
+        "@pinia/nuxt": "^0.9.0",
+        "pinia": "^2.3.0",
+        ...
+      },
+      ...
+      ```
+    - nuxt.config.ts:
+      ```typescript
+      export default defineNuxtConfig({
+        ...
+        modules: ['@pinia/nuxt'],
+        ...
+      })
+      ```
 
 ## Build Setup
 
@@ -61,6 +77,13 @@ $ npm run start
 
 # generate static project
 $ npm run generate
+
+# generate GitHub Pages and serve locally
+$ npm run ghpages
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+## Deploy to GitHub Pages
+
+See [Nuxt GitHub Pages](https://nuxt.com/deploy/github-pages)

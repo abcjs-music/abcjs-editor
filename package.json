@@ -10,7 +10,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "ghpages": "nuxt build --preset github_pages",
+    "postghpages": "npx serve .output/public"
   },
   "dependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",
