@@ -1,0 +1,50 @@
+name: Lint Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  lintcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      #- run: corepack enable
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+      # Install all packages
+      - name: Install Packages
+        run: npm ci
+      - name: Build GitHub Page
+        run: |
+          export NUXT_APP_BASE_URL="/${GITHUB_REPOSITORY##*/}/"
+          echo "NUXT_APP_BASE_URL: ${NUXT_APP_BASE_URL}"
+          npx nuxt build --preset github_pages
+      - name: Lint Check
+        run: |
+          # Make piped command to provide failed error code:
+          set -o pipefail
+          npm run lint 2>&1 | tee -a $GITHUB_STEP_SUMMARY
+          echo "Lint Check PASSED!" | tee -a $GITHUB_STEP_SUMMARY
+  #typecheck:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v4
+  #    - run: corepack enable
+  #    - uses: actions/setup-node@v4
+  #      with:
+  #        node-version: 20
+  #        cache: "npm"
+  #    - run: pnpm install
+  #    - run: pnpm nuxi prepare
+  #    - run: pnpm typecheck
