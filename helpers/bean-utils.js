@@ -11,8 +11,8 @@ export function getterName(propName, isBooleanProp = false) {
 function propName2GetterSetterName(getterSetterPrefix, propName) {
 	if (!propName) return getterSetterPrefix + "Unknown";
 	return (
-		getterSetterPrefix +
-		propName.charAt(0).toUpperCase() +
-		propName.slice(1)
+		getterSetterPrefix
+		+ propName.charAt(0).toUpperCase()
+		+ propName.slice(1)
 	);
 }

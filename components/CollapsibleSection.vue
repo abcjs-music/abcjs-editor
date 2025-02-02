@@ -1,61 +1,61 @@
 <template>
 	<section>
-		<button-tree @click="toggle" :is-open="showContents" :label="title" :is-header2="isHeader2" :is-header3="isHeader3"></button-tree>
+		<button-tree :is-open="showContents" :label="title" :is-header2="isHeader2" :is-header3="isHeader3" @click="toggle" />
 		<div v-if="showContents" class="help-section">
-			<slot></slot>
+			<slot />
 		</div>
 	</section>
 </template>
 
 <script>
+import ButtonTree from "./ButtonTree";
 
-	import ButtonTree from "./ButtonTree";
-	export default {
-		name: 'collapsible-section',
-		components: {ButtonTree},
-		watch: {
-			isOpen() {
-				this.showContents = this.isOpen;
-			}
+export default {
+	name: "CollapsibleSection",
+	components: { ButtonTree },
+	props: {
+		title: {
+			type: String,
+			required: true,
 		},
-		data() {
-			return {
-				showContents: false,
-			}
+		isOpen: {
+			type: Boolean,
+			required: false,
+			default: false,
 		},
-		mounted() {
+		isHeader2: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		isHeader3: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["click"],
+	data() {
+		return {
+			showContents: false,
+		};
+	},
+	watch: {
+		isOpen() {
 			this.showContents = this.isOpen;
 		},
-		// @vue3 MIGRATION: requires emits:
-		emits: ['click'],
-		props: {
-			title: {
-				type: String,
-				required: true,
-			},
-			isOpen: {
-				type: Boolean,
-				required: false,
-				default: false
-			},
-			isHeader2: {
-				type: Boolean,
-				required: false,
-				default: false
-			},
-			isHeader3: {
-				type: Boolean,
-				required: false,
-				default: false
-			},
+	},
+	mounted() {
+		this.showContents = this.isOpen;
+	},
+	methods: {
+		toggle() {
+			this.showContents = !this.showContents;
+			this.$emit("click");
 		},
-		methods: {
-			toggle() {
-				this.showContents = !this.showContents;
-				this.$emit("click");
-			}
-		}
-	};
+	},
+};
 </script>
 
 <style scoped>

@@ -1,79 +1,68 @@
 <template>
-		<div class="img-uploader no-print">
-			<!--UPLOAD-->
-			<form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-				<h2>Display witness image</h2>
-				<label
-					class="dropbox"
-					tabindex="0"
-					@keyup.enter.self.stop="toggle"
-					@keyup.space.self.stop="toggle"
-					@keydown.space.prevent="swallow"
-					@keydown.tab="($event.shiftKey) ? $emit('shift-tab') : $emit('tab')"
+	<div class="img-uploader no-print">
+		<!-- UPLOAD -->
+		<form v-if="isInitial || isSaving" enctype="multipart/form-data" novalidate>
+			<h2>Display witness image</h2>
+			<label
+				class="dropbox"
+				tabindex="0"
+				@keyup.enter.self.stop="toggle"
+				@keyup.space.self.stop="toggle"
+				@keydown.space.prevent="swallow"
+				@keydown.tab="($event.shiftKey) ? $emit('shift-tab') : $emit('tab')"
+			>
+				<input
+					type="file"
+					:name="uploadFieldName"
+					:disabled="isSaving"
+					accept="image/*,.pdf"
+					class="input-file"
+					@change="filesChange($event.target.name, $event.target.files)"
 				>
-					<input type="file" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files)"
-						   accept="image/*,.pdf" class="input-file">
-					<p v-if="isInitial">Drag your file here to insert image<br>or click to browse.</p>
-				</label>
-			</form>
-			<!--SUCCESS-->
-			<div v-if="isSuccess">
-				<div :class="`target-for-image ${uploadedFile ? 'loaded' : 'empty'}`" tabindex="0">
-				</div>
-			</div>
-			<!--FAILED-->
-			<div v-if="isFailed">
-				<h2>Uploaded failed.</h2>
-				<p>
-					<a href="javascript:void(0)" @click="reset()">Try again</a>
-				</p>
-				<pre>{{ uploadError }}</pre>
-			</div>
+				<p v-if="isInitial">Drag your file here to insert image<br>or click to browse.</p>
+			</label>
+		</form>
+		<!-- SUCCESS -->
+		<div v-if="isSuccess">
+			<div :class="`target-for-image ${uploadedFile ? 'loaded' : 'empty'}`" tabindex="0" />
 		</div>
+		<!-- FAILED -->
+		<div v-if="isFailed">
+			<h2>Uploaded failed.</h2>
+			<p>
+				<a href="javascript:void(0)" @click="reset()">Try again</a>
+			</p>
+			<pre>{{ uploadError }}</pre>
+		</div>
+	</div>
 </template>
 
 <script>
-import ButtonWithIcon from "./ButtonWithIcon";
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
 export default {
-	name: 'img-uploader',
-	components: {ButtonWithIcon},
-	// @vue3 MIGRATION: requires emits:
-	emits: ['shift-tab', 'tab'], // TODO review if this is really needed
+	name: "ImgUploader",
 	props: {
 		show: {
 			type: Boolean,
 			required: false,
-			default: false
+			default: false,
 		},
 		uploadZoom: {
 			type: Number,
 			required: false,
-			default: 100
+			default: 100,
 		},
 	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["shift-tab", "tab"],
 	data() {
 		return {
-			uploadedFile: '',
+			uploadedFile: "",
 			uploadError: null,
 			currentStatus: null,
-			uploadFieldName: 'photos',
-		}
-	},
-	watch: {
-		show(newValue) {
-			if (newValue)
-				this.reset();
-			else
-				this.setClosed();
-		},
-		uploadZoom(newValue) {
-			const target = document.querySelector('.target-for-image iframe');
-			if (target) {
-				target.style.transform = `scale(${newValue/100})`;
-			}
-		},
+			uploadFieldName: "photos",
+		};
 	},
 	computed: {
 		isInitial() {
@@ -87,7 +76,24 @@ export default {
 		},
 		isFailed() {
 			return this.currentStatus === STATUS_FAILED;
-		}
+		},
+	},
+	watch: {
+		show(newValue) {
+			if (newValue)
+				this.reset();
+			else
+				this.setClosed();
+		},
+		uploadZoom(newValue) {
+			const target = document.querySelector(".target-for-image iframe");
+			if (target) {
+				target.style.transform = `scale(${newValue / 100})`;
+			}
+		},
+	},
+	mounted() {
+		this.setClosed();
 	},
 	methods: {
 		reset() {
@@ -101,11 +107,11 @@ export default {
 			this.currentStatus = STATUS_SAVING;
 
 			this.upload(formData)
-				.then(x => {
+				.then((x) => {
 					this.uploadedFile = x;
 					this.currentStatus = STATUS_SUCCESS;
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.uploadError = err.response;
 					this.currentStatus = STATUS_FAILED;
 				});
@@ -120,7 +126,7 @@ export default {
 			// append the files to FormData
 			Array
 				.from(Array(fileList.length).keys())
-				.map(x => {
+				.map((x) => {
 					formData.append(fieldName, fileList[x], fileList[x].name);
 				});
 
@@ -128,22 +134,23 @@ export default {
 			this.save(formData);
 		},
 		upload(formData) {
-			const photos = formData.getAll('photos');
-			const promises = photos.map((x) => this.getImage(x)
+			const photos = formData.getAll("photos");
+			const promises = photos.map(x => this.getImage(x)
 				.then(img => ({
 					id: img,
 					originalName: x.name,
 					fileName: x.name,
-					url: img
+					url: img,
 				})));
 			return Promise.all(promises);
 		},
 		getImage(file) {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			return new Promise((resolve, reject) => {
 				const fReader = new FileReader();
 				const tagName = (file.type === "application/pdf") ? "iframe" : "img";
 				const img = document.createElement(tagName);
-				img.setAttribute("style", `height: ${this.uploadZoom}vh;transform: scale(${this.uploadZoom/100})`);
+				img.setAttribute("style", `height: ${this.uploadZoom}vh;transform: scale(${this.uploadZoom / 100})`);
 				img.setAttribute("title", "Witness Document");
 
 				fReader.onload = () => {
@@ -151,16 +158,16 @@ export default {
 					const target = document.querySelector(".target-for-image");
 					target.appendChild(img);
 					resolve();
-				}
+				};
 
 				fReader.readAsDataURL(file);
-			})
+			});
 		},
 		setClosed() {
 			this.reset();
 			const target = document.querySelector(".target-for-image");
 			if (target)
-				target.innerHTML = '';
+				target.innerHTML = "";
 			this.currentStatus = STATUS_SUCCESS;
 		},
 		toggle(event) {
@@ -172,11 +179,7 @@ export default {
 			// this keeps the page from scrolling when the space key is pressed.
 		},
 	},
-	mounted() {
-		this.setClosed();
-	},
-}
-
+};
 </script>
 
 <style scoped>
@@ -218,6 +221,7 @@ export default {
 	border-radius: 4px;
 }
 </style>
+
 <style>
 .target-for-image {
 	overflow: auto;

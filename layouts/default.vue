@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<div id="print-version"></div>
+		<div id="print-version" />
 		<header>
 			<div class="header-image">
 				<h1>quick editor</h1>
@@ -15,37 +15,42 @@
 		</main>
 		<footer>
 			<ul>
-				<li><span class="pgm-name">abcjs quick editor v{{packageVersion}}</span> courtesy of <a class="link external-link" href="https://abcjs.net" target="_blank" rel="noreferrer">abcjs v{{abcjsVersion}}</a><br>
-					<button class="link external-link" @click="bugs" rel="noreferrer">Bugs and Feature Requests</button></li>
-				<li>Written by <a class="link external-link" href="https://paulrosen.net" target="_blank" rel="noreferrer">Paul Rosen</a><br>
-					Copyright &copy; 2018-3 by Paul Rosen</li>
+				<li>
+					<span class="pgm-name">abcjs quick editor v{{ packageVersion }}</span> courtesy of <a class="link external-link" href="https://abcjs.net" target="_blank" rel="noreferrer">abcjs v{{ abcjsVersion }}</a><br>
+					<button class="link external-link" rel="noreferrer" @click="bugs">
+						Bugs and Feature Requests
+					</button>
+				</li>
+				<li>
+					Written by <a class="link external-link" href="https://paulrosen.net" target="_blank" rel="noreferrer">Paul Rosen</a><br>
+					Copyright &copy; 2018-3 by Paul Rosen
+				</li>
 			</ul>
 		</footer>
 	</div>
 </template>
 
 <script>
-	import {version as abcjsVersion} from 'abcjs/package.json';
-	import {version as packageVersion} from './package.json';
-	// @nuxt3 MIGRATION:
-	//const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
-	import abcjsDefaultExport from 'abcjs';
-	const abcjs = process.browser ? abcjsDefaultExport : null;
+import { version as abcjsVersion } from "abcjs/package.json";
+import { version as packageVersion } from "./package.json";
+// @ESlint: abcjs is NOT used!
+// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 
-	export default {
-		data() {
-			return {
-				abcjsVersion,
-				packageVersion,
-			};
+export default {
+	data() {
+		return {
+			abcjsVersion,
+			packageVersion,
+		};
+	},
+	methods: {
+		bugs() {
+			window.location.href = "mailto:blog@paulrosen.net?subject=[abcjs-editor] ";
 		},
-		methods: {
-			bugs() {
-				window.location.href = 'mailto:blog@paulrosen.net?subject=[abcjs-editor] ';
-			},
-		}
-	}
+	},
+};
 </script>
+
 <style>
 @font-face {
 	font-family: 'itim-music';
@@ -322,5 +327,4 @@
 		display: none;
 	}
 }
-
 </style>

@@ -1,12 +1,12 @@
 <template>
-	<button :class="`btn ${type}`" @click="$emit('click')">{{label}}</button>
+	<button :class="`btn ${type}`" @click="$emit('click')">
+		{{ label }}
+	</button>
 </template>
 
 <script>
 export default {
-	name: "button-with-icon",
-	// @vue3 MIGRATION: requires emits:
-	emits: ['click'],
+	name: "ButtonWithIcon",
 	props: {
 		label: {
 			type: String,
@@ -15,16 +15,18 @@ export default {
 		type: {
 			type: String,
 			required: false,
-			default: ''
+			default: "",
 		},
 
 		// NOTE: The icon was removed for now.
 		icon: {
 			type: String,
 			required: true,
-		}
-	}
-}
+		},
+	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["click"],
+};
 </script>
 
 <style>

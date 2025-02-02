@@ -19,25 +19,25 @@ export const useAbcStore = defineStore("abcStore", {
 	},
 	// Getters to retrieve store content
 	getters: {
-		allTuneNames: (state) => Object.keys(state._allTunes).sort(),
-        tuneByTitle: (state) => (title) => {
-            return state._allTunes[title];
-        },
-        showUpload: (state) => state._showUpload,
-		shortenOutput: (state) => state._shortenOutput,
-        uploadZoom: (state) => state._uploadZoom,
-        fontSize: (state) => state._fontSize,
-        visualTranspose: (state) => state._visualTranspose,
+		allTuneNames: state => Object.keys(state._allTunes).sort(),
+		tuneByTitle: state => (title) => {
+			return state._allTunes[title];
+		},
+		showUpload: state => state._showUpload,
+		shortenOutput: state => state._shortenOutput,
+		uploadZoom: state => state._uploadZoom,
+		fontSize: state => state._fontSize,
+		visualTranspose: state => state._visualTranspose,
 	},
 	// Actions to save content to the store
 	actions: {
 		initTunes() {
 			this._allTunes = getLocalStorage("tunes", {}, "Object");
 			this.setShowUpload(
-				getLocalStorage("show-upload", false, "Boolean")
+				getLocalStorage("show-upload", false, "Boolean"),
 			);
 			this.setShortenOutput(
-				getLocalStorage("shorten-output", false, "Boolean")
+				getLocalStorage("shorten-output", false, "Boolean"),
 			);
 			this.setUploadZoom(getLocalStorage("upload-zoom", 100, "Integer"));
 			this.setFontSize(getLocalStorage("font-size", 18, "Integer"));

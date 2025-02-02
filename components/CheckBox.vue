@@ -1,16 +1,16 @@
 <template>
 	<div :class="wrapperClass">
-		<input type="checkbox" v-model="dataModel" :id="id" :disabled="disabled">
+		<input :id="id" v-model="dataModel" type="checkbox" :disabled="disabled">
 		<label
 			:for="id"
 			tabindex="0"
+			:title="disabled ? disabledMessage : ''"
 			@keyup.enter.self.stop="toggle"
 			@keyup.space.self.stop="toggle"
 			@keydown.space.prevent="swallow"
 			@keydown.tab="($event.shiftKey) ? $emit('shift-tab') : $emit('tab')"
-			:title="disabled ? disabledMessage : ''"
 		>
-			{{label}}
+			{{ label }}
 		</label>
 	</div>
 </template>
@@ -18,17 +18,9 @@
 <script>
 // @Store MIGRATION to Pinia
 import { useAbcStore } from "../store/abcStore";
+
 export default {
-	// @Store MIGRATION to Pinia
-	setup() {
-		const abcStore = useAbcStore();
-		return {
-			abcStore,
-		}
-	},
-	name: "check-box",
-	// @vue3 MIGRATION: requires emits:
-	emits: ["shift-tab", "tab"], // TODO review if this is really needed
+	name: "CheckBox",
 	props: {
 		label: {
 			type: String,
@@ -49,28 +41,38 @@ export default {
 		},
 		disabledMessage: {
 			type: String,
-			default: '',
+			default: "",
 			required: false,
 		},
 		type: {
 			type: String,
-			default: '',
+			default: "",
 			required: false,
-		}
+		},
+	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["shift-tab", "tab"],
+	// @Store MIGRATION to Pinia
+	setup() {
+		const abcStore = useAbcStore();
+		return {
+			abcStore,
+		};
 	},
 	computed: {
 		dataModel: {
 			get() {
 				// @Store MIGRATION to Pinia
-				//return this.$store.getters[this.id]; },
-				return this.abcStore[this.id]; },
+				// return this.$store.getters[this.id]; },
+				return this.abcStore[this.id];
+			},
 			set(value) {
 				// Called when the user clicks with mouse
 				this.saveData(value);
-			}
+			},
 		},
 		wrapperClass() {
-			let cls = [ 'check-box'];
+			const cls = ["check-box"];
 			if (this.type)
 				cls.push(this.type);
 			return cls.join(" ");
@@ -81,7 +83,7 @@ export default {
 			// Called when user clicks with keyboard
 			if (!this.disabled)
 				// @Store MIGRATION to Pinia
-				//this.saveData(!this.$store.getters[this.id]);
+				// this.saveData(!this.$store.getters[this.id]);
 				this.saveData(!this.abcStore[this.id]);
 		},
 		swallow() {
@@ -89,7 +91,7 @@ export default {
 		},
 		saveData(value) {
 			// @Store MIGRATION to Pinia
-			//this.$store.dispatch(this.action, value);
+			// this.$store.dispatch(this.action, value);
 			this.abcStore[this.action](value);
 		},
 	},

@@ -1,10 +1,12 @@
 <template>
 	<div>
-		<p>Chord symbols can be placed over the staff to indicate what chords the accompanist should play. These chords are
+		<p>
+			Chord symbols can be placed over the staff to indicate what chords the accompanist should play. These chords are
 			played by the MIDI player, too. Chords are created by putting any string inside double quote marks. There is no error
-			checking of these strings. They are just printed as is. Many common patterns are understood by the MIDI player.</p>
-		<pre>{{abcString}}</pre>
-		<div id="help-chords-paper"></div>
+			checking of these strings. They are just printed as is. Many common patterns are understood by the MIDI player.
+		</p>
+		<pre>{{ abcString }}</pre>
+		<div id="help-chords-paper" />
 
 		<p>Here's a list of the chord types that are understood by the playback system:</p>
 		<table>
@@ -35,32 +37,32 @@
 </template>
 
 <script>
-	// @nuxt3 MIGRATION:
-	//const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
-	import abcjsDefaultExport from 'abcjs';
-	const abcjs = process.browser ? abcjsDefaultExport : null;
-	export default {
-		name: "help-accompaniment",
-		data() {
-			return {
-				abcString: `X:1
+// @nuxt3 MIGRATION:
+// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+import abcjsDefaultExport from "abcjs";
+
+const abcjs = import.meta.browser ? abcjsDefaultExport : null;
+export default {
+	name: "HelpAccompaniment",
+	components: {
+	},
+	data() {
+		return {
+			abcString: `X:1
 L:1/4
 K:C
 "A"A "Gm7"D "Bb°7"F "F#9"g|]`,
-			}
-		},
-		mounted() {
-			abcjs.renderAbc("help-chords-paper",
-				this.abcString, {
-					format: {
-						gchordfont: "FreeSerif",
-					}
-				});
-		},
-		components: {
-		},
-	};
-
+		};
+	},
+	mounted() {
+		abcjs.renderAbc("help-chords-paper",
+			this.abcString, {
+				format: {
+					gchordfont: "FreeSerif",
+				},
+			});
+	},
+};
 </script>
 
 <style scoped>

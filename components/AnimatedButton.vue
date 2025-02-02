@@ -1,57 +1,58 @@
 <template>
 	<span class="animated-button">
 
-		<button class="animate" v-if="el === 'button'" @click="$emit('click')">
-		{{ label }}
+		<button v-if="el === 'button'" class="animate" @click="$emit('click')">
+			{{ label }}
 		</button>
 
-		<a class="animate" v-if="el === 'a'" :download="download" :href="href">
-		{{ label }}
+		<a v-if="el === 'a'" class="animate" :download="download" :href="href">
+			{{ label }}
 		</a>
 
-		<check-box class="animate" v-if="el === 'checkbox'" :label="label" :id="id" :action="action"></check-box>
+		<check-box v-if="el === 'checkbox'" :id="id" class="animate" :label="label" :action="action" />
 
 	</span>
 </template>
 
 <script>
 import CheckBox from "./CheckBox";
+
 export default {
-	name: "animated-button",
-	components: {CheckBox},
-	// @vue3 MIGRATION: requires emits:
-	emits: ['click'],
+	name: "AnimatedButton",
+	components: { CheckBox },
 	props: {
 		label: {
 			type: String,
-			required: true
+			required: true,
 		},
 		el: {
 			type: String,
-			required: true
+			required: true,
 		},
 		download: {
 			type: String,
 			required: false,
-			default: ""
+			default: "",
 		},
 		href: {
 			type: String,
 			required: false,
-			default: ""
+			default: "",
 		},
 		id: {
 			type: String,
 			required: false,
-			default: ""
+			default: "",
 		},
 		action: {
 			type: String,
 			required: false,
-			default: ""
+			default: "",
 		},
 	},
-}
+	// @vue3 MIGRATION: requires emits:
+	emits: ["click"],
+};
 </script>
 
 <style scoped>
@@ -76,30 +77,30 @@ export default {
 }
 
 .animate:before{
-	 content: '';
-	 display: block;
-	 position: absolute;
-	 background: rgba(255,255,255,0.5);
-	 width: 60px;
-	 height: 100%;
-	 left: 0;
-	 top: 0;
-	 opacity: .5;
-	 filter: blur(30px);
-	 transform: translateX(-100px)  skewX(-15deg);
+	content: '';
+	display: block;
+	position: absolute;
+	background: rgba(255,255,255,0.5);
+	width: 60px;
+	height: 100%;
+	left: 0;
+	top: 0;
+	opacity: .5;
+	filter: blur(30px);
+	transform: translateX(-100px)  skewX(-15deg);
  }
 .animate:after{
-	 content: '';
-	 display: block;
-	 position: absolute;
-	 background: rgba(255,255,255,0.2);
-	 width: 30px;
-	 height: 100%;
-	 left: 30px;
-	 top: 0;
-	 opacity: 0;
-	 filter: blur(5px);
-	 transform: translateX(-100px) skewX(-15deg);
+	content: '';
+	display: block;
+	position: absolute;
+	background: rgba(255,255,255,0.2);
+	width: 30px;
+	height: 100%;
+	left: 30px;
+	top: 0;
+	opacity: 0;
+	filter: blur(5px);
+	transform: translateX(-100px) skewX(-15deg);
  }
 .animate:hover {
 	background: #0fb4e7;
@@ -107,14 +108,14 @@ export default {
 	cursor: pointer;
 }
 .animate:hover:before{
-	 transform: translateX(300px)  skewX(-15deg);
-	 opacity: 0.6;
-	 transition: .7s;
+	transform: translateX(300px)  skewX(-15deg);
+	opacity: 0.6;
+	transition: .7s;
  }
 .animate:hover:after{
-	 transform: translateX(300px) skewX(-15deg);
-	 opacity: 1;
-	 transition: .7s;
+	transform: translateX(300px) skewX(-15deg);
+	opacity: 1;
+	transition: .7s;
  }
 </style>
 
