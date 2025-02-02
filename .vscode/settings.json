@@ -5,10 +5,12 @@
     "editor.wordWrap": "on"
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.insertSpaces": false
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.insertSpaces": false
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -17,21 +19,24 @@
     // Indent with tab size 4 - as given by abcjs
     "editor.detectIndentation": false,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    //"editor.insertSpaces": false,
+    "editor.insertSpaces": false,
     //"editor.tabSize": 4,
     "prettier.tabWidth": 4,
     "prettier.useTabs": true
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-    //"prettier.tabWidth": 4,
-    //"prettier.useTabs": true
+    // Indent with tab size 4 - as given by abcjs
+    "editor.detectIndentation": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.insertSpaces": false,
+    "prettier.tabWidth": 4,
+    "prettier.useTabs": true
   },
   "[vue]": {
     // Indent with tab size 4 - as given by abcjs
     "editor.detectIndentation": false,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    //"editor.insertSpaces": false,
+    "editor.insertSpaces": false,
     //"editor.tabSize": 4,
     "prettier.tabWidth": 4,
     "prettier.useTabs": true
