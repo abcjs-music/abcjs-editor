@@ -1,8 +1,9 @@
-# Sample workflow for building and deploying a Nuxt site to GitHub Pages
+# Workflow for building and deploying a Nuxt3 site to GitHub Pages
 #
-# To get started with Nuxt see: https://nuxtjs.org/docs/get-started/installation
+# To get started with Nuxt3 see: https://nuxtjs.org/docs/get-started/installation
+# To deploy a Nuxt3 app to GitHub Pages see: https://nuxt.com/deploy/github-pages
 #
-name: Deploy Nuxt site to Pages
+name: Deploy Nuxt3 site to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -46,6 +47,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -61,36 +63,48 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "16.10.0"
+          node-version: "20.18.2"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          # Automatically inject router.base in your Nuxt configuration file and set
-          # target to static (https://nuxtjs.org/docs/configuration-glossary/configuration-target/).
-          #
-          # You may remove this line if you want to manage the configuration yourself.
-          static_site_generator: nuxt
+
+      # Note: actions/configure-pages@v5 is for Nuxt2 only
+      #- name: Setup Pages
+      #  uses: actions/configure-pages@v5
+      #  with:
+      #    # Automatically inject router.base in your Nuxt configuration file and set
+      #    # target to static (https://nuxtjs.org/docs/configuration-glossary/configuration-target/).
+      #    #
+      #    # You may remove this line if you want to manage the configuration yourself.
+      #    static_site_generator: nuxt
+
       - name: Restore cache
         uses: actions/cache@v4
         with:
           path: |
-            dist
+            .output
             .nuxt
-          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('dist') }}
+          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('.output') }}
           restore-keys: |
             ${{ runner.os }}-nuxt-build-
+
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Static HTML export with Nuxt
-        run: ${{ steps.detect-package-manager.outputs.manager }} run generate
+
+      - name: Static HTML export with Nuxt3
+        run: |
+          # If there is no domain assigned to this repos GH pages,
+          # then set NUXT_APP_BASE_URL=/<repository>/
+          export NUXT_APP_BASE_URL="/${GITHUB_REPOSITORY##*/}/"
+          echo "NUXT_APP_BASE_URL: ${NUXT_APP_BASE_URL}"
+          npx nuxt build --preset github_pages
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./.output/public
 
   # Deployment job
   deploy:
