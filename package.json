@@ -1,8 +1,9 @@
 {
   "name": "abcjs-editor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple visual editing of ABC strings",
   "author": "Paul Rosen",
+  "copyright": "Copyright © 2025 by Paul Rosen",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,14 +18,13 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@nuxt/eslint": "^1.0.0",
+    "@nuxt/eslint": "^1.0.1",
     "@nuxtjs/google-fonts": "^3.2.0",
-    "@pinia/nuxt": "^0.9.0",
-    "eslint": "^9.19.0",
-    "nuxt": "^3.15.1",
-    "pinia": "^2.3.1",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "@pinia/nuxt": "^0.10.0",
+    "eslint": "^9.20.0",
+    "nuxt": "^3.15.4",
+    "pinia": "^3.0.0",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "abcjs": "^6.4.4",

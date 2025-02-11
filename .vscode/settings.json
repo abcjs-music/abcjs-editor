@@ -1,4 +1,5 @@
 {
+  "editor.gotoLocation.multipleDefinitions": "peek",
   "editor.formatOnPaste": true,
   "git.autofetch": true,
   "[markdown]": {
