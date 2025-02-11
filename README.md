@@ -86,4 +86,6 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 ## Deploy to GitHub Pages
 
-See [Nuxt GitHub Pages](https://nuxt.com/deploy/github-pages)
+This repo provides a GitHub Action to deploy to GitHub Pages.
+Enable GitHub Pages settings for this repo first and select `GitHub Actions` as the source for deployment.
+See [Nuxt GitHub Pages](https://nuxt.com/deploy/github-pages) for further details.
