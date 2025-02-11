@@ -23,7 +23,7 @@
 				</li>
 				<li>
 					Written by <a class="link external-link" href="https://paulrosen.net" target="_blank" rel="noreferrer">Paul Rosen</a><br>
-					Copyright &copy; 2018-3 by Paul Rosen
+					{{ copyRight }}
 				</li>
 			</ul>
 		</footer>
@@ -32,7 +32,7 @@
 
 <script>
 import { version as abcjsVersion } from "abcjs/package.json";
-import { version as packageVersion } from "./package.json";
+import { version as packageVersion, copyright as copyRight } from "./package.json";
 // @ESlint: abcjs is NOT used!
 // const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 
@@ -41,6 +41,7 @@ export default {
 		return {
 			abcjsVersion,
 			packageVersion,
+			copyRight,
 		};
 	},
 	methods: {
