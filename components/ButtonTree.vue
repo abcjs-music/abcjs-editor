@@ -34,7 +34,6 @@ export default {
 			default: false,
 		},
 	},
-	// @vue3 MIGRATION: requires emits:
 	emits: ["click"],
 };
 </script>

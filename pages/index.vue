@@ -16,8 +16,6 @@
 				<section class="input">
 					<nav aria-label="input options">
 						<grow-to-modal ref="modal1" aria="Input Options">
-							<!-- @Vue3 MIGRATION: -->
-							<!-- <template slot="body"> -->
 							<template #body>
 								<load-and-save :current-tune="abcString" @load="setTune($event)" @close="close" @transpose-source="transposeSource" />
 							</template>
@@ -42,8 +40,6 @@
 				<div class="menu-holder no-print">
 					<nav aria-label="rendering options">
 						<grow-to-modal ref="modal2" aria="Rendering Options">
-							<!-- @Vue3 MIGRATION: -->
-							<!-- <template slot="body"> -->
 							<template #body>
 								<output-options />
 							</template>
@@ -67,8 +63,6 @@
 </template>
 
 <script>
-// @Vue3 MIGRATION:
-// import Vue from 'vue';
 import * as Vue from "vue";
 import { mapGetters, mapActions } from "pinia";
 import abcjsDefaultExport from "abcjs";
@@ -81,13 +75,9 @@ import IntroText from "../components/IntroText";
 import { getLocalStorage, setLocalStorage } from "../helpers/local-storage-wrapper";
 import GrowToModal from "../components/GrowToModal";
 import LoadAndSave from "../components/LoadAndSave";
-// @Store MIGRATION to Pinia
-// import {mapGetters, mapActions} from 'vuex';
 import { useAbcStore } from "../store/abcStore";
 import OutputOptions from "../components/OutputOptions";
 import { sleep } from "../helpers/sleep";
-// @nuxt3 MIGRATION:
-// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
 
@@ -102,7 +92,6 @@ export default {
 		ButtonWithIcon,
 		CheatSheet,
 	},
-	// @Store MIGRATION to Pinia
 	setup() {
 		const abcStore = useAbcStore();
 		return {
@@ -138,8 +127,6 @@ export default {
 		};
 	},
 	computed: {
-		// @Store MIGRATION to Pinia
-		// ...mapGetters(['showUpload', 'uploadZoom', 'shortenOutput', 'fontSize', 'visualTranspose']),
 		...mapGetters(useAbcStore, ["showUpload", "uploadZoom", "shortenOutput", "fontSize", "visualTranspose"]),
 		midiFilename() {
 			if (!this.abcjsEditor || this.abcjsEditor.tunes.length === 0)
@@ -230,8 +217,6 @@ K: Emin
 		window.onbeforeprint = this.redrawPrint;
 	},
 	methods: {
-		// @Store MIGRATION to Pinia
-		// ...mapActions(['initTunes']),
 		...mapActions(useAbcStore, ["initTunes"]),
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {

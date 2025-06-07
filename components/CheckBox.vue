@@ -16,7 +16,6 @@
 </template>
 
 <script>
-// @Store MIGRATION to Pinia
 import { useAbcStore } from "../store/abcStore";
 
 export default {
@@ -50,9 +49,7 @@ export default {
 			required: false,
 		},
 	},
-	// @vue3 MIGRATION: requires emits:
 	emits: ["shift-tab", "tab"],
-	// @Store MIGRATION to Pinia
 	setup() {
 		const abcStore = useAbcStore();
 		return {
@@ -62,8 +59,6 @@ export default {
 	computed: {
 		dataModel: {
 			get() {
-				// @Store MIGRATION to Pinia
-				// return this.$store.getters[this.id]; },
 				return this.abcStore[this.id];
 			},
 			set(value) {
@@ -82,16 +77,12 @@ export default {
 		toggle() {
 			// Called when user clicks with keyboard
 			if (!this.disabled)
-				// @Store MIGRATION to Pinia
-				// this.saveData(!this.$store.getters[this.id]);
 				this.saveData(!this.abcStore[this.id]);
 		},
 		swallow() {
 			// this keeps the page from scrolling when the space key is pressed.
 		},
 		saveData(value) {
-			// @Store MIGRATION to Pinia
-			// this.$store.dispatch(this.action, value);
 			this.abcStore[this.action](value);
 		},
 	},

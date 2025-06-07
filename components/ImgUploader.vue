@@ -54,7 +54,6 @@ export default {
 			default: 100,
 		},
 	},
-	// @vue3 MIGRATION: requires emits:
 	emits: ["shift-tab", "tab"],
 	data() {
 		return {

@@ -22,14 +22,10 @@
 </template>
 
 <script>
-// @Store MIGRATION to Pinia
-// import {mapActions, mapGetters} from 'vuex';
 import { mapActions, mapGetters } from "pinia";
 import { useAbcStore } from "../store/abcStore";
 import { abcTitle, abcFilename } from "../helpers/abc";
 import AnimatedButton from "./AnimatedButton";
-// @ESlint: abcjs is NOT used!
-// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 export default {
 	name: "LoadAndSave",
 	components: { AnimatedButton },
@@ -39,9 +35,7 @@ export default {
 			required: true,
 		},
 	},
-	// @vue3 MIGRATION: requires emits:
 	emits: ["close", "load", "transposeSource"],
-	// @Store MIGRATION to Pinia
 	setup() {
 		const abcStore = useAbcStore();
 		return {
@@ -49,30 +43,20 @@ export default {
 		};
 	},
 	computed: {
-		// @Store MIGRATION to Pinia
-		// ...mapGetters(['allTuneNames', 'tuneByTitle']),
 		...mapGetters(useAbcStore, ["allTuneNames", "tuneByTitle"]),
 		fontSize: {
 			get() {
-				// @Store MIGRATION to Pinia
-				// return this.$store.getters.fontSize;
 				return this.abcStore.fontSize;
 			},
 			set(value) {
-				// @Store MIGRATION to Pinia
-				// this.$store.commit('fontSize', value)
 				this.abcStore.setFontSize(value);
 			},
 		},
 		visualTranspose: {
 			get() {
-				// @Store MIGRATION to Pinia
-				// return this.$store.getters.visualTranspose;
 				return this.abcStore.visualTranspose;
 			},
 			set(value) {
-				// @Store MIGRATION to Pinia
-				// this.$store.dispatch('setVisualTranspose', value)
 				this.abcStore.setVisualTranspose(value);
 			},
 		},
@@ -93,8 +77,6 @@ export default {
 		},
 	},
 	methods: {
-		// @Store MIGRATION to Pinia
-		// ...mapActions(['saveTune', 'deleteTuneByName']),
 		...mapActions(useAbcStore, ["saveTune", "deleteTuneByName"]),
 		storeAbcString() {
 			this.saveTune(this.currentTune);
@@ -109,11 +91,7 @@ export default {
 			this.$emit("close");
 		},
 		transposeSource() {
-			// @Store MIGRATION to Pinia
-			// this.$emit('transposeSource', { halfSteps: this.$store.getters.visualTranspose })
 			this.$emit("transposeSource", { halfSteps: this.abcStore.visualTranspose });
-			// @Store MIGRATION to Pinia
-			// this.$store.dispatch('setVisualTranspose', '0')
 			this.abcStore.setVisualTranspose(0);
 			this.$emit("close");
 		},

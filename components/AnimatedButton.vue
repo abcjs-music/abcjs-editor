@@ -50,7 +50,6 @@ export default {
 			default: "",
 		},
 	},
-	// @vue3 MIGRATION: requires emits:
 	emits: ["click"],
 };
 </script>

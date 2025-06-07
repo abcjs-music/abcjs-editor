@@ -38,8 +38,6 @@
 </template>
 
 <script>
-// @nuxt3 MIGRATION:
-// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
