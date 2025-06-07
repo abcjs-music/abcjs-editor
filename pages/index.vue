@@ -1,21 +1,25 @@
 <template>
 	<div>
-		<intro-text></intro-text>
+		<intro-text />
 		<section :class="{ help: true, open: cheatSheetVisible }">
 			<nav aria-label="cheat sheet">
-				<button-with-icon @click="helpToggle"
-								  :icon="cheatSheetVisible ? '✘' : '?'"
-								  :label="cheatSheetVisible ? 'Close' : 'Help'"></button-with-icon>
+				<button-with-icon
+					:icon="cheatSheetVisible ? '✘' : '?'"
+					:label="cheatSheetVisible ? 'Close' : 'Help'"
+					@click="helpToggle"
+				/>
 			</nav>
-			<cheat-sheet v-if="cheatSheetVisible"></cheat-sheet>
+			<cheat-sheet v-if="cheatSheetVisible" />
 		</section>
 		<div class="content">
 			<div class="content-section">
 				<section class="input">
 					<nav aria-label="input options">
 						<grow-to-modal ref="modal1" aria="Input Options">
-							<template slot="body">
-								<load-and-save :currentTune="abcString" @load="setTune($event)" @close="close" @transposeSource="transposeSource"></load-and-save>
+							<!-- @Vue3 MIGRATION: -->
+							<!-- <template slot="body"> -->
+							<template #body>
+								<load-and-save :current-tune="abcString" @load="setTune($event)" @close="close" @transpose-source="transposeSource" />
 							</template>
 						</grow-to-modal>
 					</nav>
@@ -27,281 +31,313 @@
 								aria-label="ABC string"
 								spellcheck="false"
 								:style="{ fontSize: fontSize + 'px' }"
-							></textarea>
+							/>
 						</div>
-						<div id="warnings"></div>
-						<div id="midi" class="abcjs-large"></div>
+						<div id="warnings" />
+						<div id="midi" class="abcjs-large" />
 					</div>
 				</section>
 			</div>
 			<div class="content-section">
 				<div class="menu-holder no-print">
 					<nav aria-label="rendering options">
-				<grow-to-modal ref="modal2" aria="Rendering Options">
-					<template slot="body">
-						<output-options></output-options>
-					</template>
-				</grow-to-modal>
+						<grow-to-modal ref="modal2" aria="Rendering Options">
+							<!-- @Vue3 MIGRATION: -->
+							<!-- <template slot="body"> -->
+							<template #body>
+								<output-options />
+							</template>
+						</grow-to-modal>
 					</nav>
 				</div>
-				<img-uploader :show="showUpload" :uploadZoom="uploadZoom"></img-uploader>
-				<abcjs-output class="no-print" :shorten="shortenOutput"></abcjs-output>
+				<img-uploader :show="showUpload" :upload-zoom="uploadZoom" />
+				<abcjs-output class="no-print" :shorten="shortenOutput" />
 			</div>
 		</div>
 		<section class="download">
-			<a :download="midiFilename" :href="midiData">Download MIDI</a>
-			<button @click="downloadWav">Download WAV</button>
-			<button v-if="hasClipboard" @click="createSharableLink">{{ copyText }}</button>
+			<a class="btn" :download="midiFilename" :href="midiData">Download MIDI</a>
+			<button class="btn" @click="downloadWav">
+				Download WAV
+			</button>
+			<button v-if="hasClipboard" class="btn" @click="createSharableLink">
+				{{ copyText }}
+			</button>
 		</section>
 	</div>
 </template>
 
 <script>
-	import Vue from 'vue';
-	import CheatSheet from '../components/CheatSheet';
-	import ButtonWithIcon from "../components/ButtonWithIcon";
-	import {CursorControl} from "../helpers/cursor-control";
-	import AbcjsOutput from "../components/AbcjsOutput";
-	import ImgUploader from "../components/ImgUploader";
-	import IntroText from "../components/IntroText";
-	import {getLocalStorage, setLocalStorage} from "../helpers/local-storage-wrapper";
-	import GrowToModal from "../components/GrowToModal";
-	import LoadAndSave from "../components/LoadAndSave";
-	import {mapGetters, mapActions} from 'vuex';
-	import OutputOptions from "../components/OutputOptions";
-	import { sleep } from "../helpers/sleep"
-	const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+// @Vue3 MIGRATION:
+// import Vue from 'vue';
+import * as Vue from "vue";
+import { mapGetters, mapActions } from "pinia";
+import abcjsDefaultExport from "abcjs";
+import CheatSheet from "../components/CheatSheet";
+import ButtonWithIcon from "../components/ButtonWithIcon";
+import { CursorControl } from "../helpers/cursor-control";
+import AbcjsOutput from "../components/AbcjsOutput";
+import ImgUploader from "../components/ImgUploader";
+import IntroText from "../components/IntroText";
+import { getLocalStorage, setLocalStorage } from "../helpers/local-storage-wrapper";
+import GrowToModal from "../components/GrowToModal";
+import LoadAndSave from "../components/LoadAndSave";
+// @Store MIGRATION to Pinia
+// import {mapGetters, mapActions} from 'vuex';
+import { useAbcStore } from "../store/abcStore";
+import OutputOptions from "../components/OutputOptions";
+import { sleep } from "../helpers/sleep";
+// @nuxt3 MIGRATION:
+// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 
-	export default {
-		data() {
-			return {
-				cheatSheetVisible: false,
-				copyProgress: "idle",
-				abcString: "",
-				abcjsEditor: null,
-				cursorControl: new CursorControl("#canvas"),
-				midiData: "",
-				hasClipboard: false,
-				abcjsParams: {
-					responsive: "resize",
-					add_classes: true,
-					clickListener: this.clickListener,
-					oneSvgPerLine: true,
-					jazzchords: true,
-					format: {
-						titlefont: "Kreon 24",
-						subtitlefont: "Kreon 24",
-						composerfont: "Helvetica 18 italic",
-						gchordfont: "itim-music,Itim 20",
-						tempofont: "Helvetica 14",
-						partsfont: "Helvetica 20",
-						partsbox: 1,
-						annotationfont: "Helvetica-Oblique 10",
-					}
-				}
-			}
-		},
-		computed: {
-			...mapGetters(['showUpload', 'uploadZoom', 'shortenOutput', 'fontSize', 'visualTranspose']),
-			midiFilename() {
-				if (!this.abcjsEditor || this.abcjsEditor.tunes.length === 0)
-					return "tune.midi";
-				let title = this.abcjsEditor.tunes[0].metaText.title;
-				if (!title)
-					title = "untitled";
-				title = title.replace(/\W+/g,'-');
-				return title + '.midi';
-			},
-			copyText() {
-				switch (this.copyProgress) {
-					case "idle":
-						return "Copy Sharable Link To Clipboard"
-					case "working":
-						return "Copying..."
-					case "done":
-						return "Copied!"		
-				}
-				return "Copy Sharable Link To Clipboard"
-			}
-		},
-		watch: {
-			abcString(newValue) {
-				try {
-					this.midiData = new abcjs.synth.getMidiFile(newValue, {midiOutputType: "encoded"});
-				} catch (error) {
-					console.error("Error creating MIDI", error)
-				}
-			},
-			visualTranspose(newValue) {
-				this.abcjsParams.visualTranspose = newValue;
-				this.abcjsEditor.paramChanged(this.abcjsParams)
-			}
-		},
-		components: {
-			OutputOptions,
-			LoadAndSave,
-			GrowToModal,
-			IntroText,
-			ImgUploader,
-			AbcjsOutput,
-			ButtonWithIcon,
-			CheatSheet
-		},
-		mounted() {
-			this.initTunes();
-			this.cheatSheetVisible = getLocalStorage("help-open", false, "Boolean")
-			try {
-				// See if clipboard works before giving the user the option
-				const type = "text/plain"
-				const blob = new Blob(["test"], { type });
-				[new ClipboardItem({ [type]: blob })];
-				this.hasClipboard = true
-			} catch (error) {}
-			this.abcjsEditor = new abcjs.Editor("abc", {
-				canvas_id: "canvas",
-				warnings_id: "warnings",
-				synth: {
-					el: "#midi",
-					cursorControl: this.cursorControl,
-					options: { displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
-						// pan: [-1,1],
-					}
+const abcjs = import.meta.browser ? abcjsDefaultExport : null;
+
+export default {
+	components: {
+		OutputOptions,
+		LoadAndSave,
+		GrowToModal,
+		IntroText,
+		ImgUploader,
+		AbcjsOutput,
+		ButtonWithIcon,
+		CheatSheet,
+	},
+	// @Store MIGRATION to Pinia
+	setup() {
+		const abcStore = useAbcStore();
+		return {
+			abcStore,
+		};
+	},
+	data() {
+		return {
+			cheatSheetVisible: false,
+			copyProgress: "idle",
+			abcString: "",
+			abcjsEditor: null,
+			cursorControl: new CursorControl("#canvas"),
+			midiData: "",
+			hasClipboard: false,
+			abcjsParams: {
+				responsive: "resize",
+				add_classes: true,
+				clickListener: this.clickListener,
+				oneSvgPerLine: true,
+				jazzchords: true,
+				format: {
+					titlefont: "Kreon 24",
+					subtitlefont: "Kreon 24",
+					composerfont: "Helvetica 18 italic",
+					gchordfont: "itim-music,Itim 20",
+					tempofont: "Helvetica 14",
+					partsfont: "Helvetica 20",
+					partsbox: 1,
+					annotationfont: "Helvetica-Oblique 10",
 				},
-				abcjsParams: this.abcjsParams,
-			});
+			},
+		};
+	},
+	computed: {
+		// @Store MIGRATION to Pinia
+		// ...mapGetters(['showUpload', 'uploadZoom', 'shortenOutput', 'fontSize', 'visualTranspose']),
+		...mapGetters(useAbcStore, ["showUpload", "uploadZoom", "shortenOutput", "fontSize", "visualTranspose"]),
+		midiFilename() {
+			if (!this.abcjsEditor || this.abcjsEditor.tunes.length === 0)
+				return "tune.midi";
+			let title = this.abcjsEditor.tunes[0].metaText.title;
+			if (!title)
+				title = "untitled";
+			title = title.replace(/\W+/g, "-");
+			return title + ".midi";
+		},
+		copyText() {
+			switch (this.copyProgress) {
+				case "idle":
+					return "Copy Sharable Link To Clipboard";
+				case "working":
+					return "Copying...";
+				case "done":
+					return "Copied!";
+			}
+			return "Copy Sharable Link To Clipboard";
+		},
+	},
+	watch: {
+		abcString(newValue) {
+			try {
+				this.midiData = new abcjs.synth.getMidiFile(newValue, { midiOutputType: "encoded" });
+			} catch (error) {
+				console.error("Error creating MIDI", error);
+			}
+		},
+		visualTranspose(newValue) {
+			this.abcjsParams.visualTranspose = newValue;
+			this.abcjsEditor.paramChanged(this.abcjsParams);
+		},
+	},
+	mounted() {
+		this.initTunes();
+		this.cheatSheetVisible = getLocalStorage("help-open", false, "Boolean");
+		try {
+			// See if clipboard works before giving the user the option
+			const type = "text/plain";
+			const blob = new Blob(["test"], { type });
+			// @ESLint @typescript-eslint/no-unused-expressions
+			// [new ClipboardItem({ [type]: blob })];
+			new ClipboardItem({ [type]: blob });
+			this.hasClipboard = true;
+		} catch (error) {
+			this.hasClipboard = false;
+		}
+		this.abcjsEditor = new abcjs.Editor("abc", {
+			canvas_id: "canvas",
+			warnings_id: "warnings",
+			synth: {
+				el: "#midi",
+				cursorControl: this.cursorControl,
+				options: { displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
+					// pan: [-1,1],
+				},
+			},
+			abcjsParams: this.abcjsParams,
+		});
 
-			let startingTune = getLocalStorage("current-tune", `X: 1
+		let startingTune = getLocalStorage("current-tune", `X: 1
 T: Cooley's
 M: 4/4
 L: 1/8
 R: reel
 K: Emin
-|:D2|EB{c}BA B2 EB|~B2 AB dBAG|FDAD BDAD|FDAD dAFD|
-EBBA B2 EB|B2 AB defg|afe^c dBAF|DEFD E2:|
-|:gf|eB B2 efge|eB B2 gedB|A2 FA DAFA|A2 FA defg|
-eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|`, "String");
-			const overrideTune = this.$route.query.t
-			if (overrideTune)
-				startingTune = overrideTune;
-			this.setTune({abc:startingTune});
+|:D2|"Em"EB{c}BA B2 EB|~B2 AB dBAG|"D"FDAD BDAD|FDAD dAFD|
+"Em"EBBA B2 EB|B2 AB defg|"D"afe^c dBAF|"Em"DEFD E2:|
+|:gf|"Em"eB B2 efge|eB B2 gedB|"D"A2 FA DAFA|A2 FA defg|
+"Em"eB B2 eBgB|eB B2 defg|"D"afe^c dBAF|"Em"DEFD E2:|`, "String");
+		const overrideTune = this.$route.query.t;
+		if (overrideTune)
+			startingTune = overrideTune;
+		this.setTune({ abc: startingTune });
 
-			window.addEventListener('beforeunload', (e) => {
-				this.saveCurrent();
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		window.addEventListener("beforeunload", (e) => {
+			this.saveCurrent();
+		});
+		setInterval(() => {
+			this.saveCurrent();
+		}, 20000);
+
+		document.getElementById ("abc").focus();
+
+		window.onbeforeprint = this.redrawPrint;
+	},
+	methods: {
+		// @Store MIGRATION to Pinia
+		// ...mapActions(['initTunes']),
+		...mapActions(useAbcStore, ["initTunes"]),
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {
+			const lastClicked = abcElem.midiPitches;
+			if (!lastClicked)
+				return;
+
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			abcjs.synth.playEvent(lastClicked, abcElem.midiGraceNotePitches, this.abcjsEditor.millisecondsPerMeasure()).then(function (response) {
+				console.log("note played");
+			}).catch(function (error) {
+				console.log("error playing note", error);
 			});
-			setInterval(() => {
-				this.saveCurrent();
-			}, 20000);
-
-			document.getElementById ("abc").focus();
-
-			window.onbeforeprint = this.redrawPrint;
-
 		},
-		methods: {
-			...mapActions(['initTunes']),
-			clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {
-				var lastClicked = abcElem.midiPitches;
-				if (!lastClicked)
-					return;
-
-				abcjs.synth.playEvent(lastClicked, abcElem.midiGraceNotePitches, this.abcjsEditor.millisecondsPerMeasure()).then(function (response) {
-					console.log("note played");
-				}).catch(function (error) {
-					console.log("error playing note", error);
-				});
-			},
-			redrawPrint() {
-				const output = document.getElementById("print-version")
-				let text = "";
-				let svgs = document.querySelectorAll("#canvas .abcjs-container");
-				console.log(svgs.length)
-				if (svgs.length === 0) {
-					svgs = [document.querySelector("#canvas")]
-				}
-				console.log(svgs[0])
-				svgs.forEach(svg => {
-					text += svg.innerHTML;
-				})
-				text = text.replace(/display: inline-block; position: absolute; top: 0px; left: 0px;/g, "")
-				output.innerHTML = text;
-			},
-			helpToggle() {
-				this.cheatSheetVisible = !this.cheatSheetVisible;
-				setLocalStorage("help-open", this.cheatSheetVisible);
-			},
-			close() {
-				this.$refs.modal1.forceClose();
-			},
-			setTune(payload) {
-			  this.$refs.modal1.forceClose();
-				this.abcString = payload.abc;
-				Vue.nextTick(() => {
-					this.abcjsEditor.paramChanged({});
-				});
-			},
-			transposeSource(options) {
-				const visualObj = abcjs.renderAbc("*", this.abcString);
-				var newAbc = abcjs.strTranspose(this.abcString, visualObj, options.halfSteps)
-				this.abcString = newAbc
-				Vue.nextTick(() => {
-					this.abcjsEditor.paramChanged({});
-				});
-			},
-			downloadWav() {
-				const visualObj = abcjs.renderAbc("*", this.abcString)[0];
-
-				const midiBuffer = new abcjs.synth.CreateSynth();
-				midiBuffer.init({
-					visualObj: visualObj,
-					options: {
-					}
-				}).then(response => {
-					console.log(response);
-					midiBuffer.prime().then(response => {
-						const url = midiBuffer.download();
-						const link = document.createElement('a');
-						document.body.appendChild(link);
-						link.setAttribute("style","display: none;");
-						link.href = url;
-						const fileName = this.midiFilename.replace(/\.midi/, ".wav");
-						link.download = fileName ? fileName : 'output.wav';
-						link.click();
-						window.URL.revokeObjectURL(url);
-						document.body.removeChild(link);
-					});
-				}).catch(error => {
-					console.warn("Audio problem:", error);
-				});
-			},
-			saveCurrent() {
-				setLocalStorage("current-tune", this.abcString);
-			},
-			async createSharableLink() {
-				try {
-					this.copyProgress = "working"
-					const encoded = encodeURIComponent(this.abcString)
-					const here = document.location.href
-					const link = here + "?t=" + encoded
-					const type = "text/plain"
-					const blob = new Blob([link], { type });
-					const data = [new ClipboardItem({ [type]: blob })];
-					await navigator.clipboard.write(data)
-					await sleep(1000)
-					this.copyProgress = "done"
-					await sleep(1000)
-					this.copyProgress = "idle"
-					console.log("copied")
-				} catch (error) {
-					console.log("error", error)
-				}
+		redrawPrint() {
+			const output = document.getElementById("print-version");
+			let text = "";
+			let svgs = document.querySelectorAll("#canvas .abcjs-container");
+			console.log(svgs.length);
+			if (svgs.length === 0) {
+				svgs = [document.querySelector("#canvas")];
 			}
-		}
-	}
+			console.log(svgs[0]);
+			svgs.forEach((svg) => {
+				text += svg.innerHTML;
+			});
+			text = text.replace(/display: inline-block; position: absolute; top: 0px; left: 0px;/g, "");
+			output.innerHTML = text;
+		},
+		helpToggle() {
+			this.cheatSheetVisible = !this.cheatSheetVisible;
+			setLocalStorage("help-open", this.cheatSheetVisible);
+		},
+		close() {
+			this.$refs.modal1.forceClose();
+		},
+		setTune(payload) {
+			this.$refs.modal1.forceClose();
+			this.abcString = payload.abc;
+			Vue.nextTick(() => {
+				this.abcjsEditor.paramChanged({});
+			});
+		},
+		transposeSource(options) {
+			const visualObj = abcjs.renderAbc("*", this.abcString);
+			const newAbc = abcjs.strTranspose(this.abcString, visualObj, options.halfSteps);
+			this.abcString = newAbc;
+			Vue.nextTick(() => {
+				this.abcjsEditor.paramChanged({});
+			});
+		},
+		downloadWav() {
+			const visualObj = abcjs.renderAbc("*", this.abcString)[0];
+
+			const midiBuffer = new abcjs.synth.CreateSynth();
+			midiBuffer.init({
+				visualObj: visualObj,
+				options: {
+				},
+			}).then((response) => {
+				console.log(response);
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				midiBuffer.prime().then((response) => {
+					const url = midiBuffer.download();
+					const link = document.createElement("a");
+					document.body.appendChild(link);
+					link.setAttribute("style", "display: none;");
+					link.href = url;
+					const fileName = this.midiFilename.replace(/\.midi/, ".wav");
+					link.download = fileName ? fileName : "output.wav";
+					link.click();
+					window.URL.revokeObjectURL(url);
+					document.body.removeChild(link);
+				});
+			}).catch((error) => {
+				console.warn("Audio problem:", error);
+			});
+		},
+		saveCurrent() {
+			setLocalStorage("current-tune", this.abcString);
+		},
+		async createSharableLink() {
+			try {
+				this.copyProgress = "working";
+				const encoded = encodeURIComponent(this.abcString);
+				const here = document.location.href;
+				const link = here + "?t=" + encoded;
+				const type = "text/plain";
+				const blob = new Blob([link], { type });
+				const data = [new ClipboardItem({ [type]: blob })];
+				await navigator.clipboard.write(data);
+				await sleep(1000);
+				this.copyProgress = "done";
+				await sleep(1000);
+				this.copyProgress = "idle";
+				console.log("copied");
+			} catch (error) {
+				console.log("error", error);
+			}
+		},
+	},
+};
 </script>
 
 <style scoped>
-
-	.help {
+.help {
 		border: 1px solid transparent;
 		position: relative;
 		min-height: 55px;
@@ -334,18 +370,8 @@ eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|`, "String");
 	}
 
 	.download a, .download button {
-		padding: 5px 20px;
-		border-radius: 8px;
-		color: white;
-		background: #0080a6;
-		text-decoration: none;
-		font-size: 1em;
-		border: none;
-	}
-
-	.download a:hover, .download button:hover {
-		text-decoration: underline;
-		background-color: #0a9ecc;
+		margin-left: 5px;
+		margin-right: 5px;
 	}
 
 	.muted {
@@ -412,9 +438,5 @@ eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|`, "String");
 		display: flex;
 	}
 
-
 	/* ************************************ */
-
-
-
 </style>

@@ -1,41 +1,43 @@
 <template>
-	<button :class="`animated-hamburger btn ${isOpen ? 'active' : ''}`" @click="toggle" :aria-label="aria"><span></span></button>
+	<button :class="`animated-hamburger btn ${isOpen ? 'active' : ''}`" :aria-label="aria" @click="toggle">
+		<span />
+	</button>
 </template>
 
 <script>
 export default {
-	name: "animated-hamburger",
+	name: "AnimatedHamburger",
+	props: {
+		aria: {
+			type: String,
+			required: true,
+		},
+	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["click"],
 	data() {
 		return {
-			isOpen: false
-		}
+			isOpen: false,
+		};
 	},
-  props: {
-	  aria: {
-	    type: String,
-      required: true,
-    }
-  },
 	methods: {
 		toggle() {
 			this.isOpen = !this.isOpen;
 			this.$emit("click", { isOpen: this.isOpen });
 		},
-    forceClose() {
-		  this.isOpen = false;
-    }
-	}
-}
+		forceClose() {
+			this.isOpen = false;
+		},
+	},
+};
 </script>
 
 <style scoped>
 .animated-hamburger {
-	cursor: pointer;
 	padding: 13px 26px 16px 5px;
 	min-width: inherit;
 }
 .animated-hamburger span, .animated-hamburger span:before, .animated-hamburger span:after {
-	cursor: pointer;
 	border-radius: 1px;
 	height: 2px;
 	width: 20px;

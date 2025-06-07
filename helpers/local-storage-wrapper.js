@@ -3,11 +3,11 @@ export const getLocalStorage = (key, def, type) => {
 		const ret = localStorage.getItem(key);
 		if (ret !== null) {
 			switch (type) {
-				case 'Boolean':
-					return ret === 'true';
-				case 'Object':
+				case "Boolean":
+					return ret === "true";
+				case "Object":
 					return JSON.parse(ret);
-				case 'Integer':
+				case "Integer":
 					return parseInt(ret, 10);
 				default:
 					return ret;
@@ -17,7 +17,7 @@ export const getLocalStorage = (key, def, type) => {
 		// If the user doesn't allow localStorage, that's their business
 	}
 	return def;
-}
+};
 
 export const setLocalStorage = (key, value) => {
 	try {
@@ -25,4 +25,4 @@ export const setLocalStorage = (key, value) => {
 	} catch (e) {
 		// If the user doesn't allow localStorage, that's their business
 	}
-}
+};

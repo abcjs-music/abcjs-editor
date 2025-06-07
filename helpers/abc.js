@@ -11,6 +11,6 @@ export const abcTitle = (abcString) => {
 };
 
 export const abcFilename = (abcString) => {
-	const title = abcTitle(abcString).replace(/[^\w]/g,'-');
+	const title = abcTitle(abcString).replace(/[^\w]/g, "-");
 	return `${title}.abc`;
 };

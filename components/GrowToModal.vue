@@ -1,61 +1,62 @@
 <template>
 	<div :class="`grow-to-modal ${expandClass}`">
-		<div class="mask" @click="forceClose"></div>
+		<div class="mask" @click="forceClose" />
 		<div :class="`${controlButtonClass} ${expandClass}`">
-			<animated-hamburger ref="hamburger" @click="toggle" :aria="aria"></animated-hamburger>
+			<animated-hamburger ref="hamburger" :aria="aria" @click="toggle" />
 		</div>
 		<div :class="`body ${expandClass}`">
-			<slot name="body"></slot>
+			<slot name="body" />
 		</div>
 	</div>
 </template>
 
 <script>
 import AnimatedHamburger from "./AnimatedHamburger";
+
 export default {
-	name: "grow-to-modal",
-	components: {AnimatedHamburger},
+	name: "GrowToModal",
+	components: { AnimatedHamburger },
+	props: {
+		aria: {
+			type: String,
+			required: true,
+		},
+	},
 	data() {
 		return {
 			isExpanded: false,
 		};
 	},
-  props: {
-	  aria: {
-	    type: String,
-      required: true
-    }
-  },
 	computed: {
 		expandClass() {
 			if (this.isExpanded)
-				return 'expanded';
+				return "expanded";
 			else
-				return 'collapsed';
+				return "collapsed";
 		},
 		buttonText() {
 			if (this.isExpanded)
-				return 'Close';
+				return "Close";
 			else
-				return 'Open';
+				return "Open";
 		},
 		controlButtonClass() {
 			if (this.isExpanded)
-				return 'close';
+				return "close";
 			else
-				return 'open';
-		}
+				return "open";
+		},
 	},
 	methods: {
 		toggle(state) {
 			this.isExpanded = state.isOpen;
 		},
-    forceClose() {
-		  this.$refs.hamburger.forceClose();
-		  this.isExpanded = false;
-    }
-	}
-}
+		forceClose() {
+			this.$refs.hamburger.forceClose();
+			this.isExpanded = false;
+		},
+	},
+};
 </script>
 
 <style scoped>

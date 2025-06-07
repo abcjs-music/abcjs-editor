@@ -1,10 +1,12 @@
 <template>
-	<button :class="`btn ${type}`" @click="$emit('click')">{{label}}</button>
+	<button :class="`btn ${type}`" @click="$emit('click')">
+		{{ label }}
+	</button>
 </template>
 
 <script>
 export default {
-	name: "button-with-icon",
+	name: "ButtonWithIcon",
 	props: {
 		label: {
 			type: String,
@@ -13,16 +15,18 @@ export default {
 		type: {
 			type: String,
 			required: false,
-			default: ''
+			default: "",
 		},
 
 		// NOTE: The icon was removed for now.
 		icon: {
 			type: String,
 			required: true,
-		}
-	}
-}
+		},
+	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["click"],
+};
 </script>
 
 <style>
@@ -43,6 +47,7 @@ export default {
 }
 
 .btn:hover {
+	cursor: pointer;
 	text-decoration: underline;
 	background-color: #0a9ecc;
 }

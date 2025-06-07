@@ -1,26 +1,24 @@
 <template>
 	<section :class="`abcjs-output ${shorten ? 'short' :''}`" :tabindex="shorten ? '0' : null">
-		<div id="canvas"></div>
+		<div id="canvas" />
 	</section>
 </template>
 
 <script>
-	import ButtonWithIcon from "./ButtonWithIcon";
-	export default {
-		name: "abcjs-output",
-		components: {ButtonWithIcon},
-		props: {
-			shorten: {
-				type: Boolean,
-				required: false,
-				default: false
-			}
+export default {
+	name: "AbcjsOutput",
+	props: {
+		shorten: {
+			type: Boolean,
+			required: false,
+			default: false,
 		},
-		data() {
-			return {
-			}
-		},
-	}
+	},
+	data() {
+		return {
+		};
+	},
+};
 </script>
 
 <style scoped>

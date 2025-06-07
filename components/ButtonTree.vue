@@ -1,15 +1,19 @@
 <template>
 	<button class="link tree" @click="$emit('click')">
-		<span :class="isHeader2 ? 'header' : ''">{{isOpen ? '▼' : '►'}}</span>
-		<h3 v-if="isHeader3">{{label}}</h3>
-		<h2 v-if="isHeader2">{{label}}</h2>
-		<span v-if="!isHeader2 && !isHeader3">{{label}}</span>
+		<span :class="isHeader2 ? 'header' : ''">{{ isOpen ? '▼' : '►' }}</span>
+		<h3 v-if="isHeader3">
+			{{ label }}
+		</h3>
+		<h2 v-if="isHeader2">
+			{{ label }}
+		</h2>
+		<span v-if="!isHeader2 && !isHeader3">{{ label }}</span>
 	</button>
 </template>
 
 <script>
 export default {
-	name: "button-tree",
+	name: "ButtonTree",
 	props: {
 		label: {
 			type: String,
@@ -22,15 +26,17 @@ export default {
 		isHeader2: {
 			type: Boolean,
 			required: false,
-			default: false
+			default: false,
 		},
 		isHeader3: {
 			type: Boolean,
 			required: false,
-			default: false
+			default: false,
 		},
-	}
-}
+	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["click"],
+};
 </script>
 
 <style scoped>
@@ -38,6 +44,9 @@ export default {
 	margin-bottom: 10px;
 	display: flex;
 	align-items: center;
+}
+.tree:hover {
+	cursor: pointer;
 }
 .header {
 	color: #0098c4;

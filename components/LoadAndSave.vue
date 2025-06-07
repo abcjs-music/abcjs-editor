@@ -1,57 +1,80 @@
 <template>
 	<div class="load-and-save">
-		<animated-button el="a" :label="downloadLabel" :download="abcTitle" :href="saveAbcString"></animated-button>
-		<animated-button el="button" :label="saveLabel" @click="storeAbcString"></animated-button>
+		<animated-button el="a" :label="downloadLabel" :download="abcTitle" :href="saveAbcString" />
+		<animated-button el="button" :label="saveLabel" @click="storeAbcString" />
 		<div v-if="allTuneNames.length > 0">
 			<h2>Load:</h2>
 			<ul class="tune-picker">
-				<li v-for="name in allTuneNames">
-					<animated-button el="button" class="load" :label="name" @click="loadTune(name)"></animated-button>
-					<animated-button el="button" label="×" :aria-label="`Delete ${name}`" @click="deleteTune(name)"></animated-button>
+				<li v-for="name in allTuneNames" :key="name">
+					<animated-button el="button" class="load" :label="name" @click="loadTune(name)" />
+					<animated-button el="button" label="×" :aria-label="`Delete ${name}`" @click="deleteTune(name)" />
 				</li>
 			</ul>
 		</div>
 		<div class="bottom-options">
-		<label>Font Size: <input type="number" min="8" max="30" v-model="fontSize"></label>
-		<label>Visual Transpose: <input type="number" min="-24" max="24" v-model="visualTranspose"></label>
+			<label>Font Size: <input v-model="fontSize" type="number" min="8" max="30"></label>
+			<label>Visual Transpose: <input v-model="visualTranspose" type="number" min="-24" max="24"></label>
 		</div>
 		<div v-if="visualTranspose !== 0 && visualTranspose !== '0'" class="extra-bottom">
-			<animated-button el="button" label="Apply Transpose" @click="transposeSource"></animated-button>
+			<animated-button el="button" label="Apply Transpose" @click="transposeSource" />
 		</div>
 	</div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
-import {abcTitle, abcFilename} from "../helpers/abc";
+// @Store MIGRATION to Pinia
+// import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from "pinia";
+import { useAbcStore } from "../store/abcStore";
+import { abcTitle, abcFilename } from "../helpers/abc";
 import AnimatedButton from "./AnimatedButton";
-const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+// @ESlint: abcjs is NOT used!
+// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 export default {
-	name: "load-and-save",
-	components: {AnimatedButton},
+	name: "LoadAndSave",
+	components: { AnimatedButton },
 	props: {
 		currentTune: {
 			type: String,
 			required: true,
 		},
 	},
+	// @vue3 MIGRATION: requires emits:
+	emits: ["close", "load", "transposeSource"],
+	// @Store MIGRATION to Pinia
+	setup() {
+		const abcStore = useAbcStore();
+		return {
+			abcStore,
+		};
+	},
 	computed: {
-		...mapGetters(['allTuneNames', 'tuneByTitle']),
+		// @Store MIGRATION to Pinia
+		// ...mapGetters(['allTuneNames', 'tuneByTitle']),
+		...mapGetters(useAbcStore, ["allTuneNames", "tuneByTitle"]),
 		fontSize: {
 			get() {
-				return this.$store.getters.fontSize;
+				// @Store MIGRATION to Pinia
+				// return this.$store.getters.fontSize;
+				return this.abcStore.fontSize;
 			},
 			set(value) {
-				this.$store.commit('fontSize', value)
-			}
+				// @Store MIGRATION to Pinia
+				// this.$store.commit('fontSize', value)
+				this.abcStore.setFontSize(value);
+			},
 		},
 		visualTranspose: {
 			get() {
-				return this.$store.getters.visualTranspose;
+				// @Store MIGRATION to Pinia
+				// return this.$store.getters.visualTranspose;
+				return this.abcStore.visualTranspose;
 			},
 			set(value) {
-				this.$store.dispatch('setVisualTranspose', value)
-			}
+				// @Store MIGRATION to Pinia
+				// this.$store.dispatch('setVisualTranspose', value)
+				this.abcStore.setVisualTranspose(value);
+			},
 		},
 		abcTitle() {
 			return abcTitle(this.currentTune);
@@ -66,30 +89,36 @@ export default {
 			return `Save "${this.abcTitle}" in browser`;
 		},
 		downloadLabel() {
-			return `Download "${ this.abcTitle }"`;
+			return `Download "${this.abcTitle}"`;
 		},
 	},
 	methods: {
-		...mapActions(['saveTune', 'deleteTuneByName']),
+		// @Store MIGRATION to Pinia
+		// ...mapActions(['saveTune', 'deleteTuneByName']),
+		...mapActions(useAbcStore, ["saveTune", "deleteTuneByName"]),
 		storeAbcString() {
 			this.saveTune(this.currentTune);
-			this.$emit("close")
+			this.$emit("close");
 		},
 		loadTune(name) {
 			const abc = this.tuneByTitle(name);
-			this.$emit("load", {abc: abc});
+			this.$emit("load", { abc: abc });
 		},
 		deleteTune(name) {
 			this.deleteTuneByName(name);
-			this.$emit("close")
+			this.$emit("close");
 		},
 		transposeSource() {
-			this.$emit('transposeSource', { halfSteps: this.$store.getters.visualTranspose })
-			this.$store.dispatch('setVisualTranspose', '0')
-			this.$emit("close")
-		}
-	}
-}
+			// @Store MIGRATION to Pinia
+			// this.$emit('transposeSource', { halfSteps: this.$store.getters.visualTranspose })
+			this.$emit("transposeSource", { halfSteps: this.abcStore.visualTranspose });
+			// @Store MIGRATION to Pinia
+			// this.$store.dispatch('setVisualTranspose', '0')
+			this.abcStore.setVisualTranspose(0);
+			this.$emit("close");
+		},
+	},
+};
 </script>
 
 <style scoped>

@@ -1,37 +1,55 @@
 <template>
 	<div>
-		<p>There are many possibilities for using multiple voices. See the full documentation if the following use cases don't
-		fit your needs.</p>
-		<p>There are three elements involved. There is the "%%staves" directive for specifying which voices go in which staff,
-		the "V:" field in the header for defining the voices, and the "V:" field in the body for specifying which voice a line of music goes with.</p>
-		<p>It is easy to make mistakes and mis-align your music when using multiple voices. Make sure each voice has the correct
-		number of beats and the same bar lines and repeat marks.</p>
+		<p>
+			There are many possibilities for using multiple voices. See the full documentation if the following use cases don't
+			fit your needs.
+		</p>
+		<p>
+			There are three elements involved. There is the "%%staves" directive for specifying which voices go in which staff,
+			the "V:" field in the header for defining the voices, and the "V:" field in the body for specifying which voice a line of music goes with.
+		</p>
+		<p>
+			It is easy to make mistakes and mis-align your music when using multiple voices. Make sure each voice has the correct
+			number of beats and the same bar lines and repeat marks.
+		</p>
 		<h3>Piano</h3>
-		<p>A piano score has two staves and two voices: left hand and right hand. There is a brace connecting the two staves. The
-		top staff is treble clef and the bottom staff is bass clef. Here's a simple example of setting that up:</p>
-		<pre>{{abcPiano}}</pre>
-		<div id="help-piano-paper"></div>
+		<p>
+			A piano score has two staves and two voices: left hand and right hand. There is a brace connecting the two staves. The
+			top staff is treble clef and the bottom staff is bass clef. Here's a simple example of setting that up:
+		</p>
+		<pre>{{ abcPiano }}</pre>
+		<div id="help-piano-paper" />
 		<h3>Multiple Instrument Score</h3>
 		<p>If all instruments go on separate staves, then the "%%staves" directive is not needed.</p>
-		<p>Note that you can write the music in concert pitch but have it appear for Bb or Eb instruments by using the "score=_B"
-		or "score=_E" option. (You may change the octave that it transposes to by using a lower case "_b" or "_e".)</p>
-		<pre>{{abcScore}}</pre>
-		<div id="help-score-paper"></div>
+		<p>
+			Note that you can write the music in concert pitch but have it appear for Bb or Eb instruments by using the "score=_B"
+			or "score=_E" option. (You may change the octave that it transposes to by using a lower case "_b" or "_e".)
+		</p>
+		<pre>{{ abcScore }}</pre>
+		<div id="help-score-paper" />
 		<h3>Four-part Harmony, two staves</h3>
-		<p>Sometimes parts should be on the same staff. In four-part harmony, typically there are two staves and two voices
-		on each staff.</p>
-		<pre>{{abcHarmony}}</pre>
-		<div id="help-harmony-paper"></div>
+		<p>
+			Sometimes parts should be on the same staff. In four-part harmony, typically there are two staves and two voices
+			on each staff.
+		</p>
+		<pre>{{ abcHarmony }}</pre>
+		<div id="help-harmony-paper" />
 	</div>
 </template>
 
 <script>
-	const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
-	export default {
-		name: "help-voices",
-		data() {
-			return {
-				abcPiano: `X:1
+// @nuxt3 MIGRATION:
+// const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
+import abcjsDefaultExport from "abcjs";
+
+const abcjs = import.meta.browser ? abcjsDefaultExport : null;
+export default {
+	name: "HelpVoices",
+	components: {
+	},
+	data() {
+		return {
+			abcPiano: `X:1
 M:4/4
 T:Piano
 L:1/4
@@ -43,7 +61,7 @@ V: RH
 ABcd | [ce]2 [ce]2 | [df]2 [df]2| [ce]4:|]
 V: LH
 A,2 E,2 | A,2 E,2 | D,2 A,2 | A, G, F, E, :|]`,
-				abcScore: `X: 1
+			abcScore: `X: 1
 T: Score
 M: 4/4
 L: 1/4
@@ -57,7 +75,7 @@ V: Vi
 EFGA|Bcde|edcB|AGFE|]
 V: Tr
 E,F,G,A,|B,c,d,e,|e,d,c,B,|A,G,F,E,|]`,
-				abcHarmony: `X:1
+			abcHarmony: `X:1
 T:Zocharti Loch
 C:Louis Lewandowski (1821-1894)
 M:C
@@ -79,17 +97,14 @@ K:Gm
 [V:T2]       z8      |     z8    | B3A (B2c2)  | A6    ||
 [V:B1]  (d,,2f,,2 b,,2e,2) | d,8       | g,,3g,,  g,,4     | H^f,,6    ||
 [V:B2]       x8      | z2B,,2 c,,2d,,2 | e,,3e,, (d,,2c,,2)  | d,,6    ||`,
-			}
-		},
-		mounted() {
-			abcjs.renderAbc("help-piano-paper", this.abcPiano);
-			abcjs.renderAbc("help-score-paper", this.abcScore);
-			abcjs.renderAbc("help-harmony-paper", this.abcHarmony);
-		},
-		components: {
-		},
-	};
-
+		};
+	},
+	mounted() {
+		abcjs.renderAbc("help-piano-paper", this.abcPiano);
+		abcjs.renderAbc("help-score-paper", this.abcScore);
+		abcjs.renderAbc("help-harmony-paper", this.abcHarmony);
+	},
+};
 </script>
 
 <style scoped>

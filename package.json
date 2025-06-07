@@ -1,33 +1,36 @@
 {
   "name": "abcjs-editor",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Simple visual editing of ABC strings",
   "author": "Paul Rosen",
+  "copyright": "Copyright © 2025 by Paul Rosen",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "ghpages": "nuxt build --preset github_pages",
+    "postghpages": "npx serve .output/public",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@nuxtjs/axios": "5.13.1",
-    "@nuxtjs/pwa": "3.3.5",
-    "cross-env": "7.0.3",
-    "nuxt": "2.15.4"
+    "@nuxt/eslint": "^1.1.0",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@pinia/nuxt": "^0.10.1",
+    "eslint": "^9.21.0",
+    "nuxt": "^3.15.4",
+    "pinia": "^3.0.0",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "6.0.0",
-    "@nuxtjs/eslint-module": "3.0.2",
-    "@politico/vue-accessible-selects": "0.14.0",
-    "abcjs": "6.2.2",
-    "babel-eslint": "10.1.0",
-    "babel-polyfill": "6.26.0",
-    "babel-preset-env": "1.7.0",
-    "eslint": "7.24.0",
-    "eslint-plugin-nuxt": "2.0.0",
-    "nodemon": "2.0.7",
-    "v-click-outside": "3.1.2",
-    "vue-shortkey": "3.1.7"
+    "abcjs": "^6.4.4",
+    "vite-plugin-eslint2": "^5.0.3"
+  },
+  "overrides": {
+    "glob": "^11.0.1"
   }
 }

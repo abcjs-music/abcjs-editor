@@ -1,42 +1,61 @@
 <template>
 	<div class="output-options">
 		<h2>Witness Image:</h2>
-		<animated-button el="checkbox" label="Show Witness Uploader" id="showUpload" action="setShowUpload"></animated-button>
-		<div><label>Zoom (%): <input type="number" v-model="uploadZoom"></label></div>
+		<animated-button id="showUpload" el="checkbox" label="Show Witness Uploader" action="setShowUpload" />
+		<div><label>Zoom (%): <input v-model="uploadZoom" type="number"></label></div>
 		<h2>Output:</h2>
-		<animated-button el="button" label="Print" class="print-button" @click="print"></animated-button>
-		<animated-button el="checkbox" label="Shorten Output" id="shortenOutput" action="setShortenOutput"></animated-button>
+		<animated-button el="button" label="Print" class="print-button" @click="print" />
+		<animated-button id="shortenOutput" el="checkbox" label="Shorten Output" action="setShortenOutput" />
 	</div>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
-import CheckBox from "./CheckBox";
+// @Store MIGRATION to Pinia
+// import {mapActions} from 'vuex';
+import { mapActions } from "pinia";
+import { useAbcStore } from "../store/abcStore";
+// @ESlint: CheckBox not used
+// import CheckBox from "./CheckBox";
 import AnimatedButton from "./AnimatedButton";
+
 export default {
-	name: "output-options",
-	components: {AnimatedButton, CheckBox},
-	computed: {
-		uploadZoom: {
-			get() {
-				return this.$store.getters.uploadZoom; },
-			set(value) {
-				// Called when the user clicks with mouse
-				this.setUploadZoom(parseInt(value,10));
-			}
-		},
+	name: "OutputOptions",
+	// @ESlint: CheckBox not used
+	// components: { AnimatedButton, CheckBox },
+	components: { AnimatedButton },
+	// @Store MIGRATION to Pinia
+	setup() {
+		const abcStore = useAbcStore();
+		return {
+			abcStore,
+		};
 	},
 	data() {
 		return {
-		}
+		};
+	},
+	computed: {
+		uploadZoom: {
+			get() {
+				// @Store MIGRATION to Pinia
+				// return this.$store.getters.uploadZoom; },
+				return this.abcStore.uploadZoom;
+			},
+			set(value) {
+				// Called when the user clicks with mouse
+				this.setUploadZoom(parseInt(value, 10));
+			},
+		},
 	},
 	methods: {
-		...mapActions(['setUploadZoom']),
+		// @Store MIGRATION to Pinia
+		// ...mapActions(['setUploadZoom']),
+		...mapActions(useAbcStore, ["setUploadZoom"]),
 		print() {
 			window.print();
 		},
-	}
-}
+	},
+};
 </script>
 
 <style scoped>
