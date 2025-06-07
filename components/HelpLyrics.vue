@@ -12,13 +12,17 @@
 		</p>
 		<p>The following chart shows how the following problems are taken care of:</p>
 		<table>
-			<tr><th>Character</th><th>Meaning</th></tr>
-			<tr><td>- </td><td>(hyphen) break between syllables within a word</td></tr>
-			<tr><td>_ </td><td>(underscore) previous syllable is to be held for an extra note</td></tr>
-			<tr><td>* </td><td>one note is skipped (i.e. * is equivalent to a blank syllable)</td></tr>
-			<tr><td>~ </td><td>appears as a space; aligns multiple words under one note</td></tr>
-			<tr><td>\-</td><td>appears as hyphen; aligns multiple syllables under one note</td></tr>
-			<tr><td>| </td><td>advances to the next bar</td></tr>
+			<thead>
+				<tr><th>Character</th><th>Meaning</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>- </td><td>(hyphen) break between syllables within a word</td></tr>
+				<tr><td>_ </td><td>(underscore) previous syllable is to be held for an extra note</td></tr>
+				<tr><td>* </td><td>one note is skipped (i.e. * is equivalent to a blank syllable)</td></tr>
+				<tr><td>~ </td><td>appears as a space; aligns multiple words under one note</td></tr>
+				<tr><td>\-</td><td>appears as hyphen; aligns multiple syllables under one note</td></tr>
+				<tr><td>| </td><td>advances to the next bar</td></tr>
+			</tbody>
 		</table>
 		<pre>{{ abcString }}</pre>
 		<div id="help-lyrics-paper" />

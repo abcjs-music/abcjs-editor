@@ -5,16 +5,20 @@
 			of the commonly used bar lines.
 		</p>
 		<table>
-			<tr><th>Bar</th><th>Meaning</th></tr>
-			<tr><td>|  	</td><td>bar line</td></tr>
-			<tr><td>|] 	</td><td>thin-thick double bar line</td></tr>
-			<tr><td>|| 	</td><td>thin-thin double bar line</td></tr>
-			<tr><td>[| 	</td><td>thick-thin double bar line</td></tr>
-			<tr><td>|: 	</td><td>start of repeated section</td></tr>
-			<tr><td>:| 	</td><td>end of repeated section</td></tr>
-			<tr><td>:: 	</td><td>start & end of two repeated sections</td></tr>
-			<tr><td>|1	</td><td>start of first ending</td></tr>
-			<tr><td>:|2	</td><td>start of second ending</td></tr>
+			<thead>
+				<tr><th>Bar</th><th>Meaning</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>|  	</td><td>bar line</td></tr>
+				<tr><td>|] 	</td><td>thin-thick double bar line</td></tr>
+				<tr><td>|| 	</td><td>thin-thin double bar line</td></tr>
+				<tr><td>[| 	</td><td>thick-thin double bar line</td></tr>
+				<tr><td>|: 	</td><td>start of repeated section</td></tr>
+				<tr><td>:| 	</td><td>end of repeated section</td></tr>
+				<tr><td>:: 	</td><td>start & end of two repeated sections</td></tr>
+				<tr><td>|1	</td><td>start of first ending</td></tr>
+				<tr><td>:|2	</td><td>start of second ending</td></tr>
+			</tbody>
 		</table>
 		<div id="help-bar-lines-paper" />
 	</div>
