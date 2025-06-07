@@ -32,7 +32,7 @@
 
 <script>
 import { version as abcjsVersion } from "abcjs/package.json";
-import { version as packageVersion, copyright as copyRight } from "./package.json";
+import { version as packageVersion, copyright as copyRight } from "../package.json";
 // @ESlint: abcjs is NOT used!
 // const abcjs = process.browser ? require('abcjs') : null; // This requires document and window, so can't be used on the server side.
 

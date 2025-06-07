@@ -1,6 +1,6 @@
-FROM node:20.18.2
+FROM node:22.12.0
 
-RUN npm install -g npm@10.8.2
+RUN npm install -g npm@11.4.1
 
 RUN mkdir /srv/app && chown node:node /srv/app
 

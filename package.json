@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "Simple visual editing of ABC strings",
   "author": "Paul Rosen",
-  "copyright": "Copyright © 2025 by Paul Rosen",
+  "copyright": "Copyright © 2018-2025 by Paul Rosen",
   "private": true,
   "type": "module",
   "scripts": {
@@ -18,19 +18,19 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@nuxt/eslint": "^1.1.0",
+    "@nuxt/eslint": "1.4.1",
     "@nuxtjs/google-fonts": "^3.2.0",
-    "@pinia/nuxt": "^0.10.1",
-    "eslint": "^9.21.0",
-    "nuxt": "^3.15.4",
-    "pinia": "^3.0.0",
-    "vue": "^3.5.13"
+    "@pinia/nuxt": "0.11.1",
+    "eslint": "9.28.0",
+    "nuxt": "3.17.5",
+    "pinia": "3.0.3",
+    "vue": "3.5.16"
   },
   "devDependencies": {
-    "abcjs": "^6.4.4",
-    "vite-plugin-eslint2": "^5.0.3"
+    "abcjs": "6.5.0",
+    "vite-plugin-eslint2": "5.0.3"
   },
   "overrides": {
-    "glob": "^11.0.1"
+    "glob": "11.0.1"
   }
 }

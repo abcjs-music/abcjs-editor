@@ -1,31 +1,6 @@
 import { createConfigForNuxt } from "@nuxt/eslint-config/flat";
 
 export default createConfigForNuxt({
-	features: {
-		stylistic: {
-			// See https://github.com/eslint-stylistic/eslint-stylistic/blob/21704b67ff164adc31921110d9a2b5a18d96dfa3/packages/eslint-plugin/configs/customize.ts#L18-L30 for properties supported.
-			// Other stylistic customizations must be done by appropriate rule appending - see comment below.
-			// Defaults defined in eslint-plugin/configs/customize.ts:
-			//
-			// arrowParens = false,
-			// blockSpacing = true,
-			// braceStyle = 'stroustrup',
-			// commaDangle = 'always-multiline',
-			// flat = true,
-			// indent = 2,
-			// jsx = true,
-			// pluginName = '@stylistic',
-			// quoteProps = 'consistent-as-needed',
-			// quotes = 'single',
-			// semi = false,
-			//
-			// Customization:
-			indent: "tab", // Note: "tab" implies setting indent to 4
-			quotes: "double",
-			semi: true,
-			braceStyle: "1tbs", // will result in: '@stylistic/brace-style': ['error', braceStyle, { allowSingleLine: true }],
-		},
-	},
 })
 	// Example for extended stylistic updates that cannot be done by features.stylistic above:
 	// .append({
@@ -59,11 +34,11 @@ export default createConfigForNuxt({
 	// Override local Vue rules (taken from https://github.com/nuxt/nuxt.com/blob/main/eslint.config.mjs)
 	.override("nuxt/vue/rules", {
 		rules: {
-			"vue/no-v-html": "error",
-			"vue/max-attributes-per-line": [
-				"error",
-				{ singleline: 5, multiline: 1 },
-			],
+			//"vue/no-v-html": "error",
+			// "vue/max-attributes-per-line": [
+			// 	"error",
+			// 	{ singleline: 5, multiline: 1 },
+			// ],
 		},
 	})
 	// Override local typescript rules ()
