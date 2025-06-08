@@ -1,31 +1,18 @@
 <template>
-	<button :class="`btn ${type}`" @click="$emit('click')">
-		{{ label }}
+	<button class="btn" @click="emit('click')">
+		{{ label }} {{icon}}
 	</button>
 </template>
 
-<script>
-export default {
-	name: "ButtonWithIcon",
-	props: {
-		label: {
-			type: String,
-			required: true,
-		},
-		type: {
-			type: String,
-			required: false,
-			default: "",
-		},
+<script lang="ts" setup>
+const props = defineProps<{
+	label: string;
+	icon: string;
+}>();
 
-		// NOTE: The icon was removed for now.
-		icon: {
-			type: String,
-			required: true,
-		},
-	},
-	emits: ["click"],
-};
+const emit = defineEmits<{
+	(e: "click", ev: MouseEvent): void;
+}>();
 </script>
 
 <style>

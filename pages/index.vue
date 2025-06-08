@@ -11,6 +11,16 @@
 			</nav>
 			<cheat-sheet v-if="cheatSheetVisible" />
 		</section>
+		<section :class="{ options: true, open: optionsVisible }">
+			<nav aria-label="options">
+				<button-with-icon
+					:icon="optionsVisible ? '✘' : '⚙'"
+					:label="optionsVisible ? 'Close' : 'Options'"
+					@click="optionsToggle"
+				/>
+			</nav>
+			<OptionsPicker v-if="optionsVisible"/>
+		</section>
 		<div class="content">
 			<div class="content-section">
 				<section class="input">
@@ -64,25 +74,27 @@
 
 <script>
 import * as Vue from "vue";
-import { mapGetters, mapActions } from "pinia";
+import {mapGetters, mapActions} from "pinia";
 import abcjsDefaultExport from "abcjs";
-import CheatSheet from "../components/CheatSheet";
+import CheatSheet from "../components/help/CheatSheet.vue";
 import ButtonWithIcon from "../components/ButtonWithIcon";
-import { CursorControl } from "../helpers/cursor-control";
+import {CursorControl} from "../helpers/cursor-control";
 import AbcjsOutput from "../components/AbcjsOutput";
 import ImgUploader from "../components/ImgUploader";
 import IntroText from "../components/IntroText";
-import { getLocalStorage, setLocalStorage } from "../helpers/local-storage-wrapper";
+import {getLocalStorage, setLocalStorage} from "../helpers/local-storage-wrapper";
 import GrowToModal from "../components/GrowToModal";
 import LoadAndSave from "../components/LoadAndSave";
-import { useAbcStore } from "../store/abcStore";
+import {useAbcStore} from "../store/abcStore";
 import OutputOptions from "../components/OutputOptions";
-import { sleep } from "../helpers/sleep";
+import {sleep} from "../helpers/sleep";
+import OptionsPicker from "~/components/OptionsPicker.vue";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
 
 export default {
 	components: {
+		OptionsPicker,
 		OutputOptions,
 		LoadAndSave,
 		GrowToModal,
@@ -101,6 +113,7 @@ export default {
 	data() {
 		return {
 			cheatSheetVisible: false,
+			optionsVisible: false,
 			copyProgress: "idle",
 			abcString: "",
 			abcjsEditor: null,
@@ -152,7 +165,7 @@ export default {
 	watch: {
 		abcString(newValue) {
 			try {
-				this.midiData = new abcjs.synth.getMidiFile(newValue, { midiOutputType: "encoded" });
+				this.midiData = new abcjs.synth.getMidiFile(newValue, {midiOutputType: "encoded"});
 			} catch (error) {
 				console.error("Error creating MIDI", error);
 			}
@@ -165,13 +178,14 @@ export default {
 	mounted() {
 		this.initTunes();
 		this.cheatSheetVisible = getLocalStorage("help-open", false, "Boolean");
+		this.optionsVisible = getLocalStorage("options-open", false, "Boolean");
 		try {
 			// See if clipboard works before giving the user the option
 			const type = "text/plain";
-			const blob = new Blob(["test"], { type });
+			const blob = new Blob(["test"], {type});
 			// @ESLint @typescript-eslint/no-unused-expressions
 			// [new ClipboardItem({ [type]: blob })];
-			new ClipboardItem({ [type]: blob });
+			new ClipboardItem({[type]: blob});
 			this.hasClipboard = true;
 		} catch (error) {
 			this.hasClipboard = false;
@@ -182,7 +196,8 @@ export default {
 			synth: {
 				el: "#midi",
 				cursorControl: this.cursorControl,
-				options: { displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
+				options: {
+					displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
 					// pan: [-1,1],
 				},
 			},
@@ -202,7 +217,7 @@ K: Emin
 		const overrideTune = this.$route.query.t;
 		if (overrideTune)
 			startingTune = overrideTune;
-		this.setTune({ abc: startingTune });
+		this.setTune({abc: startingTune});
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		window.addEventListener("beforeunload", (e) => {
@@ -212,7 +227,7 @@ K: Emin
 			this.saveCurrent();
 		}, 20000);
 
-		document.getElementById ("abc").focus();
+		document.getElementById("abc").focus();
 
 		window.onbeforeprint = this.redrawPrint;
 	},
@@ -249,6 +264,10 @@ K: Emin
 		helpToggle() {
 			this.cheatSheetVisible = !this.cheatSheetVisible;
 			setLocalStorage("help-open", this.cheatSheetVisible);
+		},
+		optionsToggle() {
+			this.optionsVisible = !this.optionsVisible;
+			setLocalStorage("options-open", this.optionsVisible);
 		},
 		close() {
 			this.$refs.modal1.forceClose();
@@ -305,8 +324,8 @@ K: Emin
 				const here = document.location.href;
 				const link = here + "?t=" + encoded;
 				const type = "text/plain";
-				const blob = new Blob([link], { type });
-				const data = [new ClipboardItem({ [type]: blob })];
+				const blob = new Blob([link], {type});
+				const data = [new ClipboardItem({[type]: blob})];
 				await navigator.clipboard.write(data);
 				await sleep(1000);
 				this.copyProgress = "done";
@@ -323,105 +342,114 @@ K: Emin
 
 <style scoped>
 .help {
-		border: 1px solid transparent;
-		position: relative;
-		min-height: 55px;
-		border-radius: 8px;
-		margin-top: 10px;
-	}
+	border: 1px solid transparent;
+	position: relative;
+	min-height: 55px;
+	border-radius: 8px;
+	margin: -45px 0 0 auto;
+	width: 130px;
+}
 
-	.help.open {
-		border-top-color: #dddddd;
-		border-left-color: #dddddd;
-		box-shadow: 2px 2px 4px #bbbbbb, -1px -1px 1px #bbbbbb;
-		padding: 0 10px 10px 10px;
-		background: #ffffff;
-		margin-bottom: 10px;
-	}
+.help.open {
+	border-top-color: #dddddd;
+	border-left-color: #dddddd;
+	box-shadow: 2px 2px 4px #bbbbbb, -1px -1px 1px #bbbbbb;
+	padding: 0 10px 10px 10px;
+	background: #ffffff;
+	margin-bottom: 10px;
+	width: inherit;
+}
 
-	.input {
-		margin-bottom: 10px;
-		position: relative;
-		height: 100%;
-	}
+.options {
+	border: 1px solid transparent;
+	position: relative;
+	min-height: 55px;
+	border-radius: 8px;
+	margin-top: 10px;
+}
 
-	.menu-holder {
-		position: relative;
-		z-index: 2;
-	}
+.options.open {
+	border-top-color: #dddddd;
+	border-left-color: #dddddd;
+	box-shadow: 2px 2px 4px #bbbbbb, -1px -1px 1px #bbbbbb;
+	padding: 0 10px 10px 10px;
+	background: #ffffff;
+	margin-bottom: 10px;
+}
 
-	.download {
-		margin-top: 30px;
-	}
+.input {
+	margin-bottom: 10px;
+	position: relative;
+	height: 100%;
+}
 
-	.download a, .download button {
-		margin-left: 5px;
-		margin-right: 5px;
-	}
+.menu-holder {
+	position: relative;
+	z-index: 2;
+}
 
-	.muted {
-		color: #0fb4e7;
-		text-decoration: none;
-	}
-	.muted:hover {
-		text-decoration: underline;
-	}
+.download {
+	margin-top: 30px;
+}
 
+.download a, .download button {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.content {
+	display: flex;
+	flex-direction: column-reverse;
+}
+
+@media screen and (min-width: 900px) {
 	.content {
-		display: flex;
-		flex-direction: column-reverse;
+		justify-content: space-between;
+		flex-direction: row;
 	}
 
-	@media screen and (min-width: 900px) {
-		.content {
-			justify-content: space-between;
-			flex-direction: row;
-		}
-
-		.content-section {
-			width: 49%;
-		}
+	.content-section {
+		width: 49%;
 	}
+}
 
-	textarea {
-		width: 100%;
-		font-size: 18px;
-		height: 400px;
-		border-radius: 4px;
-		padding: 8px;
-		font-family: "Fira Mono", Monaco, monospace;
-		border: none;
-		box-shadow: 2px 2px 4px #bbbbbb, -1px -1px 1px #bbbbbb;
-		margin-bottom: 5px;
-	}
+textarea {
+	width: 100%;
+	font-size: 18px;
+	height: 400px;
+	border-radius: 4px;
+	padding: 8px;
+	font-family: "Fira Mono", Monaco, monospace;
+	border: none;
+	box-shadow: 2px 2px 4px #bbbbbb, -1px -1px 1px #bbbbbb;
+	margin-bottom: 5px;
+}
 
-	#warnings {
-		font-family: "Fira Mono",Monaco, monospace;
-		border: 2px solid #f10707;
-		margin: 0 0 10px 0;
-		padding: 10px;
-		border-radius: 4px;
-	}
+#warnings {
+	font-family: "Fira Mono", Monaco, monospace;
+	border: 2px solid #f10707;
+	margin: 0 0 10px 0;
+	padding: 10px;
+	border-radius: 4px;
+}
 
-	#warnings span {
-		color: #f10707;
-	}
+#warnings span {
+	color: #f10707;
+}
 
-	#warnings:empty {
-		display: none;
-	}
+#warnings:empty {
+	display: none;
+}
 
-	#midi {
-		max-width: 900px;
-	}
+#midi {
+	max-width: 900px;
+}
 
-	nav {
-		position: absolute;
-		right: 0;
-		top: 0;
-		/*z-index: 20;*/
-		display: flex;
-	}
-
-	/* ************************************ */
+nav {
+	position: absolute;
+	right: 0;
+	top: 0;
+	/*z-index: 20;*/
+	display: flex;
+}
 </style>
