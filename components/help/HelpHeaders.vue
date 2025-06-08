@@ -36,30 +36,22 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpHeaders",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 T:Twinkle, Twinkle
 C:Anonymous
 L:1/4
 M:4/4
 Q:1/4=120
 K:D
-DDAA|BBA2|]`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-header-paper", this.abcString);
-	},
-};
+DDAA|BBA2|]`
+
+onMounted(() => {
+	abcjs.renderAbc("help-header-paper", abcString);
+})
 </script>
 
 <style scoped>

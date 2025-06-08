@@ -6,26 +6,18 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpGraceNotes",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 L:1/4
 K:C
-{g}A3 A{g}AA|{cAGAG}A3 {g}A{d}A{e}A|]`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-grace-paper", this.abcString);
-	},
-};
+{g}A3 A{g}AA|{cAGAG}A3 {g}A{d}A{e}A|]`
+
+onMounted(() => {
+	abcjs.renderAbc("help-grace-paper", abcString);
+})
 </script>
 
 <style scoped>

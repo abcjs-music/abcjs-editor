@@ -17,32 +17,26 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	components: {
-	},
-	data() {
-		return {
-			abcPitch: `X:1
+const abcPitch = `X:1
 %%staffwidth 350
 L:1
 K:C
-"_G,"G, "_B,"B, "_C"C "_G"G "_B"B "_c"c "_g"g "_b"b "_c'"c' "_d'"d' "_z"z/4|`,
-			abcAccidental: `X:1
+"_G,"G, "_B,"B, "_C"C "_G"G "_B"B "_c"c "_g"g "_b"b "_c'"c' "_d'"d' "_z"z/4|`
+
+const abcAccidental = `X:1
 %%staffwidth 350
 L:1
 K:C
-"__D"_D "_=D"=D "_^D"^D |`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-pitch-paper", this.abcPitch);
-		abcjs.renderAbc("help-accidental-paper", this.abcAccidental);
-	},
-};
+"__D"_D "_=D"=D "_^D"^D |`
+
+onMounted(() => {
+	abcjs.renderAbc("help-pitch-paper", abcPitch);
+	abcjs.renderAbc("help-accidental-paper", abcAccidental);
+})
 </script>
 
 <style scoped>

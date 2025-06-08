@@ -29,27 +29,19 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpLyrics",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 L:1/4
 K:C
 A A A A| A A A A | A A A A |]
-w:word syll-a-ble syll-a--ble time__  of~the~day`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-lyrics-paper", this.abcString);
-	},
-};
+w:word syll-a-ble syll-a--ble time__  of~the~day`
+
+onMounted(() => {
+	abcjs.renderAbc("help-lyrics-paper", abcString);
+})
 </script>
 
 <style scoped>

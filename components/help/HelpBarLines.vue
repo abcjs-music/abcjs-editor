@@ -24,27 +24,19 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpBarLines",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 %%staffwidth 400
 L:1
 K:C
-A | A || A |] A [| A |: A :| A :: A |1 A :|2 A |]`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-bar-lines-paper", this.abcString);
-	},
-};
+A | A || A |] A [| A |: A :| A :: A |1 A :|2 A |]`
+
+onMounted(() => {
+	abcjs.renderAbc("help-bar-lines-paper", abcString);
+})
 </script>
 
 <style scoped>

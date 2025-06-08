@@ -9,27 +9,19 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpDecorations",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 L:1/4
 K:C
 .C !tenuto!D !marcato!E !>!F | ~G HA TB2 |
-!pppp!c !ppp!d !pp!e !p!f | !mp!g !mf!a !f!b !ff!a | !fff!g !ffff!f !sfz!e2 |]`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-decorations-paper", this.abcString);
-	},
-};
+!pppp!c !ppp!d !pp!e !p!f | !mp!g !mf!a !f!b !ff!a | !fff!g !ffff!f !sfz!e2 |]`
+
+onMounted(() => {
+	abcjs.renderAbc("help-decorations-paper", abcString);
+})
 </script>
 
 <style scoped>

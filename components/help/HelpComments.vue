@@ -17,17 +17,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpComments",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 %%leftmargin 100
 L:1/4
 % This line is ignored
@@ -35,13 +29,11 @@ K:C
 %
 % This is part of a C-scale.
 %
-cdef|] % This text is ignored, too.`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-comments-paper", this.abcString);
-	},
-};
+cdef|] % This text is ignored, too.`
+
+onMounted(() => {
+	abcjs.renderAbc("help-comments-paper", abcString);
+})
 </script>
 
 <style scoped>

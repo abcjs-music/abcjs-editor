@@ -10,26 +10,18 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpBeaming",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 L:1/8
 K:C
-A B c d AB cd ABcd|`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-beaming-paper", this.abcString);
-	},
-};
+A B c d AB cd ABcd|`
+
+onMounted(() => {
+	abcjs.renderAbc("help-beaming-paper", abcString);
+})
 </script>
 
 <style scoped>

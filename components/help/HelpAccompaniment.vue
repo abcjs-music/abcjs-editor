@@ -8,7 +8,7 @@
 		<pre>{{ abcString }}</pre>
 		<div id="help-chords-paper" />
 
-		<p>Here's a list of the chord types that are understood by the playback system:</p>
+		<p>Here's a (partial) list of the chord types that are understood by the playback system:</p>
 		<table>
 			<thead>
 			<tr><th>Suffix</th><th>Meaning</th></tr>
@@ -40,31 +40,24 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpAccompaniment",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+
+const abcString = `X:1
 L:1/4
 K:C
-"A"A "Gm7"D "Bb°7"F "F#9"g|]`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-chords-paper",
-			this.abcString, {
-				format: {
-					gchordfont: "FreeSerif",
-				},
-			});
-	},
-};
+"A"A "Gm7"D "Bb°7"F "F#9"g|]`
+
+onMounted(() => {
+	abcjs.renderAbc("help-chords-paper",
+		abcString, {
+			format: {
+				gchordfont: "FreeSerif",
+			},
+		});
+})
 </script>
 
 <style scoped>

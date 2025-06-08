@@ -15,17 +15,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpDurations",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 %%staffwidth 400
 %%staffsep 3cm
 %%scale .9
@@ -39,13 +33,11 @@ L:1/4
 P:Rests
 "_z/8"z/8 "_z/4"z/4 "_z3/8"z3/8 "_z/2"z/2 "_z/"z/ "_z3/4"z3/4 "_z"z "_z3/2"z3/2 "_z2"z2 "_z3"z3 "_z4"z4 "_z6"z6 |]
 P:Triplets
-"_(3A"(3A"_B"B"_c"c|"_(3F/"(3F/"_G/"G/"_A/"A/|`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-duration-paper", this.abcString);
-	},
-};
+"_(3A"(3A"_B"B"_c"c|"_(3F/"(3F/"_G/"G/"_A/"A/|`
+
+onMounted(() => {
+	abcjs.renderAbc("help-duration-paper", abcString);
+})
 </script>
 
 <style scoped>

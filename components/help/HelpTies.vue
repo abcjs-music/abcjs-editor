@@ -10,26 +10,18 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpTies",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 L:1/8
 K:C
-(Ac) d-d| (Ac eg) ga- a-a|`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-ties-paper", this.abcString);
-	},
-};
+(Ac) d-d| (Ac eg) ga- a-a|`
+
+onMounted(() => {
+	abcjs.renderAbc("help-ties-paper", abcString);
+})
 </script>
 
 <style scoped>

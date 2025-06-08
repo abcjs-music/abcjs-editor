@@ -37,17 +37,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpVoices",
-	components: {
-	},
-	data() {
-		return {
-			abcPiano: `X:1
+const abcPiano = `X:1
 M:4/4
 T:Piano
 L:1/4
@@ -58,8 +52,9 @@ K:C
 V: RH
 ABcd | [ce]2 [ce]2 | [df]2 [df]2| [ce]4:|]
 V: LH
-A,2 E,2 | A,2 E,2 | D,2 A,2 | A, G, F, E, :|]`,
-			abcScore: `X: 1
+A,2 E,2 | A,2 E,2 | D,2 A,2 | A, G, F, E, :|]`
+
+const abcScore = `X: 1
 T: Score
 M: 4/4
 L: 1/4
@@ -72,8 +67,9 @@ EFGA|Bcde|edcB|AGFE|]
 V: Vi
 EFGA|Bcde|edcB|AGFE|]
 V: Tr
-E,F,G,A,|B,c,d,e,|e,d,c,B,|A,G,F,E,|]`,
-			abcHarmony: `X:1
+E,F,G,A,|B,c,d,e,|e,d,c,B,|A,G,F,E,|]`
+
+const abcHarmony = `X:1
 T:Zocharti Loch
 C:Louis Lewandowski (1821-1894)
 M:C
@@ -94,15 +90,13 @@ K:Gm
 [V:T1]  (B2c2 d2g2)  | f8        | d3c (d2fe)  | H d6    ||
 [V:T2]       z8      |     z8    | B3A (B2c2)  | A6    ||
 [V:B1]  (d,,2f,,2 b,,2e,2) | d,8       | g,,3g,,  g,,4     | H^f,,6    ||
-[V:B2]       x8      | z2B,,2 c,,2d,,2 | e,,3e,, (d,,2c,,2)  | d,,6    ||`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-piano-paper", this.abcPiano);
-		abcjs.renderAbc("help-score-paper", this.abcScore);
-		abcjs.renderAbc("help-harmony-paper", this.abcHarmony);
-	},
-};
+[V:B2]       x8      | z2B,,2 c,,2d,,2 | e,,3e,, (d,,2c,,2)  | d,,6    ||`
+
+onMounted(() => {
+	abcjs.renderAbc("help-piano-paper", abcPiano);
+	abcjs.renderAbc("help-score-paper", abcScore);
+	abcjs.renderAbc("help-harmony-paper", abcHarmony);
+})
 </script>
 
 <style scoped>

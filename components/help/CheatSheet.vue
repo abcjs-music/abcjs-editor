@@ -46,44 +46,8 @@
 	</div>
 </template>
 
-<script>
-import CollapsibleSection from "./CollapsibleSection";
-import HelpPitch from "./HelpPitch";
-import HelpHeaders from "./HelpHeaders";
-import HelpDurations from "./HelpDurations";
-import HelpBarLines from "./HelpBarLines";
-import HelpBeaming from "./HelpBeaming";
-import HelpTies from "./HelpTies";
-import HelpAccompaniment from "./HelpAccompaniment";
-import HelpDecorations from "./HelpDecorations";
-import HelpGraceNotes from "./HelpGraceNotes";
-import HelpMultipleNotes from "./HelpMultipleNotes";
-import HelpLyrics from "./HelpLyrics";
-import HelpVoices from "./HelpVoices";
-import HelpComments from "./HelpComments";
+<script lang="ts" setup>
 
-export default {
-	components: {
-		HelpComments,
-		HelpVoices,
-		HelpLyrics,
-		HelpMultipleNotes,
-		HelpGraceNotes,
-		HelpDecorations,
-		HelpAccompaniment,
-		HelpTies,
-		HelpBeaming,
-		HelpBarLines,
-		HelpDurations,
-		HelpHeaders,
-		CollapsibleSection,
-		HelpPitch,
-	},
-	data() {
-		return {
-		};
-	},
-};
 </script>
 
 <style scoped>

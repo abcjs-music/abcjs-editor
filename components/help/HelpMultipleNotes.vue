@@ -10,26 +10,18 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import abcjsDefaultExport from "abcjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
-export default {
-	name: "HelpMultipleNotes",
-	components: {
-	},
-	data() {
-		return {
-			abcString: `X:1
+const abcString = `X:1
 L:1/8
 K:C
-[CEGc] [C2G2] [CE][DF]|[D2F2][EG][FA] [A4d4]|]`,
-		};
-	},
-	mounted() {
-		abcjs.renderAbc("help-multiple-paper", this.abcString);
-	},
-};
+[CEGc] [C2G2] [CE][DF]|[D2F2][EG][FA] [A4d4]|]`
+
+onMounted(() => {
+	abcjs.renderAbc("help-multiple-paper", abcString);
+})
 </script>
 
 <style scoped>
