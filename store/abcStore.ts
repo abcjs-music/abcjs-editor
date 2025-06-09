@@ -1,37 +1,34 @@
 import { defineStore } from "pinia";
-import { abcTitle } from "../helpers/abc";
+import { abcTitle } from "~/helpers/abc";
 import {
 	getLocalStorage,
 	setLocalStorage,
-} from "../helpers/local-storage-wrapper";
+} from "~/helpers/local-storage-wrapper";
 // Defining a Pinia store named "abcStore" to manage abc editor related data
 export const useAbcStore = defineStore("abcStore", {
 	// Initial state configuration for the content
 	state: () => {
 		return {
 			_allTunes: {},
-			_showUpload: false,
-			_shortenOutput: false,
-			_uploadZoom: 100,
-			_fontSize: 18,
-			_visualTranspose: 0,
+			showUpload: false,
+			shortenOutput: false,
+			uploadZoom: 100,
+			fontSize: 18,
+			visualTranspose: 0,
 		};
 	},
 	// Getters to retrieve store content
 	getters: {
 		allTuneNames: state => Object.keys(state._allTunes).sort(),
-		tuneByTitle: state => (title) => {
+		tuneByTitle: state => (title:string) => {
+			//@ts-ignore - referencing object
 			return state._allTunes[title];
 		},
-		showUpload: state => state._showUpload,
-		shortenOutput: state => state._shortenOutput,
-		uploadZoom: state => state._uploadZoom,
-		fontSize: state => state._fontSize,
-		visualTranspose: state => state._visualTranspose,
 	},
 	// Actions to save content to the store
 	actions: {
 		initTunes() {
+			//@ts-ignore - TODO-PER: getLocalStorage doesn't handle objects
 			this._allTunes = getLocalStorage("tunes", {}, "Object");
 			this.setShowUpload(
 				getLocalStorage("show-upload", false, "Boolean"),
@@ -42,37 +39,39 @@ export const useAbcStore = defineStore("abcStore", {
 			this.setUploadZoom(getLocalStorage("upload-zoom", 100, "Integer"));
 			this.setFontSize(getLocalStorage("font-size", 18, "Integer"));
 		},
-		saveTune(tune) {
-			let title = abcTitle(tune);
+		saveTune(tune:string) {
+			const title = abcTitle(tune);
 			const all = { ...this._allTunes };
+			//@ts-ignore - referencing object
 			all[title] = tune;
 			this._allTunes = all;
 			setLocalStorage("tunes", JSON.stringify(this._allTunes));
 		},
-		deleteTuneByName(name) {
+		deleteTuneByName(name:string) {
 			const all = { ...this._allTunes };
+			//@ts-ignore - referencing object
 			delete all[name];
 			this._allTunes = all;
 			setLocalStorage("tunes", JSON.stringify(this._allTunes));
 		},
-		setShowUpload(showUpload) {
-			this._showUpload = showUpload;
+		setShowUpload(showUpload:boolean) {
+			this.showUpload = showUpload;
 			setLocalStorage("show-upload", showUpload);
 		},
-		setShortenOutput(shortenOutput) {
-			this._shortenOutput = shortenOutput;
+		setShortenOutput(shortenOutput:boolean) {
+			this.shortenOutput = shortenOutput;
 			setLocalStorage("shorten-output", shortenOutput);
 		},
-		setUploadZoom(uploadZoom) {
-			this._uploadZoom = uploadZoom;
+		setUploadZoom(uploadZoom:number) {
+			this.uploadZoom = uploadZoom;
 			setLocalStorage("upload-zoom", uploadZoom);
 		},
-		setFontSize(fontSize) {
-			this._fontSize = fontSize;
+		setFontSize(fontSize:number) {
+			this.fontSize = fontSize;
 			setLocalStorage("font-size", fontSize);
 		},
-		setVisualTranspose(visualTranspose) {
-			this._visualTranspose = visualTranspose;
+		setVisualTranspose(visualTranspose:number) {
+			this.visualTranspose = visualTranspose;
 		},
 	},
 });

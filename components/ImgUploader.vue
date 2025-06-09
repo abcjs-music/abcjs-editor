@@ -144,7 +144,6 @@ export default {
 			return Promise.all(promises);
 		},
 		getImage(file) {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			return new Promise((resolve, reject) => {
 				const fReader = new FileReader();
 				const tagName = (file.type === "application/pdf") ? "iframe" : "img";

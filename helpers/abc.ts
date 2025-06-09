@@ -1,4 +1,4 @@
-export const abcTitle = (abcString) => {
+export const abcTitle = (abcString:string) => {
 	if (!abcString)
 		return "untitled";
 	const arr = abcString.split("\nT:");
@@ -10,7 +10,7 @@ export const abcTitle = (abcString) => {
 	return arr2[0].trim();
 };
 
-export const abcFilename = (abcString) => {
+export const abcFilename = (abcString:string) => {
 	const title = abcTitle(abcString).replace(/[^\w]/g, "-");
 	return `${title}.abc`;
 };

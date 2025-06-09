@@ -219,7 +219,6 @@ K: Emin
 			startingTune = overrideTune;
 		this.setTune({abc: startingTune});
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		window.addEventListener("beforeunload", (e) => {
 			this.saveCurrent();
 		});
@@ -233,13 +232,11 @@ K: Emin
 	},
 	methods: {
 		...mapActions(useAbcStore, ["initTunes"]),
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {
 			const lastClicked = abcElem.midiPitches;
 			if (!lastClicked)
 				return;
 
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			abcjs.synth.playEvent(lastClicked, abcElem.midiGraceNotePitches, this.abcjsEditor.millisecondsPerMeasure()).then(function (response) {
 				console.log("note played");
 			}).catch(function (error) {
@@ -297,7 +294,6 @@ K: Emin
 				},
 			}).then((response) => {
 				console.log(response);
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				midiBuffer.prime().then((response) => {
 					const url = midiBuffer.download();
 					const link = document.createElement("a");

@@ -1,6 +1,10 @@
 import { createConfigForNuxt } from "@nuxt/eslint-config/flat";
 
 export default createConfigForNuxt({
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"strictNullChecks": true
+	},
 })
 	// Example for extended stylistic updates that cannot be done by features.stylistic above:
 	// .append({
@@ -17,6 +21,7 @@ export default createConfigForNuxt({
 		files: ["*.vue"],
 		rules: {
 			"vue/multi-word-component-names": "error",
+			"no-debugger": "off",
 		},
 		// {
 		// 	files: [
@@ -44,26 +49,15 @@ export default createConfigForNuxt({
 	// Override local typescript rules ()
 	.override("nuxt/typescript/rules", {
 		rules: {
-			// "@typescript-eslint/no-explicit-any" taken from https://github.com/nuxt/nuxt.com/blob/main/eslint.config.mjs
-			"@typescript-eslint/no-explicit-any": "off",
-			// "@typescript-eslint/no-unused-vars" taken from https://github.com/nuxt/eslint/blob/main/packages/eslint-config/src/configs/typescript.ts
-			"@typescript-eslint/no-unused-vars": [
-				"error",
-				{
-					args: "after-used", // default
-					argsIgnorePattern: "^_", // default
-					ignoreRestSiblings: true, // default
-					vars: "all", // default
-					varsIgnorePattern: "^_", // default
-					// Allow unused vars for catch(e) {}
-					caughtErrors: "none", // Added,  default: "all"
-				},
-			],
+			"@typescript-eslint/ban-ts-comment": "off",
+			"@typescript-eslint/no-this-alias": "off",
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/no-dynamic-delete": "off",
 		},
 	})
 	.override("nuxt/javascript", {
 		rules: {
 			// Allow unused vars for catch(e) {}
-			"no-unused-vars": ["error", { caughtErrors: "none" }],
+			"@typescript-eslint/no-unused-vars": "off",
 		},
 	});
