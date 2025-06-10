@@ -1,11 +1,11 @@
 <template>
 	<div class="output-options">
 		<h2>Witness Image:</h2>
-		<animated-button id="showUpload" el="checkbox" label="Show Witness Uploader" action="setShowUpload" />
+		<animated-button id="showUpload" el="checkbox" label="Show Witness Uploader" :check-value="abcStore.showUpload" @checked="abcStore.setShowUpload($event)"/>
 		<div><label>Zoom (%): <input v-model="uploadZoom" type="number"></label></div>
 		<h2>Output:</h2>
 		<animated-button el="button" label="Print" class="print-button" @click="print" />
-		<animated-button id="shortenOutput" el="checkbox" label="Shorten Output" action="setShortenOutput" />
+		<animated-button id="shortenOutput" el="checkbox" label="Shorten Output" :check-value="abcStore.shortenOutput" @checked="abcStore.setShortenOutput($event)" />
 	</div>
 </template>
 

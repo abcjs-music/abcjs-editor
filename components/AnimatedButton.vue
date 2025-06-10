@@ -9,13 +9,13 @@
 			{{ label }}
 		</a>
 
-		<check-box v-if="el === 'checkbox'" :id="id" class="animate" :label="label" :action="action" />
+		<CheckBox v-if="el === 'checkbox'" :id="id" class="animate" :label="label" :value="checkValue" @input="$emit('checked', $event)" />
 
 	</span>
 </template>
 
 <script>
-import CheckBox from "./CheckBox";
+import CheckBox from "./atoms/CheckBox.vue";
 
 export default {
 	name: "AnimatedButton",
@@ -44,13 +44,13 @@ export default {
 			required: false,
 			default: "",
 		},
-		action: {
-			type: String,
+		checkValue: {
+			type: Boolean,
 			required: false,
-			default: "",
+			default: false
 		},
 	},
-	emits: ["click"],
+	emits: ["click", "checked"],
 };
 </script>
 

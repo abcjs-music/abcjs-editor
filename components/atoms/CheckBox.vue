@@ -1,92 +1,53 @@
 <template>
 	<div :class="wrapperClass">
-		<input :id="id" v-model="dataModel" type="checkbox" :disabled="disabled">
+		<input :id="id" :checked="value" @input="input" type="checkbox" :disabled="disabled">
 		<label
 			:for="id"
-			tabindex="0"
 			:title="disabled ? disabledMessage : ''"
-			@keyup.enter.self.stop="toggle"
-			@keyup.space.self.stop="toggle"
 			@keydown.space.prevent="swallow"
-			@keydown.tab="($event.shiftKey) ? $emit('shift-tab') : $emit('tab')"
+			@keydown.tab="($event.shiftKey) ? emit('shift-tab', $event) : emit('tab', $event)"
 		>
 			{{ label }}
 		</label>
 	</div>
 </template>
 
-<script>
-import { useAbcStore } from "../store/abcStore";
+<script lang="ts" setup>
 
-export default {
-	name: "CheckBox",
-	props: {
-		label: {
-			type: String,
-			required: true,
-		},
-		id: {
-			type: String,
-			required: true,
-		},
-		action: {
-			type: String,
-			required: true,
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-			required: false,
-		},
-		disabledMessage: {
-			type: String,
-			default: "",
-			required: false,
-		},
-		type: {
-			type: String,
-			default: "",
-			required: false,
-		},
-	},
-	emits: ["shift-tab", "tab"],
-	setup() {
-		const abcStore = useAbcStore();
-		return {
-			abcStore,
-		};
-	},
-	computed: {
-		dataModel: {
-			get() {
-				return this.abcStore[this.id];
-			},
-			set(value) {
-				// Called when the user clicks with mouse
-				this.saveData(value);
-			},
-		},
-		wrapperClass() {
-			const cls = ["check-box"];
-			if (this.type)
-				cls.push(this.type);
-			return cls.join(" ");
-		},
-	},
-	methods: {
-		toggle() {
-			// Called when user clicks with keyboard
-			if (!this.disabled)
-				this.saveData(!this.abcStore[this.id]);
-		},
-		swallow() {
-			// this keeps the page from scrolling when the space key is pressed.
-		},
-		saveData(value) {
-			this.abcStore[this.action](value);
-		},
-	},
-};
+const props = withDefaults(defineProps<{
+	label: string;
+	id: string;
+	value: boolean;
+	disabled?: boolean;
+	disabledMessage?: string;
+	type?: string;
+}>(), {
+	disabled: false,
+	disabledMessage: '',
+	type: '',
+});
+
+const emit = defineEmits<{
+	(e: "input", value: boolean): void;
+	(e: "shift-tab", ev: KeyboardEvent): void;
+	(e: "tab", ev: KeyboardEvent): void;
+}>();
+
+const wrapperClass = computed(() => {
+	const cls = ["check-box"];
+	if (props.type)
+		cls.push(props.type);
+	return cls.join(" ");
+})
+
+function swallow() {
+	// this keeps the page from scrolling when the space key is pressed.
+}
+
+function input(ev: Event) {
+	emit('input', ev.target.checked)
+}
+
 </script>
 
 <style scoped>
