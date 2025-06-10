@@ -1,7 +1,7 @@
 <template>
 	<span class="animated-button">
 
-		<button v-if="el === 'button'" class="animate" @click="$emit('click')">
+		<button v-if="el === 'button'" class="animate" @click="emit('click', $event)">
 			{{ label }}
 		</button>
 
@@ -9,49 +9,35 @@
 			{{ label }}
 		</a>
 
-		<CheckBox v-if="el === 'checkbox'" :id="id" class="animate" :label="label" :value="checkValue" @input="$emit('checked', $event)" />
+		<CheckBox v-if="el === 'checkbox'" :id="id" class="animate" :label="label" :value="checkValue" @input="emit('checked', $event)" />
 
 	</span>
 </template>
 
-<script>
-import CheckBox from "./atoms/CheckBox.vue";
+<script lang="ts" setup>
+import {useAbcStore} from "~/store/abcStore";
+import CheckBox from "~/components/atoms/CheckBox.vue";
 
-export default {
-	name: "AnimatedButton",
-	components: { CheckBox },
-	props: {
-		label: {
-			type: String,
-			required: true,
-		},
-		el: {
-			type: String,
-			required: true,
-		},
-		download: {
-			type: String,
-			required: false,
-			default: "",
-		},
-		href: {
-			type: String,
-			required: false,
-			default: "",
-		},
-		id: {
-			type: String,
-			required: false,
-			default: "",
-		},
-		checkValue: {
-			type: Boolean,
-			required: false,
-			default: false
-		},
-	},
-	emits: ["click", "checked"],
-};
+const abcStore = useAbcStore();
+
+const props = withDefaults(defineProps<{
+	label: string;
+	el: string;
+	checkValue?: boolean;
+	download?: string;
+	href?: string;
+	id?: string;
+}>(), {
+	checkValue: false,
+	download: '',
+	href: '',
+	id: '',
+});
+
+const emit = defineEmits<{
+	(e: "click", ev: MouseEvent): void;
+	(e: "checked", ev: boolean): void;
+}>();
 </script>
 
 <style scoped>

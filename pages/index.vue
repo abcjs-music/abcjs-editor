@@ -247,11 +247,9 @@ K: Emin
 			const output = document.getElementById("print-version");
 			let text = "";
 			let svgs = document.querySelectorAll("#canvas .abcjs-container");
-			console.log(svgs.length);
 			if (svgs.length === 0) {
 				svgs = [document.querySelector("#canvas")];
 			}
-			console.log(svgs[0]);
 			svgs.forEach((svg) => {
 				text += svg.innerHTML;
 			});
@@ -293,7 +291,6 @@ K: Emin
 				options: {
 				},
 			}).then((response) => {
-				console.log(response);
 				midiBuffer.prime().then((response) => {
 					const url = midiBuffer.download();
 					const link = document.createElement("a");

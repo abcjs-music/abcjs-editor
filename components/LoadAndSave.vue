@@ -1,13 +1,13 @@
 <template>
 	<div class="load-and-save">
-		<animated-button el="a" :label="downloadLabel" :download="abcTitle" :href="saveAbcString" />
-		<animated-button el="button" :label="saveLabel" @click="storeAbcString" />
+		<AnimatedButton el="a" :label="downloadLabel" :download="abcTitle" :href="saveAbcString" />
+		<AnimatedButton el="button" :label="saveLabel" @click="storeAbcString" />
 		<div v-if="allTuneNames.length > 0">
 			<h2>Load:</h2>
 			<ul class="tune-picker">
 				<li v-for="name in allTuneNames" :key="name">
-					<animated-button el="button" class="load" :label="name" @click="loadTune(name)" />
-					<animated-button el="button" label="×" :aria-label="`Delete ${name}`" @click="deleteTune(name)" />
+					<AnimatedButton el="button" class="load" :label="name" @click="loadTune(name)" />
+					<AnimatedButton el="button" label="×" :aria-label="`Delete ${name}`" @click="deleteTune(name)" />
 				</li>
 			</ul>
 		</div>
@@ -16,7 +16,7 @@
 			<label>Visual Transpose: <input v-model="visualTranspose" type="number" min="-24" max="24"></label>
 		</div>
 		<div v-if="visualTranspose !== 0 && visualTranspose !== '0'" class="extra-bottom">
-			<animated-button el="button" label="Apply Transpose" @click="transposeSource" />
+			<AnimatedButton el="button" label="Apply Transpose" @click="transposeSource" />
 		</div>
 	</div>
 </template>
@@ -25,7 +25,7 @@
 import { mapActions, mapGetters } from "pinia";
 import { useAbcStore } from "../store/abcStore";
 import { abcTitle, abcFilename } from "../helpers/abc";
-import AnimatedButton from "./AnimatedButton";
+import AnimatedButton from "./atoms/AnimatedButton.vue";
 export default {
 	name: "LoadAndSave",
 	components: { AnimatedButton },
