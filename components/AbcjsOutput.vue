@@ -1,24 +1,13 @@
 <template>
-	<section :class="`abcjs-output ${shorten ? 'short' :''}`" :tabindex="shorten ? '0' : null">
+	<section :class="{'abcjs-output': true, short: shorten}" :tabindex="shorten ? 0 : undefined">
 		<div id="canvas" />
 	</section>
 </template>
 
-<script>
-export default {
-	name: "AbcjsOutput",
-	props: {
-		shorten: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-	},
-	data() {
-		return {
-		};
-	},
-};
+<script lang="ts" setup>
+const props = defineProps<{
+	shorten: boolean;
+}>();
 </script>
 
 <style scoped>

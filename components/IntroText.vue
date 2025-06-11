@@ -1,6 +1,6 @@
 <template>
 	<div class="intro-text">
-		<collapsible-section class="no-print" title="Free online sheet music creation." :is-header2="true" :is-open="isOpen" @click="toggle">
+		<CollapsibleSection class="no-print" title="Free online sheet music creation." :is-header2="true" :is-open="isOpen" @click="toggle">
 			<div class="intro">
 				<p>
 					The input is in the form of ABC Notation and it is processed with
@@ -23,7 +23,7 @@
 					<li class="offset">☞ This website is provided for free as a convenience to you. I hope you find it useful! Tell your friends about <a href="https://abcjs.net" target="_blank" class="external-link muted" rel="noreferrer">abcjs</a>!</li>
 				</ul>
 			</div>
-		</collapsible-section>
+		</CollapsibleSection>
 	</div>
 </template>
 
