@@ -45,6 +45,7 @@ function swallow() {
 }
 
 function input(ev: Event) {
+	//@ts-ignore ev.target exists
 	emit('input', ev.target.checked)
 }
 

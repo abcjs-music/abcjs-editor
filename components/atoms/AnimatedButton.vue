@@ -15,10 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import {useAbcStore} from "~/store/abcStore";
 import CheckBox from "~/components/atoms/CheckBox.vue";
-
-const abcStore = useAbcStore();
 
 const props = withDefaults(defineProps<{
 	label: string;

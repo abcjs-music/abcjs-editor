@@ -39,6 +39,7 @@ export default createConfigForNuxt({
 	// Override local Vue rules (taken from https://github.com/nuxt/nuxt.com/blob/main/eslint.config.mjs)
 	.override("nuxt/vue/rules", {
 		rules: {
+			"vue/attributes-order": 'off',
 			//"vue/no-v-html": "error",
 			// "vue/max-attributes-per-line": [
 			// 	"error",
@@ -53,6 +54,7 @@ export default createConfigForNuxt({
 			"@typescript-eslint/no-this-alias": "off",
 			"@typescript-eslint/no-unused-vars": "off",
 			"@typescript-eslint/no-dynamic-delete": "off",
+			"@typescript-eslint/unified-signatures": "off",
 		},
 	})
 	.override("nuxt/javascript", {
