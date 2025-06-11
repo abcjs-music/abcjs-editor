@@ -1,34 +1,22 @@
 <template>
-	<button :class="`animated-hamburger btn ${isOpen ? 'active' : ''}`" :aria-label="aria" @click="toggle">
+	<button :class="{'animated-hamburger': true, btn: true, 'active' : isOpen}" :aria-label="aria" @click="toggle">
 		<span />
 	</button>
 </template>
 
-<script>
-export default {
-	name: "AnimatedHamburger",
-	props: {
-		aria: {
-			type: String,
-			required: true,
-		},
-	},
-	emits: ["click"],
-	data() {
-		return {
-			isOpen: false,
-		};
-	},
-	methods: {
-		toggle() {
-			this.isOpen = !this.isOpen;
-			this.$emit("click", { isOpen: this.isOpen });
-		},
-		forceClose() {
-			this.isOpen = false;
-		},
-	},
-};
+<script lang="ts" setup>
+const props = defineProps<{
+	aria: string;
+	isOpen: boolean;
+}>();
+
+const emit = defineEmits<{
+	(e: "click", ev: { isOpen:boolean }): void;
+}>();
+
+function toggle() {
+	emit("click", { isOpen: !props.isOpen });
+}
 </script>
 
 <style scoped>

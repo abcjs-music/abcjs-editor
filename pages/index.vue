@@ -3,7 +3,7 @@
 		<intro-text />
 		<section :class="{ help: true, open: cheatSheetVisible }">
 			<nav aria-label="cheat sheet">
-				<button-with-icon
+				<ButtonWithIcon
 					:icon="cheatSheetVisible ? '✘' : '?'"
 					:label="cheatSheetVisible ? 'Close' : 'Help'"
 					@click="helpToggle"
@@ -13,7 +13,7 @@
 		</section>
 		<section :class="{ options: true, open: optionsVisible }">
 			<nav aria-label="options">
-				<button-with-icon
+				<ButtonWithIcon
 					:icon="optionsVisible ? '✘' : '⚙'"
 					:label="optionsVisible ? 'Close' : 'Options'"
 					@click="optionsToggle"
@@ -77,7 +77,7 @@ import * as Vue from "vue";
 import {mapGetters, mapActions} from "pinia";
 import abcjsDefaultExport from "abcjs";
 import CheatSheet from "../components/help/CheatSheet.vue";
-import ButtonWithIcon from "../components/ButtonWithIcon";
+import ButtonWithIcon from "../components/atoms/ButtonWithIcon.vue";
 import {CursorControl} from "../helpers/cursor-control";
 import AbcjsOutput from "../components/AbcjsOutput";
 import ImgUploader from "../components/ImgUploader";

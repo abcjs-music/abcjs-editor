@@ -1,5 +1,5 @@
 <template>
-	<button class="btn" @click="emit('click')">
+	<button class="btn" @click="emit('click', $event)">
 		{{ label }} {{icon}}
 	</button>
 </template>
@@ -21,7 +21,7 @@ const emit = defineEmits<{
 	font-size: 14px;
 	padding: 3px 10px;
 	border-radius: 8px;
-	margin-top: 0px;
+	margin-top: 0;
 	color: white;
 	background: #0080a6;
 	text-decoration: none;

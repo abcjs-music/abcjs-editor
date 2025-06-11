@@ -2,7 +2,7 @@
 	<div :class="`grow-to-modal ${expandClass}`">
 		<div class="mask" @click="forceClose" />
 		<div :class="`${controlButtonClass} ${expandClass}`">
-			<animated-hamburger ref="hamburger" :aria="aria" @click="toggle" />
+			<AnimatedHamburger :aria="aria" :is-open="isExpanded" @click="toggle" />
 		</div>
 		<div :class="`body ${expandClass}`">
 			<slot name="body" />
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import AnimatedHamburger from "./AnimatedHamburger";
+import AnimatedHamburger from "./atoms/AnimatedHamburger.vue";
 
 export default {
 	name: "GrowToModal",
@@ -52,7 +52,6 @@ export default {
 			this.isExpanded = state.isOpen;
 		},
 		forceClose() {
-			this.$refs.hamburger.forceClose();
 			this.isExpanded = false;
 		},
 	},
