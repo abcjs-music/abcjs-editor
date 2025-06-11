@@ -1,5 +1,5 @@
 <template>
-	<button class="link tree" @click="$emit('click')">
+	<button class="link tree" @click="emit('click', $event)">
 		<span :class="isHeader2 ? 'header' : ''">{{ isOpen ? '▼' : '►' }}</span>
 		<h3 v-if="isHeader3">
 			{{ label }}
@@ -11,31 +11,20 @@
 	</button>
 </template>
 
-<script>
-export default {
-	name: "ButtonTree",
-	props: {
-		label: {
-			type: String,
-			required: true,
-		},
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-		isHeader2: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		isHeader3: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-	},
-	emits: ["click"],
-};
+<script lang="ts" setup>
+const props = withDefaults(defineProps<{
+	label: string;
+	isOpen: boolean;
+	isHeader2?: boolean;
+	isHeader3?: boolean;
+}>(), {
+	isHeader2: false,
+	isHeader3: false,
+});
+
+const emit = defineEmits<{
+	(e: "click", ev: MouseEvent): void;
+}>();
 </script>
 
 <style scoped>

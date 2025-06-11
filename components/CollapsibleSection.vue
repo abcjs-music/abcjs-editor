@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ButtonTree from "./ButtonTree";
+import ButtonTree from "./atoms/ButtonTree.vue";
 
 export default {
 	name: "CollapsibleSection",
