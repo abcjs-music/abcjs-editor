@@ -25,11 +25,11 @@
 			<div class="content-section">
 				<section class="input">
 					<nav aria-label="input options">
-						<grow-to-modal ref="modal1" aria="Input Options">
+						<GrowToModal aria="Input Options" :force-close="inputClose">
 							<template #body>
 								<load-and-save :current-tune="abcString" @load="setTune($event)" @close="close" @transpose-source="transposeSource" />
 							</template>
-						</grow-to-modal>
+						</GrowToModal>
 					</nav>
 					<div class="input-area">
 						<div>
@@ -49,11 +49,11 @@
 			<div class="content-section">
 				<div class="menu-holder no-print">
 					<nav aria-label="rendering options">
-						<grow-to-modal ref="modal2" aria="Rendering Options">
+						<GrowToModal ref="modal2" aria="Rendering Options">
 							<template #body>
 								<output-options />
 							</template>
-						</grow-to-modal>
+						</GrowToModal>
 					</nav>
 				</div>
 				<img-uploader :show="showUpload" :upload-zoom="uploadZoom" />
@@ -83,7 +83,7 @@ import AbcjsOutput from "../components/AbcjsOutput";
 import ImgUploader from "../components/ImgUploader";
 import IntroText from "../components/IntroText";
 import {getLocalStorage, setLocalStorage} from "../helpers/local-storage-wrapper";
-import GrowToModal from "../components/GrowToModal";
+import GrowToModal from "../components/generic/GrowToModal.vue";
 import LoadAndSave from "../components/LoadAndSave";
 import {useAbcStore} from "../store/abcStore";
 import OutputOptions from "../components/OutputOptions";
@@ -112,6 +112,7 @@ export default {
 	},
 	data() {
 		return {
+			inputClose: 0,
 			cheatSheetVisible: false,
 			optionsVisible: false,
 			copyProgress: "idle",
@@ -265,10 +266,10 @@ K: Emin
 			setLocalStorage("options-open", this.optionsVisible);
 		},
 		close() {
-			this.$refs.modal1.forceClose();
+			this.inputClose++
 		},
 		setTune(payload) {
-			this.$refs.modal1.forceClose();
+			this.inputClose++
 			this.abcString = payload.abc;
 			Vue.nextTick(() => {
 				this.abcjsEditor.paramChanged({});
