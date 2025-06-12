@@ -80,7 +80,7 @@ import CheatSheet from "../components/help/CheatSheet.vue";
 import ButtonWithIcon from "../components/atoms/ButtonWithIcon.vue";
 import {CursorControl} from "../helpers/cursor-control";
 import AbcjsOutput from "../components/AbcjsOutput";
-import ImgUploader from "../components/ImgUploader";
+import ImgUploader from "../components/generic/ImgUploader.vue";
 import IntroText from "../components/IntroText";
 import {getLocalStorage, setLocalStorage} from "../helpers/local-storage-wrapper";
 import GrowToModal from "../components/generic/GrowToModal.vue";
