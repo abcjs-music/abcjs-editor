@@ -1,6 +1,6 @@
 <template>
 	<div :class="{'grow-to-modal': true, expanded: isExpanded, collapsed: !isExpanded}">
-		<div class="mask" @click="forceClose" />
+		<div class="mask" @click="clickMask" />
 		<div :class="{open: !isExpanded, close: isExpanded, expanded: isExpanded, collapsed: !isExpanded}">
 			<AnimatedHamburger :aria="aria" :is-open="isExpanded" @click="toggle" />
 		</div>
@@ -33,7 +33,7 @@ function toggle(state: {isOpen: boolean}) {
 	isExpanded.value = state.isOpen;
 }
 
-function forceClose() {
+function clickMask() {
 	isExpanded.value = false;
 }
 </script>

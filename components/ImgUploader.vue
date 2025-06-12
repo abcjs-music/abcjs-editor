@@ -85,7 +85,7 @@ export default {
 				this.setClosed();
 		},
 		uploadZoom(newValue) {
-			const target = document.querySelector(".target-for-image iframe");
+			const target = document.querySelector(".target-for-image img");
 			if (target) {
 				target.style.transform = `scale(${newValue / 100})`;
 			}
@@ -230,7 +230,7 @@ export default {
 .target-for-image img {
 	width: 100%;
 }
-.target-for-image embed,.target-for-image iframe {
+.target-for-image embed,.target-for-image img,.target-for-image iframe {
 	width: 100%;
 	transform-origin: top left;
 }

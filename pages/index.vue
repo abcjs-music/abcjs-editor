@@ -56,7 +56,7 @@
 						</GrowToModal>
 					</nav>
 				</div>
-				<img-uploader :show="showUpload" :upload-zoom="uploadZoom" />
+				<ImgUploader :show="showUpload" :upload-zoom="uploadZoom" />
 				<abcjs-output class="no-print" :shorten="shortenOutput" />
 			</div>
 		</div>

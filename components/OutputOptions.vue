@@ -2,49 +2,25 @@
 	<div class="output-options">
 		<h2>Witness Image:</h2>
 		<AnimatedButton id="showUpload" el="checkbox" label="Show Witness Uploader" :check-value="abcStore.showUpload" @checked="abcStore.setShowUpload($event)"/>
-		<div><label>Zoom (%): <input v-model="uploadZoom" type="number"></label></div>
+		<div><label>Zoom (%): <input :value="abcStore.uploadZoom" @input="setUploadZoom" type="number"></label></div>
 		<h2>Output:</h2>
 		<AnimatedButton el="button" label="Print" class="print-button" @click="print" />
 		<AnimatedButton id="shortenOutput" el="checkbox" label="Shorten Output" :check-value="abcStore.shortenOutput" @checked="abcStore.setShortenOutput($event)" />
 	</div>
 </template>
 
-<script>
-import { mapActions } from "pinia";
-import { useAbcStore } from "../store/abcStore";
-import AnimatedButton from "./atoms/AnimatedButton.vue";
+<script lang="ts" setup>
+import { useAbcStore } from "~/store/abcStore";
+import AnimatedButton from "~/components/atoms/AnimatedButton.vue";
 
-export default {
-	name: "OutputOptions",
-	components: { AnimatedButton },
-	setup() {
-		const abcStore = useAbcStore();
-		return {
-			abcStore,
-		};
-	},
-	data() {
-		return {
-		};
-	},
-	computed: {
-		uploadZoom: {
-			get() {
-				return this.abcStore.uploadZoom;
-			},
-			set(value) {
-				// Called when the user clicks with mouse
-				this.setUploadZoom(parseInt(value, 10));
-			},
-		},
-	},
-	methods: {
-		...mapActions(useAbcStore, ["setUploadZoom"]),
-		print() {
-			window.print();
-		},
-	},
-};
+const abcStore = useAbcStore();
+
+function print() {
+	window.print();
+}
+function setUploadZoom(ev) {
+	useAbcStore().setUploadZoom(parseInt(ev.target.value,10))
+}
 </script>
 
 <style scoped>
