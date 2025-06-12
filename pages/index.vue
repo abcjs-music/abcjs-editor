@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<IntroText />
+		<IntroText/>
 		<section :class="{ help: true, open: cheatSheetVisible }">
 			<nav aria-label="cheat sheet">
 				<ButtonWithIcon
@@ -9,7 +9,7 @@
 					@click="helpToggle"
 				/>
 			</nav>
-			<CheatSheet v-if="cheatSheetVisible" />
+			<CheatSheet v-if="cheatSheetVisible"/>
 		</section>
 		<section :class="{ options: true, open: optionsVisible }">
 			<nav aria-label="options">
@@ -27,7 +27,7 @@
 					<nav aria-label="input options">
 						<GrowToModal aria="Input Options" :force-close="inputClose">
 							<template #body>
-								<LoadAndSave :current-tune="abcString" @load="setTune($event)" @close="close" @transpose-source="transposeSource" />
+								<LoadAndSave :current-tune="abcString" @load="setTune($event)" @close="close" @transpose-source="transposeSource"/>
 							</template>
 						</GrowToModal>
 					</nav>
@@ -41,8 +41,8 @@
 								:style="{ fontSize: fontSize + 'px' }"
 							/>
 						</div>
-						<div id="warnings" />
-						<div id="midi" class="abcjs-large" />
+						<div id="warnings"/>
+						<div id="midi" class="abcjs-large"/>
 					</div>
 				</section>
 			</div>
@@ -51,13 +51,13 @@
 					<nav aria-label="rendering options">
 						<GrowToModal ref="modal2" aria="Rendering Options">
 							<template #body>
-								<OutputOptions />
+								<OutputOptions/>
 							</template>
 						</GrowToModal>
 					</nav>
 				</div>
-				<ImgUploader :show="showUpload" :upload-zoom="uploadZoom" />
-				<AbcjsOutput class="no-print" :shorten="shortenOutput" />
+				<ImgUploader :show="showUpload" :upload-zoom="uploadZoom"/>
+				<AbcjsOutput class="no-print" :shorten="shortenOutput"/>
 			</div>
 		</div>
 		<section class="download">
@@ -72,140 +72,125 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import * as Vue from "vue";
-import {mapGetters, mapActions} from "pinia";
 import abcjsDefaultExport from "abcjs";
 import CheatSheet from "../components/help/CheatSheet.vue";
 import ButtonWithIcon from "../components/atoms/ButtonWithIcon.vue";
-import {CursorControl} from "../helpers/cursor-control";
-import AbcjsOutput from "../components/AbcjsOutput";
+import {CursorControl} from "~/helpers/cursor-control";
 import ImgUploader from "../components/generic/ImgUploader.vue";
-import IntroText from "../components/IntroText";
-import {getLocalStorage, setLocalStorage} from "../helpers/local-storage-wrapper";
+import {getLocalStorage, setLocalStorage} from "~/helpers/local-storage-wrapper";
 import GrowToModal from "../components/generic/GrowToModal.vue";
-import LoadAndSave from "../components/LoadAndSave";
-import {useAbcStore} from "../store/abcStore";
-import OutputOptions from "../components/OutputOptions";
-import {sleep} from "../helpers/sleep";
-import OptionsPicker from "~/components/OptionsPicker.vue";
+import {useAbcStore} from "~/store/abcStore";
+import {sleep} from "~/helpers/sleep";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
+const abcStore = useAbcStore();
 
-export default {
-	components: {
-		OptionsPicker,
-		OutputOptions,
-		LoadAndSave,
-		GrowToModal,
-		IntroText,
-		ImgUploader,
-		AbcjsOutput,
-		ButtonWithIcon,
-		CheatSheet,
+const inputClose = ref(0)
+const cheatSheetVisible = ref(false)
+const optionsVisible = ref(false)
+const copyProgress = ref("idle")
+const abcString = ref("")
+const abcjsEditor = ref(null)
+const cursorControl = ref(new CursorControl("#canvas"))
+const midiData = ref("")
+const hasClipboard = ref(false)
+const abcjsParams = ref({
+	responsive: "resize",
+	add_classes: true,
+	clickListener: clickListener,
+	oneSvgPerLine: true,
+	jazzchords: true,
+	format: {
+		titlefont: "Kreon 24",
+		subtitlefont: "Kreon 24",
+		composerfont: "Helvetica 18 italic",
+		gchordfont: "itim-music,Itim 20",
+		tempofont: "Helvetica 14",
+		partsfont: "Helvetica 20",
+		partsbox: 1,
+		annotationfont: "Helvetica-Oblique 10",
 	},
-	setup() {
-		const abcStore = useAbcStore();
-		return {
-			abcStore,
-		};
-	},
-	data() {
-		return {
-			inputClose: 0,
-			cheatSheetVisible: false,
-			optionsVisible: false,
-			copyProgress: "idle",
-			abcString: "",
-			abcjsEditor: null,
-			cursorControl: new CursorControl("#canvas"),
-			midiData: "",
-			hasClipboard: false,
-			abcjsParams: {
-				responsive: "resize",
-				add_classes: true,
-				clickListener: this.clickListener,
-				oneSvgPerLine: true,
-				jazzchords: true,
-				format: {
-					titlefont: "Kreon 24",
-					subtitlefont: "Kreon 24",
-					composerfont: "Helvetica 18 italic",
-					gchordfont: "itim-music,Itim 20",
-					tempofont: "Helvetica 14",
-					partsfont: "Helvetica 20",
-					partsbox: 1,
-					annotationfont: "Helvetica-Oblique 10",
-				},
-			},
-		};
-	},
-	computed: {
-		...mapGetters(useAbcStore, ["showUpload", "uploadZoom", "shortenOutput", "fontSize", "visualTranspose"]),
-		midiFilename() {
-			if (!this.abcjsEditor || this.abcjsEditor.tunes.length === 0)
-				return "tune.midi";
-			let title = this.abcjsEditor.tunes[0].metaText.title;
-			if (!title)
-				title = "untitled";
-			title = title.replace(/\W+/g, "-");
-			return title + ".midi";
-		},
-		copyText() {
-			switch (this.copyProgress) {
-				case "idle":
-					return "Copy Sharable Link To Clipboard";
-				case "working":
-					return "Copying...";
-				case "done":
-					return "Copied!";
-			}
+})
+
+const showUpload = computed(() => abcStore.showUpload)
+const uploadZoom = computed(() => abcStore.uploadZoom)
+const shortenOutput = computed(() => abcStore.shortenOutput)
+const fontSize = computed(() => abcStore.fontSize)
+const visualTranspose = computed(() => abcStore.visualTranspose)
+
+const midiFilename = computed(() => {
+	if (!abcjsEditor.value || abcjsEditor.value.tunes.length === 0)
+		return "tune.midi";
+	let title = abcjsEditor.value.tunes[0].metaText.title;
+	if (!title)
+		title = "untitled";
+	title = title.replace(/\W+/g, "-");
+	return title + ".midi";
+})
+
+const copyText = computed(() => {
+	switch (copyProgress.value) {
+		case "idle":
 			return "Copy Sharable Link To Clipboard";
-		},
-	},
-	watch: {
-		abcString(newValue) {
-			try {
-				this.midiData = new abcjs.synth.getMidiFile(newValue, {midiOutputType: "encoded"});
-			} catch (error) {
-				console.error("Error creating MIDI", error);
-			}
-		},
-		visualTranspose(newValue) {
-			this.abcjsParams.visualTranspose = newValue;
-			this.abcjsEditor.paramChanged(this.abcjsParams);
-		},
-	},
-	mounted() {
-		this.initTunes();
-		this.cheatSheetVisible = getLocalStorage("help-open", false, "Boolean");
-		this.optionsVisible = getLocalStorage("options-open", false, "Boolean");
-		try {
-			// See if clipboard works before giving the user the option
-			const type = "text/plain";
-			const blob = new Blob(["test"], {type});
-			// @ESLint @typescript-eslint/no-unused-expressions
-			// [new ClipboardItem({ [type]: blob })];
-			new ClipboardItem({[type]: blob});
-			this.hasClipboard = true;
-		} catch (error) {
-			this.hasClipboard = false;
-		}
-		this.abcjsEditor = new abcjs.Editor("abc", {
-			canvas_id: "canvas",
-			warnings_id: "warnings",
-			synth: {
-				el: "#midi",
-				cursorControl: this.cursorControl,
-				options: {
-					displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
-					// pan: [-1,1],
-				},
-			},
-			abcjsParams: this.abcjsParams,
-		});
+		case "working":
+			return "Copying...";
+		case "done":
+			return "Copied!";
+	}
+	return "Copy Sharable Link To Clipboard";
+})
 
-		let startingTune = getLocalStorage("current-tune", `X: 1
+watch(
+	() => abcString.value,
+	() => {
+		try {
+			midiData.value = new abcjs.synth.getMidiFile(abcString.value, {midiOutputType: "encoded"});
+		} catch (error) {
+			console.error("Error creating MIDI", error);
+		}
+	}
+)
+
+watch(
+	() => visualTranspose.value,
+	() => {
+		abcjsParams.value.visualTranspose = visualTranspose.value;
+		abcjsEditor.value.paramChanged(abcjsParams.value);
+	}
+)
+
+onMounted(() => {
+	abcStore.initTunes();
+	cheatSheetVisible.value = getLocalStorage("help-open", false, "Boolean");
+	optionsVisible.value = getLocalStorage("options-open", false, "Boolean");
+	try {
+		// See if clipboard works before giving the user the option
+		const type = "text/plain";
+		const blob = new Blob(["test"], {type});
+		// @ESLint @typescript-eslint/no-unused-expressions
+		// [new ClipboardItem({ [type]: blob })];
+		new ClipboardItem({[type]: blob});
+		hasClipboard.value = true;
+	} catch (error) {
+		hasClipboard.value = false;
+	}
+	abcjsEditor.value = new abcjs.Editor("abc", {
+		canvas_id: "canvas",
+		warnings_id: "warnings",
+		synth: {
+			el: "#midi",
+			cursorControl: cursorControl,
+			options: {
+				displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
+				// pan: [-1,1],
+			},
+		},
+		abcjsParams: abcjsParams.value,
+	});
+
+	let startingTune = getLocalStorage("current-tune", `X: 1
 T: Cooley's
 M: 4/4
 L: 1/8
@@ -215,123 +200,127 @@ K: Emin
 "Em"EBBA B2 EB|B2 AB defg|"D"afe^c dBAF|"Em"DEFD E2:|
 |:gf|"Em"eB B2 efge|eB B2 gedB|"D"A2 FA DAFA|A2 FA defg|
 "Em"eB B2 eBgB|eB B2 defg|"D"afe^c dBAF|"Em"DEFD E2:|`, "String");
-		const overrideTune = this.$route.query.t;
-		if (overrideTune)
-			startingTune = overrideTune;
-		this.setTune({abc: startingTune});
+	const overrideTune = useRoute().query.t;
+	if (overrideTune)
+		startingTune = overrideTune;
+	setTune({abc: startingTune});
 
-		window.addEventListener("beforeunload", (e) => {
-			this.saveCurrent();
+	window.addEventListener("beforeunload", (e) => {
+		saveCurrent();
+	});
+	setInterval(() => {
+		saveCurrent();
+	}, 20000);
+
+	document.getElementById("abc").focus();
+
+	window.onbeforeprint = redrawPrint;
+})
+
+function clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {
+	const lastClicked = abcElem.midiPitches;
+	if (!lastClicked)
+		return;
+
+	abcjs.synth.playEvent(lastClicked, abcElem.midiGraceNotePitches, abcjsEditor.value.millisecondsPerMeasure()).then(function (response) {
+		console.log("note played");
+	}).catch(function (error) {
+		console.log("error playing note", error);
+	});
+}
+
+function redrawPrint() {
+	const output = document.getElementById("print-version");
+	let text = "";
+	let svgs = document.querySelectorAll("#canvas .abcjs-container");
+	if (svgs.length === 0) {
+		svgs = [document.querySelector("#canvas")];
+	}
+	svgs.forEach((svg) => {
+		text += svg.innerHTML;
+	});
+	text = text.replace(/display: inline-block; position: absolute; top: 0px; left: 0px;/g, "");
+	output.innerHTML = text;
+}
+
+function helpToggle() {
+	cheatSheetVisible.value = !cheatSheetVisible.value;
+	setLocalStorage("help-open", cheatSheetVisible.value);
+}
+
+function optionsToggle() {
+	optionsVisible.value = !optionsVisible.value;
+	setLocalStorage("options-open", optionsVisible.value);
+}
+
+function close() {
+	inputClose.value++
+}
+
+function setTune(payload) {
+	inputClose.value++
+	abcString.value = payload.abc;
+	Vue.nextTick(() => {
+		abcjsEditor.value.paramChanged({});
+	});
+}
+
+function transposeSource(options) {
+	const visualObj = abcjs.renderAbc("*", abcString.value);
+	const newAbc = abcjs.strTranspose(abcString.value, visualObj, options.halfSteps);
+	abcString.value = newAbc;
+	Vue.nextTick(() => {
+		abcjsEditor.value.paramChanged({});
+	});
+}
+
+function downloadWav() {
+	const visualObj = abcjs.renderAbc("*", abcString.value)[0];
+
+	const midiBuffer = new abcjs.synth.CreateSynth();
+	midiBuffer.init({
+		visualObj: visualObj,
+		options: {},
+	}).then((response) => {
+		midiBuffer.prime().then((response) => {
+			const url = midiBuffer.download();
+			const link = document.createElement("a");
+			document.body.appendChild(link);
+			link.setAttribute("style", "display: none;");
+			link.href = url;
+			const fileName = midiFilename.value.replace(/\.midi/, ".wav");
+			link.download = fileName ? fileName : "output.wav";
+			link.click();
+			window.URL.revokeObjectURL(url);
+			document.body.removeChild(link);
 		});
-		setInterval(() => {
-			this.saveCurrent();
-		}, 20000);
+	}).catch((error) => {
+		console.warn("Audio problem:", error);
+	});
+}
 
-		document.getElementById("abc").focus();
+function saveCurrent() {
+	setLocalStorage("current-tune", abcString.value);
+}
 
-		window.onbeforeprint = this.redrawPrint;
-	},
-	methods: {
-		...mapActions(useAbcStore, ["initTunes"]),
-		clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {
-			const lastClicked = abcElem.midiPitches;
-			if (!lastClicked)
-				return;
-
-			abcjs.synth.playEvent(lastClicked, abcElem.midiGraceNotePitches, this.abcjsEditor.millisecondsPerMeasure()).then(function (response) {
-				console.log("note played");
-			}).catch(function (error) {
-				console.log("error playing note", error);
-			});
-		},
-		redrawPrint() {
-			const output = document.getElementById("print-version");
-			let text = "";
-			let svgs = document.querySelectorAll("#canvas .abcjs-container");
-			if (svgs.length === 0) {
-				svgs = [document.querySelector("#canvas")];
-			}
-			svgs.forEach((svg) => {
-				text += svg.innerHTML;
-			});
-			text = text.replace(/display: inline-block; position: absolute; top: 0px; left: 0px;/g, "");
-			output.innerHTML = text;
-		},
-		helpToggle() {
-			this.cheatSheetVisible = !this.cheatSheetVisible;
-			setLocalStorage("help-open", this.cheatSheetVisible);
-		},
-		optionsToggle() {
-			this.optionsVisible = !this.optionsVisible;
-			setLocalStorage("options-open", this.optionsVisible);
-		},
-		close() {
-			this.inputClose++
-		},
-		setTune(payload) {
-			this.inputClose++
-			this.abcString = payload.abc;
-			Vue.nextTick(() => {
-				this.abcjsEditor.paramChanged({});
-			});
-		},
-		transposeSource(options) {
-			const visualObj = abcjs.renderAbc("*", this.abcString);
-			const newAbc = abcjs.strTranspose(this.abcString, visualObj, options.halfSteps);
-			this.abcString = newAbc;
-			Vue.nextTick(() => {
-				this.abcjsEditor.paramChanged({});
-			});
-		},
-		downloadWav() {
-			const visualObj = abcjs.renderAbc("*", this.abcString)[0];
-
-			const midiBuffer = new abcjs.synth.CreateSynth();
-			midiBuffer.init({
-				visualObj: visualObj,
-				options: {
-				},
-			}).then((response) => {
-				midiBuffer.prime().then((response) => {
-					const url = midiBuffer.download();
-					const link = document.createElement("a");
-					document.body.appendChild(link);
-					link.setAttribute("style", "display: none;");
-					link.href = url;
-					const fileName = this.midiFilename.replace(/\.midi/, ".wav");
-					link.download = fileName ? fileName : "output.wav";
-					link.click();
-					window.URL.revokeObjectURL(url);
-					document.body.removeChild(link);
-				});
-			}).catch((error) => {
-				console.warn("Audio problem:", error);
-			});
-		},
-		saveCurrent() {
-			setLocalStorage("current-tune", this.abcString);
-		},
-		async createSharableLink() {
-			try {
-				this.copyProgress = "working";
-				const encoded = encodeURIComponent(this.abcString);
-				const here = document.location.href;
-				const link = here + "?t=" + encoded;
-				const type = "text/plain";
-				const blob = new Blob([link], {type});
-				const data = [new ClipboardItem({[type]: blob})];
-				await navigator.clipboard.write(data);
-				await sleep(1000);
-				this.copyProgress = "done";
-				await sleep(1000);
-				this.copyProgress = "idle";
-				console.log("copied");
-			} catch (error) {
-				console.log("error", error);
-			}
-		},
-	},
-};
+async function createSharableLink() {
+	try {
+		copyProgress.value = "working";
+		const encoded = encodeURIComponent(abcString.value);
+		const here = document.location.href;
+		const link = here + "?t=" + encoded;
+		const type = "text/plain";
+		const blob = new Blob([link], {type});
+		const data = [new ClipboardItem({[type]: blob})];
+		await navigator.clipboard.write(data);
+		await sleep(1000);
+		copyProgress.value = "done";
+		await sleep(1000);
+		copyProgress.value = "idle";
+	} catch (error) {
+		console.log("error", error);
+	}
+}
 </script>
 
 <style scoped>
