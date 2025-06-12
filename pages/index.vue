@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<intro-text />
+		<IntroText />
 		<section :class="{ help: true, open: cheatSheetVisible }">
 			<nav aria-label="cheat sheet">
 				<ButtonWithIcon
@@ -9,7 +9,7 @@
 					@click="helpToggle"
 				/>
 			</nav>
-			<cheat-sheet v-if="cheatSheetVisible" />
+			<CheatSheet v-if="cheatSheetVisible" />
 		</section>
 		<section :class="{ options: true, open: optionsVisible }">
 			<nav aria-label="options">
@@ -27,7 +27,7 @@
 					<nav aria-label="input options">
 						<GrowToModal aria="Input Options" :force-close="inputClose">
 							<template #body>
-								<load-and-save :current-tune="abcString" @load="setTune($event)" @close="close" @transpose-source="transposeSource" />
+								<LoadAndSave :current-tune="abcString" @load="setTune($event)" @close="close" @transpose-source="transposeSource" />
 							</template>
 						</GrowToModal>
 					</nav>
@@ -51,13 +51,13 @@
 					<nav aria-label="rendering options">
 						<GrowToModal ref="modal2" aria="Rendering Options">
 							<template #body>
-								<output-options />
+								<OutputOptions />
 							</template>
 						</GrowToModal>
 					</nav>
 				</div>
 				<ImgUploader :show="showUpload" :upload-zoom="uploadZoom" />
-				<abcjs-output class="no-print" :shorten="shortenOutput" />
+				<AbcjsOutput class="no-print" :shorten="shortenOutput" />
 			</div>
 		</div>
 		<section class="download">

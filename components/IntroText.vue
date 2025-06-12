@@ -29,6 +29,7 @@
 
 <script lang="ts" setup>
 import { getLocalStorage, setLocalStorage } from "~/helpers/local-storage-wrapper";
+import CollapsibleSection from "~/components/generic/CollapsibleSection.vue";
 
 const isOpen = ref(true)
 

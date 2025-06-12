@@ -152,7 +152,6 @@ function upload(formData: FormData) {
 	return Promise.all(promises);
 }
 function getImage(file: Blob) {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	return new Promise((resolve, reject) => {
 		const fReader = new FileReader();
 		const tagName = (file.type === "application/pdf") ? "iframe" : "img";

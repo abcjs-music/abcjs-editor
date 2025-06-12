@@ -4,50 +4,50 @@
 		<p class="cheat-info">
 			These are some of the most common things that can be done with ABC. For all the details, see <a class="muted external-link" href="http://abcnotation.com/wiki/abc:standard" target="_blank">the full documentation.</a>
 		</p>
-		<collapsible-section title="Headers" :is-header3="true">
+		<CollapsibleSection title="Headers" :is-header3="true">
 			<help-headers />
-		</collapsible-section>
-		<collapsible-section title="Pitches" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Pitches" :is-header3="true">
 			<help-pitch />
-		</collapsible-section>
-		<collapsible-section title="Durations" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Durations" :is-header3="true">
 			<help-durations />
-		</collapsible-section>
-		<collapsible-section title="Bar Lines" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Bar Lines" :is-header3="true">
 			<help-bar-lines />
-		</collapsible-section>
-		<collapsible-section title="Beaming" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Beaming" :is-header3="true">
 			<help-beaming />
-		</collapsible-section>
-		<collapsible-section title="Ties and Slurs" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Ties and Slurs" :is-header3="true">
 			<help-ties />
-		</collapsible-section>
-		<collapsible-section title="Accompaniment" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Accompaniment" :is-header3="true">
 			<help-accompaniment />
-		</collapsible-section>
-		<collapsible-section title="Decorations" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Decorations" :is-header3="true">
 			<help-decorations />
-		</collapsible-section>
-		<collapsible-section title="Grace Notes" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Grace Notes" :is-header3="true">
 			<help-grace-notes />
-		</collapsible-section>
-		<collapsible-section title="Multiple Notes" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Multiple Notes" :is-header3="true">
 			<help-multiple-notes />
-		</collapsible-section>
-		<collapsible-section title="Lyrics" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Lyrics" :is-header3="true">
 			<help-lyrics />
-		</collapsible-section>
-		<collapsible-section title="Voices / Staves" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Voices / Staves" :is-header3="true">
 			<help-voices />
-		</collapsible-section>
-		<collapsible-section title="Comments" :is-header3="true">
+		</CollapsibleSection>
+		<CollapsibleSection title="Comments" :is-header3="true">
 			<help-comments />
-		</collapsible-section>
+		</CollapsibleSection>
 	</div>
 </template>
 
 <script lang="ts" setup>
-
+import CollapsibleSection from "~/components/generic/CollapsibleSection.vue";
 </script>
 
 <style scoped>
