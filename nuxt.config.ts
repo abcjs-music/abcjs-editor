@@ -38,7 +38,7 @@ export default defineNuxtConfig({
 			],
 		},
 	},
-	css: ["abcjs/abcjs-audio.css"],
+	css: ["abcjs/abcjs-audio.css", "@webcoder49/code-input/code-input.css"],
 	compatibilityDate: "2024-11-01",
 	eslint: {
 		checker: true,
@@ -49,6 +49,11 @@ export default defineNuxtConfig({
 			"Kreon": true,
 			"Itim": true,
 			"Fira+Mono": true,
+		},
+	},
+	vue: {
+		compilerOptions: {
+			isCustomElement: (tag) => tag === "code-input",
 		},
 	},
 });

@@ -33,9 +33,9 @@
 					</nav>
 					<div class="input-area">
 						<div>
-							<textarea
+							<code-input
 								id="abc"
-								v-model="abcString"
+								name="abc"
 								aria-label="ABC string"
 								spellcheck="false"
 								:style="{ fontSize: fontSize + 'px' }"
@@ -83,8 +83,14 @@ import {getLocalStorage, setLocalStorage} from "~/helpers/local-storage-wrapper"
 import GrowToModal from "../components/generic/GrowToModal.vue";
 import {useAbcStore} from "~/store/abcStore";
 import {sleep} from "~/helpers/sleep";
+import codeInputDefaultExport from "@webcoder49/code-input";
+
+import highlight from "highlight.js/lib/core"
+import highlightAbc from "highlightjs-abc"
+import CiHljsTemplate from "@webcoder49/code-input/templates/hljs.mjs";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
+const codeInput = import.meta.browser ? codeInputDefaultExport : null;
 const abcStore = useAbcStore();
 
 const inputClose = ref(0)
@@ -176,20 +182,41 @@ onMounted(() => {
 	} catch (error) {
 		hasClipboard.value = false;
 	}
-	abcjsEditor.value = new abcjs.Editor("abc", {
-		canvas_id: "canvas",
-		warnings_id: "warnings",
-		synth: {
-			el: "#midi",
-			cursorControl: cursorControl,
-			options: {
-				displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
-				// pan: [-1,1],
-			},
-		},
-		abcjsParams: abcjsParams.value,
-	});
+	highlight.registerLanguage("abc", highlightAbc);
+	//highlight.registerLanguage("abc", highlightAbcParser);
+	if (abcjs && codeInput) {
+		codeInput.registerTemplate("syntax-highlighted", new CiHljsTemplate(highlight, []));
 
+		const el = document.querySelector('#abc textarea')
+		if (!el) {
+			console.log("Error! Can't find the editor on the page")
+			return
+		}
+		const editArea = new abcjs.EditArea(el)
+		// TODO-PER: Change this to `new abcjs.Editor('#abc textarea', {` after release
+		new abcjs.Editor(editArea, {
+			canvas_id: "paper",
+			warnings_id: "warnings",
+			abcjsParams: {}
+		});
+		// codeInput.registerTemplate("syntax-highlighted", codeInput.templates.hljs(hljs, []));
+		// const el = document.querySelector('#abc textarea')
+		// //@ts-ignore - abcjs error - EditArea isn't exposed
+		// const editArea = new abcjs.EditArea(el)
+		abcjsEditor.value = new abcjs.Editor(editArea, {
+			canvas_id: "canvas",
+			warnings_id: "warnings",
+			synth: {
+				el: "#midi",
+				cursorControl: cursorControl,
+				options: {
+					displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
+					// pan: [-1,1],
+				},
+			},
+			abcjsParams: abcjsParams.value,
+		});
+	}
 	let startingTune = getLocalStorage("current-tune", `X: 1
 T: Cooley's
 M: 4/4
