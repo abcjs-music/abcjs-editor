@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
 import { version as abcjsVersion } from "abcjs/package.json";
-import { version as packageVersion, copyright as copyRight } from "../package.json";
+import { version as packageVersion, copyright as copyRight } from "../../package.json";
 
 function bugs() {
 	window.location.href = "mailto:blog@paulrosen.net?subject=[abcjs-editor] ";
@@ -76,8 +76,6 @@ body {
 
 header, footer {
 	background: #a9e4f7; /* Old browsers */
-	background: -moz-linear-gradient(left, #a9e4f7 0%, #0fb4e7 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(left, #a9e4f7 0%, #0fb4e7 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(to right, #a9e4f7 0%, #0fb4e7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a9e4f7', endColorstr='#0fb4e7', GradientType=1); /* IE6-9 */
 }
@@ -214,7 +212,7 @@ p {
 }
 
 table {
-	box-shadow: 2px 2px 2px #aaaaaa, 0px -1px 0 #cccccc;
+	box-shadow: 2px 2px 2px #aaaaaa, 0 -1px 0 #cccccc;
 	margin-bottom: 10px;
 }
 

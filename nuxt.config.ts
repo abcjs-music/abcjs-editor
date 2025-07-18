@@ -51,4 +51,11 @@ export default defineNuxtConfig({
 			"Fira+Mono": true,
 		},
 	},
+	typescript: {
+		tsConfig: {
+			compilerOptions: {
+				//noUncheckedIndexedAccess: false
+			}
+		}
+	},
 });

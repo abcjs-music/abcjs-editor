@@ -11,26 +11,18 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "ghpages": "nuxt build --preset github_pages",
-    "postghpages": "npx serve .output/public",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.4.1",
+    "@nuxt/eslint": "1.6.0",
     "@nuxtjs/google-fonts": "3.2.0",
     "@pinia/nuxt": "0.11.1",
-    "eslint": "9.28.0",
-    "nuxt": "3.17.5",
-    "pinia": "3.0.3",
-    "vue": "3.5.16"
+    "eslint": "9.31.0",
+    "nuxt": "4.0.0",
+    "pinia": "3.0.3"
   },
   "devDependencies": {
     "abcjs": "6.5.1",
-    "vite-plugin-eslint2": "5.0.3"
-  },
-  "overrides": {
-    "glob": "11.0.1"
+    "vite-plugin-eslint2": "5.0.4"
   }
 }
