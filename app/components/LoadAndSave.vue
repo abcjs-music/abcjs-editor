@@ -76,7 +76,7 @@ function transposeSource() {
 	padding: 10px;
 }
 
-//.src-button {
+/*.src-button {
 //	padding: 10px;
 //	border: 1px solid #0fb4e7;
 //	border-radius: 4px;
@@ -87,7 +87,7 @@ function transposeSource() {
 //	margin-bottom: 5px;
 //	text-align: left;
 //}
-//
+*/
 .tune-picker {
 	max-height: 200px;
 	overflow-y: auto;
