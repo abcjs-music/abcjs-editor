@@ -1,6 +1,6 @@
 <template>
 	<div class="load-and-save">
-		<AnimatedButton el="a" :label="downloadLabel" :download="abcTitle" :href="saveAbcString" />
+		<AnimatedButton el="a" :label="downloadLabel" :download="abcFilename(currentTune)" :href="saveAbcString" />
 		<AnimatedButton el="button" :label="saveLabel" @click="storeAbcString" />
 		<div v-if="allTuneNames.length > 0">
 			<h2>Load:</h2>
@@ -12,8 +12,8 @@
 			</ul>
 		</div>
 		<div class="bottom-options">
-			<label>Font Size: <input v-model="fontSize" type="number" min="8" max="30"></label>
-			<label>Visual Transpose: <input v-model="visualTranspose" type="number" min="-24" max="24"></label>
+			<label>Font Size: <input :value="fontSize" @input="abcStore.setFontSize($event.target.value)" type="number" min="8" max="30"></label>
+			<label>Visual Transpose: <input :value="visualTranspose" @input="abcStore.setVisualTranspose($event.target.value)" type="number" min="-24" max="24"></label>
 		</div>
 		<div v-if="visualTranspose !== 0 && visualTranspose !== '0'" class="extra-bottom">
 			<AnimatedButton el="button" label="Apply Transpose" @click="transposeSource" />
@@ -21,82 +21,50 @@
 	</div>
 </template>
 
-<script>
-import { mapActions, mapGetters } from "pinia";
-import { useAbcStore } from "../store/abcStore";
-import { abcTitle, abcFilename } from "../helpers/abc";
+<script lang="ts" setup>
+import { useAbcStore } from "~/store/abcStore";
+import { abcTitle, abcFilename } from "~/helpers/abc";
 import AnimatedButton from "./atoms/AnimatedButton.vue";
-export default {
-	name: "LoadAndSave",
-	components: { AnimatedButton },
-	props: {
-		currentTune: {
-			type: String,
-			required: true,
-		},
-	},
-	emits: ["close", "load", "transposeSource"],
-	setup() {
-		const abcStore = useAbcStore();
-		return {
-			abcStore,
-		};
-	},
-	computed: {
-		...mapGetters(useAbcStore, ["allTuneNames", "tuneByTitle"]),
-		fontSize: {
-			get() {
-				return this.abcStore.fontSize;
-			},
-			set(value) {
-				this.abcStore.setFontSize(value);
-			},
-		},
-		visualTranspose: {
-			get() {
-				return this.abcStore.visualTranspose;
-			},
-			set(value) {
-				this.abcStore.setVisualTranspose(value);
-			},
-		},
-		abcTitle() {
-			return abcTitle(this.currentTune);
-		},
-		abcFilename() {
-			return abcFilename(this.currentTune);
-		},
-		saveAbcString() {
-			return `data:text/plain,${encodeURIComponent(this.currentTune)}`;
-		},
-		saveLabel() {
-			return `Save "${this.abcTitle}" in browser`;
-		},
-		downloadLabel() {
-			return `Download "${this.abcTitle}"`;
-		},
-	},
-	methods: {
-		...mapActions(useAbcStore, ["saveTune", "deleteTuneByName"]),
-		storeAbcString() {
-			this.saveTune(this.currentTune);
-			this.$emit("close");
-		},
-		loadTune(name) {
-			const abc = this.tuneByTitle(name);
-			this.$emit("load", { abc: abc });
-		},
-		deleteTune(name) {
-			this.deleteTuneByName(name);
-			this.$emit("close");
-		},
-		transposeSource() {
-			this.$emit("transposeSource", { halfSteps: this.abcStore.visualTranspose });
-			this.abcStore.setVisualTranspose(0);
-			this.$emit("close");
-		},
-	},
-};
+
+const props = defineProps<{
+	currentTune: string;
+}>();
+
+const emit = defineEmits<{
+	(e: "close"): void;
+	(e: "load", ev: { abc: string }): void;
+	(e: "transposeSource", { halfSteps: number}): void;
+}>();
+
+const abcStore = useAbcStore();
+
+const allTuneNames = computed(() => abcStore.allTuneNames)
+const fontSize = computed(() => abcStore.fontSize)
+const visualTranspose = computed(() => abcStore.visualTranspose)
+
+const saveAbcString = computed(() => `data:text/plain,${encodeURIComponent(props.currentTune)}`)
+const saveLabel = computed(() => `Save "${abcTitle(props.currentTune)}" in browser`)
+const downloadLabel = computed(() => `Download "${abcTitle(props.currentTune)}"`)
+
+
+function storeAbcString() {
+	abcStore.saveTune(props.currentTune);
+	emit("close");
+}
+function loadTune(name) {
+	const abc = abcStore.tuneByTitle(name);
+	emit("load", { abc: abc });
+}
+function deleteTune(name) {
+	abcStore.deleteTuneByName(name);
+	//emit("close");
+}
+function transposeSource() {
+	emit("transposeSource", { halfSteps: abcStore.visualTranspose });
+	abcStore.setVisualTranspose(0);
+	emit("close");
+}
+
 </script>
 
 <style scoped>
@@ -108,18 +76,18 @@ export default {
 	padding: 10px;
 }
 
-.src-button {
-	padding: 10px;
-	border: 1px solid #0fb4e7;
-	border-radius: 4px;
-	background: white;
-	text-decoration: none;
-	font-size: 1em;
-	color: black;
-	margin-bottom: 5px;
-	text-align: left;
-}
-
+//.src-button {
+//	padding: 10px;
+//	border: 1px solid #0fb4e7;
+//	border-radius: 4px;
+//	background: white;
+//	text-decoration: none;
+//	font-size: 1em;
+//	color: black;
+//	margin-bottom: 5px;
+//	text-align: left;
+//}
+//
 .tune-picker {
 	max-height: 200px;
 	overflow-y: auto;
