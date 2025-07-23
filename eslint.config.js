@@ -40,6 +40,7 @@ export default createConfigForNuxt({
 	.override("nuxt/vue/rules", {
 		rules: {
 			"vue/attributes-order": 'off',
+			"vue/html-self-closing": 'off',
 			//"vue/no-v-html": "error",
 			// "vue/max-attributes-per-line": [
 			// 	"error",
