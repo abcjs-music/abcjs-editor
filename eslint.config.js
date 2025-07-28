@@ -41,6 +41,8 @@ export default createConfigForNuxt({
 		rules: {
 			"vue/attributes-order": 'off',
 			"vue/html-self-closing": 'off',
+			"vue/attribute-hyphenation": 'off',
+			"vue/v-on-event-hyphenation": 'off',
 			//"vue/no-v-html": "error",
 			// "vue/max-attributes-per-line": [
 			// 	"error",
