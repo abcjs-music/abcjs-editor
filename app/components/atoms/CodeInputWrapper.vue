@@ -1,6 +1,7 @@
 <template>
 	<ClientOnly>
 		<code-input
+			ref="elem"
 			:name="name"
 			:value="value"
 			:aria-label="ariaLabel"
@@ -28,6 +29,8 @@ const props = defineProps<{
 	fontSize: number;
 }>();
 
+const elem = ref()
+
 onBeforeMount(async () => {
 	if (import.meta.browser) {
 		const codeInput = await import("@webcoder49/code-input");
@@ -38,10 +41,13 @@ onBeforeMount(async () => {
 })
 
 onMounted(async() => {
-	let ta = document.querySelector('textarea')
+	let ta : HTMLElement | null = null
 	while (!ta) {
-		await sleep(1)
-		ta = document.querySelector('textarea')
+		if (elem.value) {
+			ta = elem.value.querySelector('textarea')
+		}
+		if (!ta)
+			await sleep(1)
 	}
 	emit("ready")
 })
