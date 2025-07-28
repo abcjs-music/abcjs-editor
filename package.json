@@ -18,7 +18,7 @@
     "@nuxt/eslint": "1.7.1",
     "@nuxtjs/google-fonts": "3.2.0",
     "@pinia/nuxt": "0.11.2",
-    "@webcoder49/code-input": "https://github.com/WebCoder49/code-input#84e4ac14dbd88e305e2ad6e74c4b315a02549e05",
+    "@webcoder49/code-input": "https://github.com/WebCoder49/code-input#7820240ae77893e5f609b2d46d1f6ebad50e1c3c",
     "abcjs": "https://github.com/paulrosen/abcjs.git#1a8c3b33d61abaa8fa4317c89327181a485bfaef",
     "eslint": "9.32.0",
     "highlight.js": "11.11.1",

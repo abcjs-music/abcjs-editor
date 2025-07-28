@@ -51,7 +51,6 @@ function loaded() {
 
 <style scoped>
 .code-input-wrapper {
-	background: white;
 	border: 1px solid #bbbbbb;
 }
 code-input {
@@ -62,6 +61,9 @@ code-input {
 </style>
 
 <style>
+.hljs {
+	background: white;
+}
 code-input textarea::selection {
 	background: #6781ef;
 	color: #ffffff;
