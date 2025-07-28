@@ -9,20 +9,24 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev-cache": "rm -R node_modules/.cache/vite && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.6.0",
+    "@nuxt/eslint": "1.7.1",
     "@nuxtjs/google-fonts": "3.2.0",
-    "@pinia/nuxt": "0.11.1",
-    "eslint": "9.31.0",
-    "nuxt": "4.0.0",
+    "@pinia/nuxt": "0.11.2",
+    "@webcoder49/code-input": "https://github.com/WebCoder49/code-input#84e4ac14dbd88e305e2ad6e74c4b315a02549e05",
+    "abcjs": "https://github.com/paulrosen/abcjs.git#1a8c3b33d61abaa8fa4317c89327181a485bfaef",
+    "eslint": "9.32.0",
+    "highlight.js": "11.11.1",
+    "highlightjs-abc": "https://github.com/paulrosen/highlightjs-abc.git#41fb32b6fcf64607bd1eca2bf18f0f85b90d3720",
+    "nuxt": "4.0.1",
     "pinia": "3.0.3"
   },
   "devDependencies": {
-    "abcjs": "6.5.1",
     "vite-plugin-eslint2": "5.0.4"
   }
 }

@@ -33,13 +33,13 @@
 					</nav>
 					<div class="input-area">
 						<div>
-							<textarea
-								id="abc"
-								v-model="abcString"
-								aria-label="ABC string"
-								spellcheck="false"
-								:style="{ fontSize: fontSize + 'px' }"
-							/>
+							<AbcEditor
+								:value="abcString"
+								:fontSize="fontSize"
+								:visualTranspose="visualTranspose"
+								@input="updateAbcString"
+								@editorCreated="editorCreated"
+							></AbcEditor>
 						</div>
 						<div id="warnings"/>
 						<div id="midi" class="abcjs-large"/>
@@ -73,46 +73,27 @@
 </template>
 
 <script lang="ts" setup>
-import * as Vue from "vue";
-import abcjsDefaultExport from "abcjs";
+import abcjsDefaultExport, {type Editor} from "abcjs";
 import CheatSheet from "../components/help/CheatSheet.vue";
 import ButtonWithIcon from "../components/atoms/ButtonWithIcon.vue";
-import {CursorControl} from "~/helpers/cursor-control";
 import ImgUploader from "../components/generic/ImgUploader.vue";
 import {getLocalStorage, setLocalStorage} from "~/helpers/local-storage-wrapper";
 import GrowToModal from "../components/generic/GrowToModal.vue";
 import {useAbcStore} from "~/store/abcStore";
 import {sleep} from "~/helpers/sleep";
+import AbcEditor from "~/components/atoms/AbcEditor.vue";
 
 const abcjs = import.meta.browser ? abcjsDefaultExport : null;
+
 const abcStore = useAbcStore();
 
 const inputClose = ref(0)
 const cheatSheetVisible = ref(false)
 const optionsVisible = ref(false)
 const copyProgress = ref("idle")
-const abcString = ref("")
-const abcjsEditor = ref(null)
-const cursorControl = ref(new CursorControl("#canvas"))
+const abcString = ref(" ")
 const midiData = ref("")
 const hasClipboard = ref(false)
-const abcjsParams = ref({
-	responsive: "resize",
-	add_classes: true,
-	clickListener: clickListener,
-	oneSvgPerLine: true,
-	jazzchords: true,
-	format: {
-		titlefont: "Kreon 24",
-		subtitlefont: "Kreon 24",
-		composerfont: "Helvetica 18 italic",
-		gchordfont: "itim-music,Itim 20",
-		tempofont: "Helvetica 14",
-		partsfont: "Helvetica 20",
-		partsbox: 1,
-		annotationfont: "Helvetica-Oblique 10",
-	},
-})
 
 const showUpload = computed(() => abcStore.showUpload)
 const uploadZoom = computed(() => abcStore.uploadZoom)
@@ -120,10 +101,21 @@ const shortenOutput = computed(() => abcStore.shortenOutput)
 const fontSize = computed(() => abcStore.fontSize)
 const visualTranspose = computed(() => abcStore.visualTranspose)
 
+function updateAbcString(value: string) {
+	abcString.value = value
+}
+
+const abcjsEditor = ref(null as Editor | null)
+function editorCreated(editor: Editor) {
+	abcjsEditor.value = editor
+}
 const midiFilename = computed(() => {
-	if (!abcjsEditor.value || abcjsEditor.value.tunes.length === 0)
+	if (!abcjsEditor.value)
 		return "tune.midi";
-	let title = abcjsEditor.value.tunes[0].metaText.title;
+	const tunes = abcjsEditor.value.getTunes()
+	if (!tunes || !tunes.length)
+		return "tune.midi";
+	let title = tunes[0].metaText.title;
 	if (!title)
 		title = "untitled";
 	title = title.replace(/\W+/g, "-");
@@ -146,20 +138,31 @@ watch(
 	() => abcString.value,
 	() => {
 		try {
-			midiData.value = new abcjs.synth.getMidiFile(abcString.value, {midiOutputType: "encoded"});
+			if (abcjs)
+				midiData.value = abcjs.synth.getMidiFile(abcString.value, {midiOutputType: "encoded"});
 		} catch (error) {
 			console.error("Error creating MIDI", error);
 		}
 	}
 )
 
-watch(
-	() => visualTranspose.value,
-	() => {
-		abcjsParams.value.visualTranspose = visualTranspose.value;
-		abcjsEditor.value.paramChanged(abcjsParams.value);
-	}
-)
+function initCodeInput() {
+
+	let startingTune = getLocalStorage("current-tune", `X: 1
+T: Cooley's
+M: 4/4
+L: 1/8
+R: reel
+K: Emin
+|:D2|"Em"EB{c}BA B2 EB|~B2 AB dBAG|"D"FDAD BDAD|FDAD dAFD|
+"Em"EBBA B2 EB|B2 AB defg|"D"afe^c dBAF|"Em"DEFD E2:|
+|:gf|"Em"eB B2 efge|eB B2 gedB|"D"A2 FA DAFA|A2 FA defg|
+"Em"eB B2 eBgB|eB B2 defg|"D"afe^c dBAF|"Em"DEFD E2:|`, "String");
+	const overrideTune = useRoute().query.t;
+	if (overrideTune)
+		startingTune = overrideTune;
+	setTune({abc: startingTune});
+}
 
 onMounted(() => {
 	abcStore.initTunes();
@@ -176,35 +179,6 @@ onMounted(() => {
 	} catch (error) {
 		hasClipboard.value = false;
 	}
-	abcjsEditor.value = new abcjs.Editor("abc", {
-		canvas_id: "canvas",
-		warnings_id: "warnings",
-		synth: {
-			el: "#midi",
-			cursorControl: cursorControl,
-			options: {
-				displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
-				// pan: [-1,1],
-			},
-		},
-		abcjsParams: abcjsParams.value,
-	});
-
-	let startingTune = getLocalStorage("current-tune", `X: 1
-T: Cooley's
-M: 4/4
-L: 1/8
-R: reel
-K: Emin
-|:D2|"Em"EB{c}BA B2 EB|~B2 AB dBAG|"D"FDAD BDAD|FDAD dAFD|
-"Em"EBBA B2 EB|B2 AB defg|"D"afe^c dBAF|"Em"DEFD E2:|
-|:gf|"Em"eB B2 efge|eB B2 gedB|"D"A2 FA DAFA|A2 FA defg|
-"Em"eB B2 eBgB|eB B2 defg|"D"afe^c dBAF|"Em"DEFD E2:|`, "String");
-	const overrideTune = useRoute().query.t;
-	if (overrideTune)
-		startingTune = overrideTune;
-	setTune({abc: startingTune});
-
 	window.addEventListener("beforeunload", (e) => {
 		saveCurrent();
 	});
@@ -212,35 +186,26 @@ K: Emin
 		saveCurrent();
 	}, 20000);
 
-	document.getElementById("abc").focus();
-
+	initCodeInput()
 	window.onbeforeprint = redrawPrint;
 })
 
-function clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {
-	const lastClicked = abcElem.midiPitches;
-	if (!lastClicked)
-		return;
-
-	abcjs.synth.playEvent(lastClicked, abcElem.midiGraceNotePitches, abcjsEditor.value.millisecondsPerMeasure()).then(function (response) {
-		console.log("note played");
-	}).catch(function (error) {
-		console.log("error playing note", error);
-	});
-}
-
 function redrawPrint() {
 	const output = document.getElementById("print-version");
-	let text = "";
-	let svgs = document.querySelectorAll("#canvas .abcjs-container");
-	if (svgs.length === 0) {
-		svgs = [document.querySelector("#canvas")];
+	if (output) {
+		let text = "";
+		let svgs = document.querySelectorAll("#canvas .abcjs-container");
+		if (svgs.length === 0) {
+			const canvas = document.querySelector("#canvas")
+			if (canvas)
+				svgs = [canvas];
+		}
+		svgs.forEach((svg) => {
+			text += svg.innerHTML;
+		});
+		text = text.replace(/display: inline-block; position: absolute; top: 0px; left: 0px;/g, "");
+		output.innerHTML = text;
 	}
-	svgs.forEach((svg) => {
-		text += svg.innerHTML;
-	});
-	text = text.replace(/display: inline-block; position: absolute; top: 0px; left: 0px;/g, "");
-	output.innerHTML = text;
 }
 
 function helpToggle() {
@@ -257,46 +222,44 @@ function close() {
 	inputClose.value++
 }
 
-function setTune(payload) {
+function setTune(payload: {abc: string}) {
 	inputClose.value++
 	abcString.value = payload.abc;
-	Vue.nextTick(() => {
-		abcjsEditor.value.paramChanged({});
-	});
 }
 
-function transposeSource(options) {
-	const visualObj = abcjs.renderAbc("*", abcString.value);
-	const newAbc = abcjs.strTranspose(abcString.value, visualObj, options.halfSteps);
-	abcString.value = newAbc;
-	Vue.nextTick(() => {
-		abcjsEditor.value.paramChanged({});
-	});
+function transposeSource(options: { halfSteps: number}) {
+	if (abcjs) {
+		const visualObj = abcjs.renderAbc("*", abcString.value);
+		const newAbc = abcjs.strTranspose(abcString.value, visualObj, options.halfSteps);
+		abcString.value = newAbc;
+	}
 }
 
 function downloadWav() {
-	const visualObj = abcjs.renderAbc("*", abcString.value)[0];
+	if (abcjs) {
+		const visualObj = abcjs.renderAbc("*", abcString.value)[0];
 
-	const midiBuffer = new abcjs.synth.CreateSynth();
-	midiBuffer.init({
-		visualObj: visualObj,
-		options: {},
-	}).then((response) => {
-		midiBuffer.prime().then((response) => {
-			const url = midiBuffer.download();
-			const link = document.createElement("a");
-			document.body.appendChild(link);
-			link.setAttribute("style", "display: none;");
-			link.href = url;
-			const fileName = midiFilename.value.replace(/\.midi/, ".wav");
-			link.download = fileName ? fileName : "output.wav";
-			link.click();
-			window.URL.revokeObjectURL(url);
-			document.body.removeChild(link);
+		const midiBuffer = new abcjs.synth.CreateSynth();
+		midiBuffer.init({
+			visualObj: visualObj,
+			options: {},
+		}).then((response) => {
+			midiBuffer.prime().then((response) => {
+				const url = midiBuffer.download();
+				const link = document.createElement("a");
+				document.body.appendChild(link);
+				link.setAttribute("style", "display: none;");
+				link.href = url;
+				const fileName = midiFilename.value.replace(/\.midi/, ".wav");
+				link.download = fileName ? fileName : "output.wav";
+				link.click();
+				window.URL.revokeObjectURL(url);
+				document.body.removeChild(link);
+			});
+		}).catch((error) => {
+			console.warn("Audio problem:", error);
 		});
-	}).catch((error) => {
-		console.warn("Audio problem:", error);
-	});
+	}
 }
 
 function saveCurrent() {
@@ -432,7 +395,7 @@ nav {
 	position: absolute;
 	right: 0;
 	top: 0;
-	/*z-index: 20;*/
+	z-index: 20;
 	display: flex;
 }
 </style>

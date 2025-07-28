@@ -12,8 +12,8 @@
 			</ul>
 		</div>
 		<div class="bottom-options">
-			<label>Font Size: <input :value="fontSize" @input="abcStore.setFontSize($event.target.value)" type="number" min="8" max="30"></label>
-			<label>Visual Transpose: <input :value="visualTranspose" @input="abcStore.setVisualTranspose($event.target.value)" type="number" min="-24" max="24"></label>
+			<label>Font Size: <input :value="fontSize" @input="abcStore.setFontSize(parseInt($event.target.value,10))" type="number" min="8" max="30"></label>
+			<label>Visual Transpose: <input :value="visualTranspose" @input="abcStore.setVisualTranspose(parseInt($event.target.value,10))" type="number" min="-24" max="24"></label>
 		</div>
 		<div v-if="visualTranspose !== 0 && visualTranspose !== '0'" class="extra-bottom">
 			<AnimatedButton el="button" label="Apply Transpose" @click="transposeSource" />
