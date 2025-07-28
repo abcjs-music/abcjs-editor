@@ -361,18 +361,6 @@ async function createSharableLink() {
 	}
 }
 
-textarea {
-	width: 100%;
-	font-size: 18px;
-	height: 400px;
-	border-radius: 4px;
-	padding: 8px;
-	font-family: "Fira Mono", Monaco, monospace;
-	border: none;
-	box-shadow: 2px 2px 4px #bbbbbb, -1px -1px 1px #bbbbbb;
-	margin-bottom: 5px;
-}
-
 #warnings {
 	font-family: "Fira Mono", Monaco, monospace;
 	border: 2px solid #f10707;

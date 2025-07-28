@@ -18,7 +18,6 @@
 <script lang="ts" setup>
 import hljs from "highlight.js/lib/core";
 import highlightAbc from "highlightjs-abc"
-import {sleep} from "~/helpers/sleep";
 
 const emit = defineEmits<{
 	(e: "input", value: string): void;
@@ -50,15 +49,19 @@ function loaded() {
 }
 </script>
 
-<style>
+<style scoped>
 .code-input-wrapper {
 	background: white;
 	border: 1px solid #bbbbbb;
 }
 code-input {
 	resize: both;
+	margin: 0;
+	font-family: "Fira Mono", Monaco, monospace;
 }
+</style>
 
+<style>
 code-input textarea::selection {
 	background: #6781ef;
 	color: #ffffff;
