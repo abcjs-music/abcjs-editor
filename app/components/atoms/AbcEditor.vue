@@ -1,6 +1,7 @@
 <template>
 	<CodeInputWrapper
 		ref="editor"
+		:theme="theme"
 		name="abc"
 		ariaLabel="ABC string"
 		:value="value"
@@ -23,6 +24,7 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
+	theme: string;
 	value: string;
 	fontSize: number;
 	visualTranspose: number;
@@ -99,13 +101,8 @@ function input(value: string) {
 	emit('input', value)
 }
 
-async function ready() {
+async function ready(el: HTMLElement) {
 	const abcjs = await import("abcjs");
-	const el: HTMLElement | null = document.querySelector('textarea[name="abc"]')
-	if (!el) {
-		console.log("Error! Can't find the editor on the page")
-		return
-	}
 	abcjsEditor.value = new abcjs.Editor(el, {
 		canvas_id: "canvas",
 		warnings_id: "warnings",

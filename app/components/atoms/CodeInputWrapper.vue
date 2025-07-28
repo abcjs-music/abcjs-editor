@@ -1,15 +1,18 @@
 <template>
-	<ClientOnly>
-		<code-input
-			ref="elem"
-			:name="name"
-			:value="value"
-			:aria-label="ariaLabel"
-			:style="{ fontSize: fontSize + 'px' }"
-			spellcheck="false"
-			@input="emit('input', $event.target.value)"
-		></code-input>
-	</ClientOnly>
+	<div :class="`code-input-wrapper ${theme}`">
+		<ClientOnly>
+			<code-input
+				ref="elem"
+				:name="name"
+				:value="value"
+				:aria-label="ariaLabel"
+				:style="{ fontSize: fontSize + 'px' }"
+				spellcheck="false"
+				@input="emit('input', $event.target.value)"
+				@code-input_load="loaded"
+			></code-input>
+		</ClientOnly>
+	</div>
 </template>
 
 <script lang="ts" setup>
@@ -19,10 +22,11 @@ import {sleep} from "~/helpers/sleep";
 
 const emit = defineEmits<{
 	(e: "input", value: string): void;
-	(e: "ready"): void;
+	(e: "ready", textarea: HTMLElement): void;
 }>();
 
 const props = defineProps<{
+	theme: string;
 	value: string;
 	name: string;
 	ariaLabel: string;
@@ -40,15 +44,24 @@ onBeforeMount(async () => {
 	}
 })
 
-onMounted(async() => {
-	let ta : HTMLElement | null = null
-	while (!ta) {
-		if (elem.value) {
-			ta = elem.value.querySelector('textarea')
-		}
-		if (!ta)
-			await sleep(1)
-	}
-	emit("ready")
-})
+function loaded() {
+	const ta = elem.value.querySelector('textarea')
+	emit("ready", ta)
+}
 </script>
+
+<style>
+.code-input-wrapper {
+	background: white;
+	border: 1px solid #bbbbbb;
+}
+code-input {
+	resize: both;
+}
+
+code-input textarea::selection {
+	background: #6781ef;
+	color: #ffffff;
+}
+
+</style>

@@ -34,6 +34,7 @@
 					<div class="input-area">
 						<div>
 							<AbcEditor
+								:theme="theme"
 								:value="abcString"
 								:fontSize="fontSize"
 								:visualTranspose="visualTranspose"
@@ -100,6 +101,7 @@ const uploadZoom = computed(() => abcStore.uploadZoom)
 const shortenOutput = computed(() => abcStore.shortenOutput)
 const fontSize = computed(() => abcStore.fontSize)
 const visualTranspose = computed(() => abcStore.visualTranspose)
+const theme = computed(() => abcStore.syntaxHighlighting ? "abcjs-light" : 'highlight-off')
 
 function updateAbcString(value: string) {
 	abcString.value = value

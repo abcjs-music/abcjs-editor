@@ -4,7 +4,7 @@ import {
 	getLocalStorage,
 	setLocalStorage,
 } from "~/helpers/local-storage-wrapper";
-// Defining a Pinia store named "abcStore" to manage abc editor related data
+
 export const useAbcStore = defineStore("abcStore", {
 	// Initial state configuration for the content
 	state: () => {
@@ -15,6 +15,7 @@ export const useAbcStore = defineStore("abcStore", {
 			uploadZoom: 100,
 			fontSize: 18,
 			visualTranspose: 0,
+			syntaxHighlighting: true,
 		};
 	},
 	// Getters to retrieve store content
@@ -72,6 +73,9 @@ export const useAbcStore = defineStore("abcStore", {
 		},
 		setVisualTranspose(visualTranspose:number) {
 			this.visualTranspose = visualTranspose;
+		},
+		setSyntaxHighlighting(syntaxHighlighting:boolean) {
+			this.syntaxHighlighting = syntaxHighlighting;
 		},
 	},
 });

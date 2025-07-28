@@ -1,6 +1,6 @@
 {
   "name": "abcjs-editor",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Simple visual editing of ABC strings",
   "author": "Paul Rosen",
   "copyright": "Copyright © 2018-2025 by Paul Rosen",

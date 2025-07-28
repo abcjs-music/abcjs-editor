@@ -172,7 +172,7 @@ p {
 }
 
 .link {
-	text-shadow: 1px 1px #eeeeee;
+	text-shadow: 1px 1px #eeeeee, -1px -1px #eeeeee, 1px -1px #eeeeee, -1px 1px #eeeeee;
 	text-decoration: none;
 	border: none;
 	background: transparent;
