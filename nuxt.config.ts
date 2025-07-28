@@ -48,7 +48,7 @@ export default defineNuxtConfig({
 			"Roboto": [300, 400, 500, 700],
 			"Kreon": true,
 			"Itim": true,
-			"Fira+Mono": true,
+			"Fira+Mono": [400, 700],
 		},
 	},
 	typescript: {
