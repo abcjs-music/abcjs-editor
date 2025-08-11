@@ -15,15 +15,15 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.7.1",
+    "@nuxt/eslint": "1.8.0",
     "@nuxtjs/google-fonts": "3.2.0",
     "@pinia/nuxt": "0.11.2",
     "@webcoder49/code-input": "https://github.com/WebCoder49/code-input#7820240ae77893e5f609b2d46d1f6ebad50e1c3c",
     "abcjs": "https://github.com/paulrosen/abcjs.git#1a8c3b33d61abaa8fa4317c89327181a485bfaef",
-    "eslint": "9.32.0",
+    "eslint": "9.33.0",
     "highlight.js": "11.11.1",
-    "highlightjs-abc": "https://github.com/paulrosen/highlightjs-abc.git#41fb32b6fcf64607bd1eca2bf18f0f85b90d3720",
-    "nuxt": "4.0.1",
+    "highlightjs-abc": "https://github.com/paulrosen/highlightjs-abc.git#b7ece94c678b3f340894cb02462ef70340d473b0",
+    "nuxt": "4.0.3",
     "pinia": "3.0.3"
   },
   "devDependencies": {

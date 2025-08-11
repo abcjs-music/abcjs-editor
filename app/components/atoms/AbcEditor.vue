@@ -97,7 +97,7 @@ function clickListener(abcElem : AbcElem) {
 }
 
 function input(value: string) {
-	console.log("input", value)
+	//console.log("input", value)
 	emit('input', value)
 }
 

@@ -38,7 +38,7 @@ export default defineNuxtConfig({
 			],
 		},
 	},
-	css: ["abcjs/abcjs-audio.css", '@webcoder49/code-input/code-input.css', '@/assets/css/abcjs-light-theme.css'],
+	css: ["abcjs/abcjs-audio.css", '@webcoder49/code-input/code-input.css', 'highlightjs-abc/abcjs-light-theme.css'],
 	compatibilityDate: "2024-11-01",
 	eslint: {
 		checker: true,
