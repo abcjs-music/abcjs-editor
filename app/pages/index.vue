@@ -272,7 +272,7 @@ async function createSharableLink() {
 	try {
 		copyProgress.value = "working";
 		const encoded = encodeURIComponent(abcString.value);
-		const here = document.location.href;
+		const here = document.location.href.split('?')[0];
 		const link = here + "?t=" + encoded;
 		const type = "text/plain";
 		const blob = new Blob([link], {type});
