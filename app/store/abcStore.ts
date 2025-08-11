@@ -16,6 +16,7 @@ export const useAbcStore = defineStore("abcStore", {
 			fontSize: 18,
 			visualTranspose: 0,
 			syntaxHighlighting: true,
+			swingPlayback: false,
 		};
 	},
 	// Getters to retrieve store content
@@ -29,7 +30,6 @@ export const useAbcStore = defineStore("abcStore", {
 	// Actions to save content to the store
 	actions: {
 		initTunes() {
-			//@ts-ignore - TODO-PER: getLocalStorage doesn't handle objects
 			this._allTunes = getLocalStorage("tunes", {}, "Object");
 			this.setShowUpload(
 				getLocalStorage("show-upload", false, "Boolean"),
@@ -39,6 +39,8 @@ export const useAbcStore = defineStore("abcStore", {
 			);
 			this.setUploadZoom(getLocalStorage("upload-zoom", 100, "Integer"));
 			this.setFontSize(getLocalStorage("font-size", 18, "Integer"));
+			this.setSyntaxHighlighting(getLocalStorage("highlighting", false, "Boolean"));
+			this.setSwingPlayback(getLocalStorage("swing", false, "Boolean"));
 		},
 		saveTune(tune:string) {
 			const title = abcTitle(tune);
@@ -76,6 +78,11 @@ export const useAbcStore = defineStore("abcStore", {
 		},
 		setSyntaxHighlighting(syntaxHighlighting:boolean) {
 			this.syntaxHighlighting = syntaxHighlighting;
+			setLocalStorage("highlighting", syntaxHighlighting);
+		},
+		setSwingPlayback(swingPlayback:boolean) {
+			this.swingPlayback = swingPlayback;
+			setLocalStorage("swing", swingPlayback);
 		},
 	},
 });

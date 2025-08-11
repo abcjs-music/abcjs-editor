@@ -8,9 +8,10 @@
 				<AnimatedButton id="useSyntaxHighlighting" el="checkbox" label="Use Syntax Highlighting" :check-value="abcStore.syntaxHighlighting" @checked="abcStore.setSyntaxHighlighting($event)"/>
 				<label>Font Size: <input name="fontSize" :value="abcStore.fontSize" @input="abcStore.setFontSize(parseInt($event.target.value,10))" type="number" min="8" max="30"></label>
 			</section>
-<!--			<section>-->
-<!--				<h3>Formatting Options</h3>-->
-<!--			</section>-->
+			<section>
+				<h3>Synth Options</h3>
+				<AnimatedButton id="swingPlayback" el="checkbox" label="Swing" :check-value="abcStore.swingPlayback" @checked="abcStore.setSwingPlayback($event)"/>
+			</section>
 		</div>
 
 	</div>

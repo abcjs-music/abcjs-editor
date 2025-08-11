@@ -37,6 +37,7 @@
 								:theme="theme"
 								:value="abcString"
 								:fontSize="fontSize"
+								:swingPlayback="swingPlayback"
 								:visualTranspose="visualTranspose"
 								@input="updateAbcString"
 								@editorCreated="editorCreated"
@@ -100,6 +101,7 @@ const showUpload = computed(() => abcStore.showUpload)
 const uploadZoom = computed(() => abcStore.uploadZoom)
 const shortenOutput = computed(() => abcStore.shortenOutput)
 const fontSize = computed(() => abcStore.fontSize)
+const swingPlayback = computed(() => abcStore.swingPlayback)
 const visualTranspose = computed(() => abcStore.visualTranspose)
 const theme = computed(() => abcStore.syntaxHighlighting ? "abcjs-light" : 'highlight-off')
 

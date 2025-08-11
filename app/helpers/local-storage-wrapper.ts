@@ -1,4 +1,4 @@
-export const getLocalStorage = (key:string, def:string|boolean|number, type:'Boolean'|'Object'|'Integer'|'String') => {
+export const getLocalStorage = (key:string, def:string|boolean|number|object, type:'Boolean'|'Object'|'Integer'|'String') => {
 	try {
 		const ret = localStorage.getItem(key);
 		if (ret !== null) {

@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import CodeInputWrapper from "~/components/atoms/CodeInputWrapper.vue";
-import abcjs, {type AbcElem, type AbcVisualParams, type Editor} from "abcjs";
+import abcjs, {type AbcElem, type AbcVisualParams, type Editor, type SynthOptions} from "abcjs";
 import {CursorControl} from "~/helpers/cursor-control";
 import {sleep} from "~/helpers/sleep";
 
@@ -28,6 +28,7 @@ const props = defineProps<{
 	value: string;
 	fontSize: number;
 	visualTranspose: number;
+	swingPlayback: boolean;
 }>();
 
 const abcjsEditor = ref(null as Editor|null)
@@ -42,11 +43,37 @@ watch(
 )
 
 watch(
+	() => props.swingPlayback,
+	() => {
+		setSwing(props.swingPlayback)
+	}
+)
+
+watch(
 	() => props.value,
 	() => {
 		updateString()
 	}
 )
+
+function setSwing(on: boolean) {
+	if (on) {
+		abcjsSynthParams.value.swing = 75
+		abcjsSynthParams.value.gchord = "bzczbzcz"
+		abcjsSynthParams.value.bassprog = 58
+		abcjsSynthParams.value.bassvol = 80
+		abcjsSynthParams.value.chordprog = 25
+		abcjsSynthParams.value.chordvol = 19
+		abcjsSynthParams.value.program = 24
+	} else {
+		abcjsSynthParams.value = {}
+	}
+	updateSynthParams()
+}
+
+onMounted(() => {
+	setSwing(props.swingPlayback)
+})
 
 async function updateParams() {
 	while (!abcjsEditor.value) {
@@ -55,6 +82,15 @@ async function updateParams() {
 	}
 	await nextTick()
 	abcjsEditor.value.paramChanged(abcjsParams.value);
+}
+
+async function updateSynthParams() {
+	while (!abcjsEditor.value) {
+		console.log("waiting for editor...")
+		await sleep(1)
+	}
+	await nextTick()
+	abcjsEditor.value.synthParamChanged(abcjsSynthParams.value);
 }
 
 async function updateString() {
@@ -83,6 +119,14 @@ const abcjsParams = ref({
 		annotationfont: "Helvetica-Oblique 10",
 	},
 } as AbcVisualParams)
+
+const abcjsSynthParams = ref({
+	displayLoop: true,
+	displayRestart: true,
+	displayPlay: true,
+	displayProgress: true,
+	displayWarp: true,
+} as SynthOptions)
 
 function clickListener(abcElem : AbcElem) {
 	const lastClicked = abcElem.midiPitches;
