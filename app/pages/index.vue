@@ -333,6 +333,12 @@ async function createSharableLink() {
 	height: 100%;
 }
 
+.input-area {
+	display: flex;
+	flex-direction: column;
+	row-gap: 10px;
+}
+
 .menu-holder {
 	position: relative;
 	z-index: 2;
@@ -366,7 +372,6 @@ async function createSharableLink() {
 #warnings {
 	font-family: "Fira Mono", Monaco, monospace;
 	border: 2px solid #f10707;
-	margin: 0 0 10px 0;
 	padding: 10px;
 	border-radius: 4px;
 }
