@@ -17,6 +17,7 @@ import CodeInputWrapper from "~/components/atoms/CodeInputWrapper.vue";
 import abcjs, {type AbcElem, type AbcVisualParams, type Editor, type SynthOptions} from "abcjs";
 import {CursorControl} from "~/helpers/cursor-control";
 import {sleep} from "~/helpers/sleep";
+import type {TablatureTypes} from "~/store/abcStore";
 
 const emit = defineEmits<{
 	(e: "input", value: string): void;
@@ -29,6 +30,7 @@ const props = defineProps<{
 	fontSize: number;
 	visualTranspose: number;
 	swingPlayback: boolean;
+	tablature: TablatureTypes;
 }>();
 
 const abcjsEditor = ref(null as Editor|null)
@@ -38,6 +40,17 @@ watch(
 	() => props.visualTranspose,
 	() => {
 		abcjsParams.value.visualTranspose = props.visualTranspose;
+		updateParams()
+	}
+)
+
+watch(
+	() => props.tablature,
+	() => {
+		if (props.tablature === 'none')
+			abcjsParams.value.tablature = []
+		else
+			abcjsParams.value.tablature = [{instrument: props.tablature}];
 		updateParams()
 	}
 )

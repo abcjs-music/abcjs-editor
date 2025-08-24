@@ -42,6 +42,10 @@ watch(
 	}
 )
 
+onMounted(() => {
+	picked.value = props.value
+})
+
 function swallow() {
 	// this keeps the page from scrolling when the space key is pressed.
 }

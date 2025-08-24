@@ -44,6 +44,7 @@ export const useAbcStore = defineStore("abcStore", {
 			this.setFontSize(getLocalStorage("font-size", 18, "Integer"));
 			this.setSyntaxHighlighting(getLocalStorage("highlighting", false, "Boolean"));
 			this.setSwingPlayback(getLocalStorage("swing", false, "Boolean"));
+			this.setTablature(getLocalStorage("tablature", false, "String"));
 		},
 		saveTune(tune:string) {
 			const title = abcTitle(tune);

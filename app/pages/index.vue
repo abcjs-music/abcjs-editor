@@ -39,6 +39,7 @@
 								:fontSize="fontSize"
 								:swingPlayback="swingPlayback"
 								:visualTranspose="visualTranspose"
+								:tablature="abcStore.tablature"
 								@input="updateAbcString"
 								@editorCreated="editorCreated"
 							></AbcEditor>
