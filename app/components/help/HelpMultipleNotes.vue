@@ -20,7 +20,9 @@ K:C
 [CEGc] [C2G2] [CE][DF]|[D2F2][EG][FA] [A4d4]|]`
 
 onMounted(() => {
-	abcjs.renderAbc("help-multiple-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-multiple-paper", abcString);
+	}
 })
 </script>
 

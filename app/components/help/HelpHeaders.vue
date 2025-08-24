@@ -50,7 +50,9 @@ K:D
 DDAA|BBA2|]`
 
 onMounted(() => {
-	abcjs.renderAbc("help-header-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-header-paper", abcString);
+	}
 })
 </script>
 

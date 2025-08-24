@@ -51,12 +51,14 @@ K:C
 "A"A "Gm7"D "Bb°7"F "F#9"g|]`
 
 onMounted(() => {
-	abcjs.renderAbc("help-chords-paper",
-		abcString, {
-			format: {
-				gchordfont: "FreeSerif",
-			},
-		});
+	if (abcjs) {
+		abcjs.renderAbc("help-chords-paper",
+			abcString, {
+				format: {
+					gchordfont: "FreeSerif",
+				},
+			});
+	}
 })
 </script>
 

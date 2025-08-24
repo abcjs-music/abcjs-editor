@@ -20,7 +20,9 @@ K:C
 (Ac) d-d| (Ac eg) ga- a-a|`
 
 onMounted(() => {
-	abcjs.renderAbc("help-ties-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-ties-paper", abcString);
+	}
 })
 </script>
 

@@ -1,6 +1,5 @@
 <template>
 	<CodeInputWrapper
-		ref="editor"
 		:theme="theme"
 		name="abc"
 		ariaLabel="ABC string"
@@ -142,6 +141,12 @@ const abcjsSynthParams = ref({
 } as SynthOptions)
 
 function clickListener(abcElem : AbcElem) {
+	const textarea : HTMLInputElement | null = document.querySelector('textarea[name="abc"]')
+	if (textarea && abcElem.startChar !== undefined && abcElem.endChar !== undefined) {
+		textarea.setSelectionRange(abcElem.endChar,abcElem.endChar)
+		textarea.focus()
+		textarea.setSelectionRange(abcElem.startChar,abcElem.endChar)
+	}
 	const lastClicked = abcElem.midiPitches;
 	if (!lastClicked || !abcjsEditor.value)
 		return;

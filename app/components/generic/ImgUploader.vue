@@ -87,7 +87,7 @@ watch(
 	() => {
 		const target = document.querySelector(".target-for-image img,.target-for-image iframe");
 		if (target) {
-			//@ts-ignore - style does exist
+			//@ts-expect-error - style does exist
 			target.style.transform = `scale(${props.uploadZoom / 100})`;
 		}
 	}
@@ -108,7 +108,7 @@ function save(formData:FormData) {
 
 	upload(formData)
 		.then((x) => {
-			//@ts-ignore = x will be of type string
+			//@ts-expect-error = x will be of type string
 			uploadedFile.value = x;
 			currentStatus.value = STATUS_SUCCESS;
 		})
@@ -120,9 +120,9 @@ function save(formData:FormData) {
 }
 function filesChange(ev: Event) {
 	const target = ev.target
-	//@ts-ignore - target exists and name exists
+	//@ts-expect-error - target exists and name exists
 	const fieldName = target.name
-	//@ts-ignore - target exists and files exists
+	//@ts-expect-error - target exists and files exists
 	const fileList = target.files
 
 	// handle file changes
@@ -162,7 +162,7 @@ function getImage(file: Blob) {
 		fReader.onload = () => {
 			img.src = fReader.result;
 			const target = document.querySelector(".target-for-image");
-			//@ts-ignore - target does exist
+			//@ts-expect-error - target does exist
 			target.appendChild(img);
 			resolve();
 		};
@@ -179,7 +179,7 @@ function setClosed() {
 }
 function toggle(event: KeyboardEvent) {
 	// Called when user clicks with keyboard
-	//@ts-ignore - event.target does exist
+	//@ts-expect-error - event.target does exist
 	const input = event.target.querySelector("input");
 	input.click();
 }

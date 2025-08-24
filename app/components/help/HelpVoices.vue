@@ -93,9 +93,11 @@ K:Gm
 [V:B2]       x8      | z2B,,2 c,,2d,,2 | e,,3e,, (d,,2c,,2)  | d,,6    ||`
 
 onMounted(() => {
-	abcjs.renderAbc("help-piano-paper", abcPiano);
-	abcjs.renderAbc("help-score-paper", abcScore);
-	abcjs.renderAbc("help-harmony-paper", abcHarmony);
+	if (abcjs) {
+		abcjs.renderAbc("help-piano-paper", abcPiano);
+		abcjs.renderAbc("help-score-paper", abcScore);
+		abcjs.renderAbc("help-harmony-paper", abcHarmony);
+	}
 })
 </script>
 

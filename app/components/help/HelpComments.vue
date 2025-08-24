@@ -32,7 +32,9 @@ K:C
 cdef|] % This text is ignored, too.`
 
 onMounted(() => {
-	abcjs.renderAbc("help-comments-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-comments-paper", abcString);
+	}
 })
 </script>
 

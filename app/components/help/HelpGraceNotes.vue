@@ -16,7 +16,9 @@ K:C
 {g}A3 A{g}AA|{cAGAG}A3 {g}A{d}A{e}A|]`
 
 onMounted(() => {
-	abcjs.renderAbc("help-grace-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-grace-paper", abcString);
+	}
 })
 </script>
 

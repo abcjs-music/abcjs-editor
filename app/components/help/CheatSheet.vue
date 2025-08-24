@@ -2,7 +2,7 @@
 	<div class="cheatsheet">
 		<h2>ABC Cheat Sheet</h2>
 		<p class="cheat-info">
-			These are some of the most common things that can be done with ABC. For all the details, see <a class="muted external-link" href="http://abcnotation.com/wiki/abc:standard" target="_blank">the full documentation.</a>
+			These are some of the most common things that can be done with ABC. For all the details, see <a class="muted external-link" href="https://abcnotation.com/wiki/abc:standard" target="_blank">the full documentation.</a>
 		</p>
 		<CollapsibleSection title="Headers" :is-header3="true">
 			<help-headers />

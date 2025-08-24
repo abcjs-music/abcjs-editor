@@ -18,7 +18,8 @@ const abcStore = useAbcStore();
 function print() {
 	window.print();
 }
-function setUploadZoom(ev) {
+function setUploadZoom(ev:Event) {
+	//@ts-expect-error - ev.target does exist
 	useAbcStore().setUploadZoom(parseInt(ev.target.value,10))
 }
 </script>

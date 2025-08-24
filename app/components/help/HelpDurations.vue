@@ -36,7 +36,9 @@ P:Triplets
 "_(3A"(3A"_B"B"_c"c|"_(3F/"(3F/"_G/"G/"_A/"A/|`
 
 onMounted(() => {
-	abcjs.renderAbc("help-duration-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-duration-paper", abcString);
+	}
 })
 </script>
 

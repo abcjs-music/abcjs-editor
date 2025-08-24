@@ -20,7 +20,9 @@ K:C
 A B c d AB cd ABcd|`
 
 onMounted(() => {
-	abcjs.renderAbc("help-beaming-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-beaming-paper", abcString);
+	}
 })
 </script>
 

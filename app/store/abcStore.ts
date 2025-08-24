@@ -26,7 +26,7 @@ export const useAbcStore = defineStore("abcStore", {
 	getters: {
 		allTuneNames: state => Object.keys(state._allTunes).sort(),
 		tuneByTitle: state => (title:string) => {
-			//@ts-ignore - referencing object
+			//@ts-expect-error - referencing object
 			return state._allTunes[title];
 		},
 	},
@@ -49,14 +49,14 @@ export const useAbcStore = defineStore("abcStore", {
 		saveTune(tune:string) {
 			const title = abcTitle(tune);
 			const all = { ...this._allTunes };
-			//@ts-ignore - referencing object
+			//@ts-expect-error - referencing object
 			all[title] = tune;
 			this._allTunes = all;
 			setLocalStorage("tunes", JSON.stringify(this._allTunes));
 		},
 		deleteTuneByName(name:string) {
 			const all = { ...this._allTunes };
-			//@ts-ignore - referencing object
+			//@ts-expect-error - referencing object
 			delete all[name];
 			this._allTunes = all;
 			setLocalStorage("tunes", JSON.stringify(this._allTunes));

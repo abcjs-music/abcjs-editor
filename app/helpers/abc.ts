@@ -4,13 +4,13 @@ export const abcTitle = (abcString:string) => {
 	const arr = abcString.split("\nT:");
 	if (arr.length < 2)
 		return "untitled";
-	const arr2 = arr[1].split("\n");
-	if (arr2.length < 2)
-		return "untitled";
-	return arr2[0].trim();
+	const afterT = arr[1] ? arr[1] : ''
+	const arr2 = afterT.split("\n");
+	const title = arr2[0] ? arr2[0] : 'untitled'
+	return title.trim();
 };
 
 export const abcFilename = (abcString:string) => {
-	const title = abcTitle(abcString).replace(/[^\w]/g, "-");
+	const title = abcTitle(abcString).replace(/\W/g, "-");
 	return `${title}.abc`;
 };

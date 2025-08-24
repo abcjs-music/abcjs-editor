@@ -203,6 +203,7 @@ function redrawPrint() {
 		if (svgs.length === 0) {
 			const canvas = document.querySelector("#canvas")
 			if (canvas)
+				// @ts-expect-error - one is an Element array, the other is a NodeList. It doesn't matter to this code
 				svgs = [canvas];
 		}
 		svgs.forEach((svg) => {

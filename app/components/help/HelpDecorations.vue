@@ -20,7 +20,9 @@ K:C
 !pppp!c !ppp!d !pp!e !p!f | !mp!g !mf!a !f!b !ff!a | !fff!g !ffff!f !sfz!e2 |]`
 
 onMounted(() => {
-	abcjs.renderAbc("help-decorations-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-decorations-paper", abcString);
+	}
 })
 </script>
 

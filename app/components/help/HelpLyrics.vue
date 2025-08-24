@@ -40,7 +40,9 @@ A A A A| A A A A | A A A A |]
 w:word syll-a-ble syll-a--ble time__  of~the~day`
 
 onMounted(() => {
-	abcjs.renderAbc("help-lyrics-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-lyrics-paper", abcString);
+	}
 })
 </script>
 

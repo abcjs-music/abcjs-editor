@@ -46,7 +46,7 @@ function swallow() {
 }
 
 function input(ev: Event) {
-	//@ts-ignore ev.target exists
+	//@ts-expect-error ev.target exists
 	emit('input', ev.target.checked)
 }
 
@@ -64,6 +64,7 @@ input[type="checkbox"] + label {
 	font-size: 18px;
 	color: black;
 	cursor: pointer;
+	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -104,7 +105,6 @@ input[type="checkbox"]:checked + label:before {
 	opacity: 1;
 	border-top-color: transparent;
 	border-left-color: transparent;
-	-webkit-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 

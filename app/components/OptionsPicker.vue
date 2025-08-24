@@ -6,11 +6,12 @@
 			<section>
 				<h3>Input Options</h3>
 				<AnimatedButton id="useSyntaxHighlighting" el="checkbox" label="Use Syntax Highlighting" :check-value="abcStore.syntaxHighlighting" @checked="abcStore.setSyntaxHighlighting($event)"/>
-				<label>Font Size: <input name="fontSize" :value="abcStore.fontSize" @input="abcStore.setFontSize(parseInt($event.target.value,10))" type="number" min="8" max="30"></label>
+				<label>Font Size: <input name="fontSize" :value="abcStore.fontSize" @input="setFontSize($event)" type="number" min="8" max="30"></label>
 			</section>
 			<section>
 				<h3>Synth Options</h3>
 				<AnimatedButton id="swingPlayback" el="checkbox" label="Swing" :check-value="abcStore.swingPlayback" @checked="abcStore.setSwingPlayback($event)"/>
+				<p>(Only works for 4/4)</p>
 			</section>
 			<section>
 				<h3>Tablature Options</h3>
@@ -36,6 +37,11 @@ const tablatureOptions : Array<{label: string, value: TablatureTypes}> = [
 
 function tablatureChange(value: TablatureTypes) {
 	abcStore.setTablature(value)
+}
+
+function setFontSize(ev: Event) {
+	//@ts-expect-error - ev.target does exist
+	abcStore.setFontSize(parseInt(ev.target.value,10))
 }
 
 </script>

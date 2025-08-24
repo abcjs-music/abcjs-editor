@@ -12,9 +12,9 @@
 			</ul>
 		</div>
 		<div class="bottom-options">
-			<label>Visual Transpose: <input :value="visualTranspose" @input="abcStore.setVisualTranspose(parseInt($event.target.value,10))" type="number" min="-24" max="24"></label>
+			<label>Visual Transpose: <input :value="visualTranspose" @input="setVisualTranspose($event)" type="number" min="-24" max="24"></label>
 		</div>
-		<div v-if="visualTranspose !== 0 && visualTranspose !== '0'" class="extra-bottom">
+		<div v-if="visualTranspose !== 0" class="extra-bottom">
 			<AnimatedButton el="button" label="Apply Transpose" @click="transposeSource" />
 		</div>
 	</div>
@@ -32,7 +32,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	(e: "close"): void;
 	(e: "load", ev: { abc: string }): void;
-	(e: "transposeSource", { halfSteps: number}): void;
+	(e: "transposeSource", ev: { halfSteps: number}): void;
 }>();
 
 const abcStore = useAbcStore();
@@ -44,18 +44,21 @@ const saveAbcString = computed(() => `data:text/plain,${encodeURIComponent(props
 const saveLabel = computed(() => `Save "${abcTitle(props.currentTune)}" in browser`)
 const downloadLabel = computed(() => `Download "${abcTitle(props.currentTune)}"`)
 
+function setVisualTranspose(ev: Event) {
+	//@ts-expect-error - ev.target does exist
+	abcStore.setVisualTranspose(parseInt(ev.target.value,10))
+}
 
 function storeAbcString() {
 	abcStore.saveTune(props.currentTune);
 	emit("close");
 }
-function loadTune(name) {
+function loadTune(name: string) {
 	const abc = abcStore.tuneByTitle(name);
 	emit("load", { abc: abc });
 }
-function deleteTune(name) {
+function deleteTune(name: string) {
 	abcStore.deleteTuneByName(name);
-	//emit("close");
 }
 function transposeSource() {
 	emit("transposeSource", { halfSteps: abcStore.visualTranspose });

@@ -35,7 +35,9 @@ K:C
 A | A || A |] A [| A |: A :| A :: A |1 A :|2 A |]`
 
 onMounted(() => {
-	abcjs.renderAbc("help-bar-lines-paper", abcString);
+	if (abcjs) {
+		abcjs.renderAbc("help-bar-lines-paper", abcString);
+	}
 })
 </script>
 

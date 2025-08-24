@@ -34,8 +34,10 @@ K:C
 "__D"_D "_=D"=D "_^D"^D |`
 
 onMounted(() => {
-	abcjs.renderAbc("help-pitch-paper", abcPitch);
-	abcjs.renderAbc("help-accidental-paper", abcAccidental);
+	if (abcjs) {
+		abcjs.renderAbc("help-pitch-paper", abcPitch);
+		abcjs.renderAbc("help-accidental-paper", abcAccidental);
+	}
 })
 </script>
 
