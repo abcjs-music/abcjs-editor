@@ -63,6 +63,10 @@ code-input {
 <style>
 .hljs {
 	background: white;
+	letter-spacing: 0.05rem;
+}
+code-input textarea {
+	letter-spacing: 0.05rem;
 }
 code-input textarea::selection {
 	background: #6781ef;

@@ -5,6 +5,8 @@ import {
 	setLocalStorage,
 } from "~/helpers/local-storage-wrapper";
 
+export type TablatureTypes = 'none' | 'violin' | 'guitar'
+
 export const useAbcStore = defineStore("abcStore", {
 	// Initial state configuration for the content
 	state: () => {
@@ -17,6 +19,7 @@ export const useAbcStore = defineStore("abcStore", {
 			visualTranspose: 0,
 			syntaxHighlighting: true,
 			swingPlayback: false,
+			tablature: 'none' as TablatureTypes,
 		};
 	},
 	// Getters to retrieve store content
@@ -83,6 +86,10 @@ export const useAbcStore = defineStore("abcStore", {
 		setSwingPlayback(swingPlayback:boolean) {
 			this.swingPlayback = swingPlayback;
 			setLocalStorage("swing", swingPlayback);
+		},
+		setTablature(tablature:TablatureTypes) {
+			this.tablature = tablature;
+			setLocalStorage("tablature", tablature);
 		},
 	},
 });

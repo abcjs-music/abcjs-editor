@@ -1,14 +1,12 @@
 <template>
-	<div :class="wrapperClass">
-		<input :id="id" :checked="value" @input="input" type="checkbox" :disabled="disabled">
+	<div class="radio-buttons">
 		<label
-			:for="id"
-			:title="disabled ? disabledMessage : ''"
-			tabindex="0"
+			v-for="button in options" :key="button.value"
 			@keydown.space.prevent="swallow"
 			@keydown.tab="($event.shiftKey) ? emit('shift-tab', $event) : emit('tab', $event)"
 		>
-			{{ label }}
+			<input :name="id" :value="button.value" v-model="picked" type="radio">
+			{{ button.label }}
 		</label>
 	</div>
 </template>
@@ -16,67 +14,80 @@
 <script lang="ts" setup>
 
 const props = withDefaults(defineProps<{
-	label: string;
+	options: Array<{ label: string, value: string }>;
 	id: string;
-	value: boolean;
-	disabled?: boolean;
-	disabledMessage?: string;
-	type?: string;
+	value: string;
 }>(), {
-	disabled: false,
-	disabledMessage: '',
-	type: '',
 });
 
 const emit = defineEmits<{
-	(e: "input", value: boolean): void;
+	(e: "input", value: string): void;
 	(e: "shift-tab", ev: KeyboardEvent): void;
 	(e: "tab", ev: KeyboardEvent): void;
 }>();
 
-const wrapperClass = computed(() => {
-	const cls = ["check-box"];
-	if (props.type)
-		cls.push(props.type);
-	return cls.join(" ");
-})
+const picked = ref('')
+
+watch(
+	() => props.value,
+	() => {
+		picked.value = props.value
+	}
+)
+
+watch(
+	() => picked.value,
+	() => {
+		emit('input', picked.value)
+	}
+)
 
 function swallow() {
 	// this keeps the page from scrolling when the space key is pressed.
 }
 
-function input(ev: Event) {
-	//@ts-ignore ev.target exists
-	emit('input', ev.target.checked)
-}
-
 </script>
 
 <style scoped>
-input[type="checkbox"] {
+.radio-buttons {
+	border: 1px solid #0074db;
+	border-radius: 6px;
+	padding: 15px;
+	background: white;
+	display: flex;
+	flex-direction: column;
+	row-gap: 10px;
+}
+label {
+	font-size: 18px;
+
+}
+/*
+input[type="radio"] {
 	display: none;
 }
 
-input[type="checkbox"] + label {
+input[type="radio"] + label {
 	display: block;
 	position: relative;
 	padding: 8px 5px 8px 32px;
 	font-size: 18px;
 	color: black;
 	cursor: pointer;
+	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 }
 
-.large input[type="checkbox"] + label {
+.large input[type="radio"] + label {
 	font-size: 24px;
 	border: 3px solid #0074db;
 	border-radius: 6px;
 	padding: 15px 15px 15px 40px;
 }
 
-input[type="checkbox"] + label:before {
+input[type="radio"] + label:before {
 	content: '';
 	display: block;
 	width: 20px;
@@ -91,12 +102,12 @@ input[type="checkbox"] + label:before {
 	transition: all .12s, border-color .08s;
 }
 
-.large input[type="checkbox"] + label:before {
+.large input[type="radio"] + label:before {
 	margin-top: 21px;
 	margin-left: 15px;
 }
 
-input[type="checkbox"]:checked + label:before {
+input[type="radio"]:checked + label:before {
 	width: 10px;
 	top: -1px;
 	left: 10px;
@@ -104,17 +115,17 @@ input[type="checkbox"]:checked + label:before {
 	opacity: 1;
 	border-top-color: transparent;
 	border-left-color: transparent;
-	-webkit-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 
-.large input[type="checkbox"]:checked + label:before {
+.large input[type="radio"]:checked + label:before {
 	border: 3px solid #3B305D;
 	border-top-color: transparent;
 	border-left-color: transparent;
 }
 
-input[type="checkbox"]:disabled + label {
+input[type="radio"]:disabled + label {
 	text-decoration: line-through;
 }
+*/
 </style>

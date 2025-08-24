@@ -12,6 +12,10 @@
 				<h3>Synth Options</h3>
 				<AnimatedButton id="swingPlayback" el="checkbox" label="Swing" :check-value="abcStore.swingPlayback" @checked="abcStore.setSwingPlayback($event)"/>
 			</section>
+			<section>
+				<h3>Tablature Options</h3>
+				<RadioButtons id="tablature" :options="tablatureOptions" :value="abcStore.tablature" @input="tablatureChange" />
+			</section>
 		</div>
 
 	</div>
@@ -19,9 +23,20 @@
 
 <script lang="ts" setup>
 import AnimatedButton from "~/components/atoms/AnimatedButton.vue";
-import {useAbcStore} from "~/store/abcStore";
+import {type TablatureTypes, useAbcStore} from "~/store/abcStore";
+import RadioButtons from "~/components/atoms/RadioButtons.vue";
 
 const abcStore = useAbcStore();
+
+const tablatureOptions : Array<{label: string, value: TablatureTypes}> = [
+	{ label: "None", value: "none"},
+	{ label: "Violin/Mandolin", value: "violin"},
+	{ label: "Guitar", value: "guitar"},
+]
+
+function tablatureChange(value: TablatureTypes) {
+	abcStore.setTablature(value)
+}
 
 </script>
 
