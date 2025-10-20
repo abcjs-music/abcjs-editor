@@ -34,5 +34,8 @@ nav {
 	[fill="#ff0000"] {
 		fill: currentColor;
 	}
+	.abcjs-cursor {
+		display: none;
+	}
 }
 </style>
