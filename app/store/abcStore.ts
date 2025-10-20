@@ -89,6 +89,9 @@ export const useAbcStore = defineStore("abcStore", {
 			setLocalStorage("swing", swingPlayback);
 		},
 		setTablature(tablature:TablatureTypes) {
+			//@ts-expect-error - this was an illegal value that we're correcting now
+			if (tablature === "false")
+				tablature = "none"
 			this.tablature = tablature;
 			setLocalStorage("tablature", tablature);
 		},
