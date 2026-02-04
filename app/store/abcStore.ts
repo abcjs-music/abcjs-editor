@@ -6,6 +6,7 @@ import {
 } from "~/helpers/local-storage-wrapper";
 
 export type TablatureTypes = 'none' | 'violin' | 'guitar'
+export type ChordGridTypes = 'none' | 'withMusic' | 'noMusic'
 
 export const useAbcStore = defineStore("abcStore", {
 	// Initial state configuration for the content
@@ -20,6 +21,7 @@ export const useAbcStore = defineStore("abcStore", {
 			syntaxHighlighting: true,
 			swingPlayback: false,
 			tablature: 'none' as TablatureTypes,
+			chordGrid: 'none' as ChordGridTypes,
 		};
 	},
 	// Getters to retrieve store content
@@ -45,6 +47,7 @@ export const useAbcStore = defineStore("abcStore", {
 			this.setSyntaxHighlighting(getLocalStorage("highlighting", false, "Boolean"));
 			this.setSwingPlayback(getLocalStorage("swing", false, "Boolean"));
 			this.setTablature(getLocalStorage("tablature", 'none', "String"));
+			this.setChordGrid(getLocalStorage("chordGrid", 'none', "String"));
 		},
 		saveTune(tune:string) {
 			const title = abcTitle(tune);
@@ -94,6 +97,10 @@ export const useAbcStore = defineStore("abcStore", {
 				tablature = "none"
 			this.tablature = tablature;
 			setLocalStorage("tablature", tablature);
+		},
+		setChordGrid(chordGrid:ChordGridTypes) {
+			this.chordGrid = chordGrid;
+			setLocalStorage("chordGrid", chordGrid);
 		},
 	},
 });

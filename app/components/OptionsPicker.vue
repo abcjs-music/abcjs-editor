@@ -17,6 +17,10 @@
 				<h3>Tablature Options</h3>
 				<RadioButtons id="tablature" :options="tablatureOptions" :value="abcStore.tablature" @input="tablatureChange" />
 			</section>
+			<section>
+				<h3>Grid Options</h3>
+				<RadioButtons id="chord-grid" :options="chordGridOptions" :value="abcStore.chordGrid" @input="chordGridChange" />
+			</section>
 		</div>
 
 	</div>
@@ -24,7 +28,7 @@
 
 <script lang="ts" setup>
 import AnimatedButton from "~/components/atoms/AnimatedButton.vue";
-import {type TablatureTypes, useAbcStore} from "~/store/abcStore";
+import {type ChordGridTypes, type TablatureTypes, useAbcStore} from "~/store/abcStore";
 import RadioButtons from "~/components/atoms/RadioButtons.vue";
 
 const abcStore = useAbcStore();
@@ -37,6 +41,16 @@ const tablatureOptions : Array<{label: string, value: TablatureTypes}> = [
 
 function tablatureChange(value: TablatureTypes) {
 	abcStore.setTablature(value)
+}
+
+const chordGridOptions : Array<{label: string, value: ChordGridTypes}> = [
+	{ label: "None", value: "none"},
+	{ label: "With Music", value: "withMusic"},
+	{ label: "No Music", value: "noMusic"},
+]
+
+function chordGridChange(value: ChordGridTypes) {
+	abcStore.setChordGrid(value)
 }
 
 function setFontSize(ev: Event) {

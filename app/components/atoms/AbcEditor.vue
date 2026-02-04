@@ -16,7 +16,7 @@ import CodeInputWrapper from "~/components/atoms/CodeInputWrapper.vue";
 import abcjs, {type AbcElem, type AbcVisualParams, type Editor, type SynthOptions} from "abcjs";
 import {CursorControl} from "~/helpers/cursor-control";
 import {sleep} from "~/helpers/sleep";
-import type {TablatureTypes} from "~/store/abcStore";
+import {type ChordGridTypes, type TablatureTypes, useAbcStore} from "~/store/abcStore";
 
 const emit = defineEmits<{
 	(e: "input", value: string): void;
@@ -30,6 +30,7 @@ const props = defineProps<{
 	visualTranspose: number;
 	swingPlayback: boolean;
 	tablature: TablatureTypes;
+	chordGrid: ChordGridTypes;
 }>();
 
 const abcjsEditor = ref(null as Editor|null)
@@ -50,6 +51,17 @@ watch(
 			abcjsParams.value.tablature = []
 		else
 			abcjsParams.value.tablature = [{instrument: props.tablature}];
+		updateParams()
+	}
+)
+
+watch(
+	() => props.chordGrid,
+	() => {
+		if (props.chordGrid === 'none')
+			abcjsParams.value.chordGrid = undefined
+		else
+			abcjsParams.value.chordGrid = props.chordGrid;
 		updateParams()
 	}
 )
@@ -120,6 +132,7 @@ const abcjsParams = ref({
 	clickListener: clickListener,
 	oneSvgPerLine: true,
 	jazzchords: true,
+	chordGrid: useAbcStore().chordGrid === 'none' ? undefined : useAbcStore().chordGrid,
 	format: {
 		titlefont: "Kreon 24",
 		subtitlefont: "Kreon 24",

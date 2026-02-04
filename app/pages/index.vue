@@ -40,6 +40,7 @@
 								:swingPlayback="swingPlayback"
 								:visualTranspose="visualTranspose"
 								:tablature="abcStore.tablature"
+								:chordGrid="abcStore.chordGrid"
 								@input="updateAbcString"
 								@editorCreated="editorCreated"
 							></AbcEditor>
