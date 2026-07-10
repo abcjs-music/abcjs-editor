@@ -3,7 +3,7 @@
 	"version": "1.1.0",
 	"description": "Simple visual editing of ABC strings",
 	"author": "Paul Rosen",
-	"copyright": "Copyright © 2018-2025 by Paul Rosen",
+	"copyright": "Copyright © 2018-2026 by Paul Rosen",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -16,11 +16,11 @@
 	},
 	"dependencies": {
 		"@pinia/nuxt": "0.11.3",
-		"@webcoder49/code-input": "2.8.0",
-		"abcjs": "6.6.2",
+		"@webcoder49/code-input": "2.8.3",
+		"abcjs": "6.6.4",
 		"highlight.js": "11.11.1",
 		"highlightjs-abc": "https://github.com/paulrosen/highlightjs-abc.git#0dff0ab12ad49a365163e527f05ed62d06f3fdf6",
-		"nuxt": "4.2.2",
+		"nuxt": "4.4.5",
 		"pinia": "3.0.4"
 	},
 	"devDependencies": {
@@ -28,5 +28,10 @@
 		"@nuxtjs/google-fonts": "3.2.0",
 		"eslint": "9.39.2",
 		"vite-plugin-eslint2": "5.0.4"
+	},
+	"allowScripts": {
+		"@parcel/watcher@2.5.6": true,
+		"esbuild@0.27.7": true,
+		"unrs-resolver@1.12.2": true
 	}
 }
