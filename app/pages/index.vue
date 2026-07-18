@@ -170,7 +170,7 @@ K: Emin
 	setTune({abc: startingTune});
 }
 
-onMounted(() => {
+onMounted(async () => {
 	abcStore.initTunes();
 	cheatSheetVisible.value = getLocalStorage("help-open", false, "Boolean");
 	optionsVisible.value = getLocalStorage("options-open", false, "Boolean");
@@ -192,8 +192,9 @@ onMounted(() => {
 		saveCurrent();
 	}, 20000);
 
-	initCodeInput()
 	window.onbeforeprint = redrawPrint;
+	await sleep(10) // This allows everything to get set up, including the query parameter on the router.
+	initCodeInput()
 })
 
 function redrawPrint() {
