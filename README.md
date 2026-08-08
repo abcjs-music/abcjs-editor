@@ -43,7 +43,7 @@ $ npx nuxi@latest init abcjs-editor-nuxt3
   ```
   - did update:
     - package.json:
-      ```json
+      ```
       ...
       "dependencies": {
         ...
@@ -54,7 +54,7 @@ $ npx nuxi@latest init abcjs-editor-nuxt3
       ...
       ```
     - nuxt.config.ts:
-      ```typescript
+      ```
       export default defineNuxtConfig({
         ...
         modules: ['@pinia/nuxt'],
@@ -77,15 +77,6 @@ $ npm run start
 
 # generate static project
 $ npm run generate
-
-# generate GitHub Pages and serve locally
-$ npm run ghpages
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
-
-## Deploy to GitHub Pages
-
-This repo provides a GitHub Action to deploy to GitHub Pages.
-Enable GitHub Pages settings for this repo first and select `GitHub Actions` as the source for deployment.
-See [Nuxt GitHub Pages](https://nuxt.com/deploy/github-pages) for further details.
